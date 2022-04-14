@@ -1,0 +1,682 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+invertedindex,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configuration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+LongWritable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Writable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+DateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+IMRInput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+KylinMapper,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+MRUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+AbstractHadoopJob,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+BatchConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+IIInstance,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+IIManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+IISegment,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+index,Identifier
+.,Punctuation
+TableRecordInfo,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+SegmentStatusEnum,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+InvertedIndexMapper,Identifier
+<,Operator
+KEYIN,Identifier
+>,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+KylinMapper,Identifier
+<,Operator
+KEYIN,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+",",Punctuation
+ ,Whitespace
+LongWritable,Identifier
+",",Punctuation
+ ,Whitespace
+Writable,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+TableRecordInfo,Identifier
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+LongWritable,Identifier
+ ,Whitespace
+outputKey,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+IMRInput,Identifier
+.,Punctuation
+IMRTableInputFormat,Identifier
+ ,Whitespace
+flatTableInputFormat,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setup,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+.,Punctuation
+bindCurrentConfiguration,Identifier
+(,Punctuation
+context,Identifier
+.,Punctuation
+getConfiguration,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+conf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getConfiguration,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+AbstractHadoopJob,Identifier
+.,Punctuation
+loadKylinPropsAndMetadata,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+IIManager,Identifier
+ ,Whitespace
+mgr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+IIManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+IIInstance,Identifier
+ ,Whitespace
+ii,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mgr,Identifier
+.,Punctuation
+getII,Identifier
+(,Punctuation
+conf,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+BatchConstants,Identifier
+.,Punctuation
+CFG_II_NAME,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+IISegment,Identifier
+ ,Whitespace
+seg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ii,Identifier
+.,Punctuation
+getSegment,Identifier
+(,Punctuation
+conf,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+BatchConstants,Identifier
+.,Punctuation
+CFG_II_SEGMENT_NAME,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+SegmentStatusEnum,Identifier
+.,Punctuation
+NEW,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+info,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TableRecordInfo,Identifier
+(,Punctuation
+seg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+outputKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LongWritable,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+flatTableInputFormat,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MRUtil,Identifier
+.,Punctuation
+getBatchCubingInputSide,Identifier
+(,Punctuation
+ii,Identifier
+.,Punctuation
+getFirstSegment,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+getFlatTableInputFormat,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+map,Identifier
+(,Punctuation
+KEYIN,Identifier
+ ,Whitespace
+key,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+record,Identifier
+",",Punctuation
+ ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Writable,Identifier
+ ,Whitespace
+writableRecord,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+Writable,Identifier
+),Punctuation
+ ,Whitespace
+record,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+flatTableInputFormat,Identifier
+.,Punctuation
+parseMapperInput,Identifier
+(,Punctuation
+writableRecord,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+timestampString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+row,Identifier
+[,Punctuation
+info,Identifier
+.,Punctuation
+getTimestampColumn,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+outputKey,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+DateFormat,Identifier
+.,Punctuation
+stringToMillis,Identifier
+(,Punctuation
+timestampString,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+//,Comment
+"
+",Newline
+        ,Whitespace
+context,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+outputKey,Identifier
+",",Punctuation
+ ,Whitespace
+writableRecord,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

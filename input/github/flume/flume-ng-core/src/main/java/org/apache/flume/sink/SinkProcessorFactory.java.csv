@@ -1,0 +1,1079 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Locale,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Sink,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+SinkProcessor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+ComponentConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurables,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+SinkProcessorType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SinkProcessorFactory,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+SinkProcessorFactory,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+TYPE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""type""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * Creates a sink processor and configures it using the provided context
+   * </p>
+   *
+   * @param context Context limited to that of the processor. Should include type
+   * and any settings relevant to that processor type. Referer to javadoc for
+   * specific sink
+   * @param sinks A non-null, non-empty list of sinks to be assigned to the
+   *  processor
+   * @return A configured SinkProcessor
+   * @see org.apache.flume.SinkProcessorType
+   * @throws FlumeException Runtime exception thrown in the case of an invalid
+   * processor configuration
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+SinkProcessor,Identifier
+ ,Whitespace
+getProcessor,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+",",Punctuation
+"
+",Newline
+ ,Whitespace
+List,Identifier
+<,Operator
+Sink,Identifier
+>,Operator
+ ,Whitespace
+sinks,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+sinks,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+!,Operator
+sinks,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+params,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getParameters,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkProcessor,Identifier
+ ,Whitespace
+processor,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+typeStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+params,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+TYPE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkProcessorType,Identifier
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SinkProcessorType,Identifier
+.,Punctuation
+OTHER,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+processorClassName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+typeStr,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SinkProcessorType,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+typeStr,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+Locale,Identifier
+.,Punctuation
+ENGLISH,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Sink Processor type {} is a custom type""",String
+",",Punctuation
+ ,Whitespace
+typeStr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+type,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+SinkProcessorType,Identifier
+.,Punctuation
+OTHER,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+processorClassName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+type,Identifier
+.,Punctuation
+getSinkProcessorClassName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Creating instance of sink processor type {}, class {}""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+typeStr,Identifier
+",",Punctuation
+ ,Whitespace
+processorClassName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+SinkProcessor,Identifier
+>,Operator
+ ,Whitespace
+processorClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+processorClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+SinkProcessor,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+Class,Identifier
+.,Punctuation
+forName,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+processorClassName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Unable to load sink processor type: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+typeStr,Identifier
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+""", class: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+type,Identifier
+.,Punctuation
+getSinkProcessorClassName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+processor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+processorClass,Identifier
+.,Punctuation
+newInstance,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Unable to create sink processor, type: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+typeStr,Identifier
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+""", class: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+processorClassName,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+processor,Identifier
+.,Punctuation
+setSinks,Identifier
+(,Punctuation
+sinks,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+processor,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+processor,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+SinkProcessor,Identifier
+ ,Whitespace
+getProcessor,Identifier
+(,Punctuation
+ComponentConfiguration,Identifier
+ ,Whitespace
+conf,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+List,Identifier
+<,Operator
+Sink,Identifier
+>,Operator
+ ,Whitespace
+sinks,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+typeStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+conf,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkProcessor,Identifier
+ ,Whitespace
+processor,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkProcessorType,Identifier
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SinkProcessorType,Identifier
+.,Punctuation
+DEFAULT,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SinkProcessorType,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+typeStr,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+Locale,Identifier
+.,Punctuation
+ENGLISH,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Sink type {} does not exist, using default""",String
+",",Punctuation
+ ,Whitespace
+typeStr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+SinkProcessor,Identifier
+>,Operator
+ ,Whitespace
+processorClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+processorClass,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+(,Punctuation
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+SinkProcessor,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+Class,Identifier
+.,Punctuation
+forName,Identifier
+(,Punctuation
+type,Identifier
+"
+",Newline
+              ,Whitespace
+.,Punctuation
+getSinkProcessorClassName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Unable to load sink processor type: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+typeStr,Identifier
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+""", class: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+type,Identifier
+.,Punctuation
+getSinkProcessorClassName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+processor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+processorClass,Identifier
+.,Punctuation
+newInstance,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Unable to create processor, type: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+typeStr,Identifier
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+""", class: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+type,Identifier
+.,Punctuation
+getSinkProcessorClassName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+processor,Identifier
+.,Punctuation
+setSinks,Identifier
+(,Punctuation
+sinks,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+processor,Identifier
+",",Punctuation
+ ,Whitespace
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+processor,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

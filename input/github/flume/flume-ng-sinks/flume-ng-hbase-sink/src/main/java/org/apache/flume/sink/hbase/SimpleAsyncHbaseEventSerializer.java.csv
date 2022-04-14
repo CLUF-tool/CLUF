@@ -1,0 +1,1140 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+hbase,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+async,Identifier
+.,Punctuation
+AtomicIncrementRequest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+async,Identifier
+.,Punctuation
+PutRequest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+ComponentConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+SimpleHbaseEventSerializer,Identifier
+.,Punctuation
+KeyType,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Charsets,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A simple serializer to be used with the AsyncHBaseSink
+ * that returns puts from an event, by writing the event
+ * body into it. The headers are discarded. It also updates a row in hbase
+ * which acts as an event counter.
+ *
+ * Takes optional parameters:<p>
+ * <tt>rowPrefix:</tt> The prefix to be used. Default: <i>default</i><p>
+ * <tt>incrementRow</tt> The row to increment. Default: <i>incRow</i><p>
+ * <tt>suffix:</tt> <i>uuid/random/timestamp.</i>Default: <i>uuid</i><p>
+ *
+ * Mandatory parameters: <p>
+ * <tt>cf:</tt>Column family.<p>
+ * Components that have no defaults and will not be used if absent:
+ * <tt>payloadColumn:</tt> Which column to put payload in. If it is not present,
+ * event data will not be written.<p>
+ * <tt>incrementColumn:</tt> Which column to increment. If this is absent, it
+ *  means no column is incremented.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SimpleAsyncHbaseEventSerializer,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+AsyncHbaseEventSerializer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+table,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+cf,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+payload,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+payloadColumn,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+incrementColumn,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+rowPrefix,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+incrementRow,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+KeyType,Identifier
+ ,Whitespace
+keyType,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initialize,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+table,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+cf,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+table,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+table,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+cf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cf,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+PutRequest,Identifier
+>,Operator
+ ,Whitespace
+getActions,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+PutRequest,Identifier
+>,Operator
+ ,Whitespace
+actions,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+PutRequest,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+payloadColumn,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+rowKey,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+keyType,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+case,Keyword
+ ,Whitespace
+TS,Identifier
+:,Operator
+"
+",Newline
+            ,Whitespace
+rowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SimpleRowKeyGenerator,Identifier
+.,Punctuation
+getTimestampKey,Identifier
+(,Punctuation
+rowPrefix,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+case,Keyword
+ ,Whitespace
+TSNANO,Identifier
+:,Operator
+"
+",Newline
+            ,Whitespace
+rowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SimpleRowKeyGenerator,Identifier
+.,Punctuation
+getNanoTimestampKey,Identifier
+(,Punctuation
+rowPrefix,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+case,Keyword
+ ,Whitespace
+RANDOM,Identifier
+:,Operator
+"
+",Newline
+            ,Whitespace
+rowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SimpleRowKeyGenerator,Identifier
+.,Punctuation
+getRandomKey,Identifier
+(,Punctuation
+rowPrefix,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+            ,Whitespace
+rowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SimpleRowKeyGenerator,Identifier
+.,Punctuation
+getUUIDKey,Identifier
+(,Punctuation
+rowPrefix,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+PutRequest,Identifier
+ ,Whitespace
+putRequest,Identifier
+ ,Whitespace
+=,Operator
+  ,Whitespace
+new,Keyword
+ ,Whitespace
+PutRequest,Identifier
+(,Punctuation
+table,Identifier
+",",Punctuation
+ ,Whitespace
+rowKey,Identifier
+",",Punctuation
+ ,Whitespace
+cf,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+payloadColumn,Identifier
+",",Punctuation
+ ,Whitespace
+payload,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+actions,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+putRequest,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Could not get row key!""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+actions,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+AtomicIncrementRequest,Identifier
+>,Operator
+ ,Whitespace
+getIncrements,Identifier
+(,Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+AtomicIncrementRequest,Identifier
+>,Operator
+ ,Whitespace
+actions,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+"
+",Newline
+        ,Whitespace
+ArrayList,Identifier
+<,Operator
+AtomicIncrementRequest,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+incrementColumn,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+AtomicIncrementRequest,Identifier
+ ,Whitespace
+inc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AtomicIncrementRequest,Identifier
+(,Punctuation
+table,Identifier
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+incrementRow,Identifier
+",",Punctuation
+ ,Whitespace
+cf,Identifier
+",",Punctuation
+ ,Whitespace
+incrementColumn,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+actions,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+inc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+actions,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+cleanUp,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// TODO Auto-generated method stub,Comment
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+pCol,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""payloadColumn""",String
+",",Punctuation
+ ,Whitespace
+"""pCol""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+iCol,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""incrementColumn""",String
+",",Punctuation
+ ,Whitespace
+"""iCol""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+rowPrefix,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""rowPrefix""",String
+",",Punctuation
+ ,Whitespace
+"""default""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+suffix,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""suffix""",String
+",",Punctuation
+ ,Whitespace
+"""uuid""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+pCol,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+pCol,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+suffix,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""timestamp""",String
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+keyType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KeyType,Identifier
+.,Punctuation
+TS,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+suffix,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""random""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+keyType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KeyType,Identifier
+.,Punctuation
+RANDOM,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+(,Punctuation
+suffix,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""nano""",String
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+keyType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KeyType,Identifier
+.,Punctuation
+TSNANO,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+keyType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KeyType,Identifier
+.,Punctuation
+UUID,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+payloadColumn,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pCol,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+iCol,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+iCol,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+incrementColumn,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+iCol,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+incrementRow,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""incrementRow""",String
+",",Punctuation
+ ,Whitespace
+"""incRow""",String
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setEvent,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+payload,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+ComponentConfiguration,Identifier
+ ,Whitespace
+conf,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// TODO Auto-generated method stub,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

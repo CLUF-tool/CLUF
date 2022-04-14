@@ -1,0 +1,986 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+controller,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+.,Punctuation
+AclEntity,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+request,Identifier
+.,Punctuation
+AccessRequest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+response,Identifier
+.,Punctuation
+AccessEntryResponse,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+AclPermissionFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+service,Identifier
+.,Punctuation
+AccessService,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+beans,Identifier
+.,Punctuation
+factory,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+Autowired,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+acls,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+Acl,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+acls,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+Permission,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+acls,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+Sid,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+stereotype,Identifier
+.,Punctuation
+Controller,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+web,Identifier
+.,Punctuation
+bind,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+PathVariable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+web,Identifier
+.,Punctuation
+bind,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+RequestBody,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+web,Identifier
+.,Punctuation
+bind,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+RequestMapping,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+web,Identifier
+.,Punctuation
+bind,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+RequestMethod,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+web,Identifier
+.,Punctuation
+bind,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+ResponseBody,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author xduo
+ * 
+ */",Comment
+"
+",Newline
+@,Punctuation
+Controller,Identifier
+"
+",Newline
+@,Punctuation
+RequestMapping,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""/access""",String
+),Punctuation
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+AccessController,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+BasicController,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Autowired,Identifier
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+AccessService,Identifier
+ ,Whitespace
+accessService,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Get access entry list of a domain object
+     * 
+     * @param uuid
+     * @return
+     * @throws IOException
+     */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+RequestMapping,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""/{type}/{uuid}""",String
+",",Punctuation
+ ,Whitespace
+method,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+RequestMethod,Identifier
+.,Punctuation
+GET,Identifier
+ ,Whitespace
+},Punctuation
+),Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+ResponseBody,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+AccessEntryResponse,Identifier
+>,Operator
+ ,Whitespace
+getAccessEntities,Identifier
+(,Punctuation
+@,Punctuation
+PathVariable,Identifier
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+",",Punctuation
+ ,Whitespace
+@,Punctuation
+PathVariable,Identifier
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+uuid,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+AclEntity,Identifier
+ ,Whitespace
+ae,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+getAclEntity,Identifier
+(,Punctuation
+type,Identifier
+",",Punctuation
+ ,Whitespace
+uuid,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Acl,Identifier
+ ,Whitespace
+acl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+getAcl,Identifier
+(,Punctuation
+ae,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+generateAceResponses,Identifier
+(,Punctuation
+acl,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Grant a new access on a domain object to a user/role
+     * 
+     * @param accessRequest
+     */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+RequestMapping,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""/{type}/{uuid}""",String
+",",Punctuation
+ ,Whitespace
+method,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+RequestMethod,Identifier
+.,Punctuation
+POST,Identifier
+ ,Whitespace
+},Punctuation
+),Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+ResponseBody,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+AccessEntryResponse,Identifier
+>,Operator
+ ,Whitespace
+grant,Identifier
+(,Punctuation
+@,Punctuation
+PathVariable,Identifier
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+",",Punctuation
+ ,Whitespace
+@,Punctuation
+PathVariable,Identifier
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+uuid,Identifier
+",",Punctuation
+ ,Whitespace
+@,Punctuation
+RequestBody,Identifier
+ ,Whitespace
+AccessRequest,Identifier
+ ,Whitespace
+accessRequest,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+AclEntity,Identifier
+ ,Whitespace
+ae,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+getAclEntity,Identifier
+(,Punctuation
+type,Identifier
+",",Punctuation
+ ,Whitespace
+uuid,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Sid,Identifier
+ ,Whitespace
+sid,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+getSid,Identifier
+(,Punctuation
+accessRequest,Identifier
+.,Punctuation
+getSid,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+accessRequest,Identifier
+.,Punctuation
+isPrincipal,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Permission,Identifier
+ ,Whitespace
+permission,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+AclPermissionFactory,Identifier
+.,Punctuation
+getPermission,Identifier
+(,Punctuation
+accessRequest,Identifier
+.,Punctuation
+getPermission,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Acl,Identifier
+ ,Whitespace
+acl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+grant,Identifier
+(,Punctuation
+ae,Identifier
+",",Punctuation
+ ,Whitespace
+permission,Identifier
+",",Punctuation
+ ,Whitespace
+sid,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+generateAceResponses,Identifier
+(,Punctuation
+acl,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Update a access on a domain object
+     * 
+     * @param accessRequest
+     */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+RequestMapping,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""/{type}/{uuid}""",String
+",",Punctuation
+ ,Whitespace
+method,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+RequestMethod,Identifier
+.,Punctuation
+PUT,Identifier
+ ,Whitespace
+},Punctuation
+),Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+ResponseBody,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+AccessEntryResponse,Identifier
+>,Operator
+ ,Whitespace
+update,Identifier
+(,Punctuation
+@,Punctuation
+PathVariable,Identifier
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+",",Punctuation
+ ,Whitespace
+@,Punctuation
+PathVariable,Identifier
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+uuid,Identifier
+",",Punctuation
+ ,Whitespace
+@,Punctuation
+RequestBody,Identifier
+ ,Whitespace
+AccessRequest,Identifier
+ ,Whitespace
+accessRequest,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+AclEntity,Identifier
+ ,Whitespace
+ae,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+getAclEntity,Identifier
+(,Punctuation
+type,Identifier
+",",Punctuation
+ ,Whitespace
+uuid,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Permission,Identifier
+ ,Whitespace
+permission,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+AclPermissionFactory,Identifier
+.,Punctuation
+getPermission,Identifier
+(,Punctuation
+accessRequest,Identifier
+.,Punctuation
+getPermission,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Acl,Identifier
+ ,Whitespace
+acl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+update,Identifier
+(,Punctuation
+ae,Identifier
+",",Punctuation
+ ,Whitespace
+accessRequest,Identifier
+.,Punctuation
+getAccessEntryId,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+permission,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+generateAceResponses,Identifier
+(,Punctuation
+acl,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Revoke access on a domain object from a user/role
+     * 
+     * @param AccessRequest
+     */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+RequestMapping,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""/{type}/{uuid}""",String
+",",Punctuation
+ ,Whitespace
+method,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+RequestMethod,Identifier
+.,Punctuation
+DELETE,Identifier
+ ,Whitespace
+},Punctuation
+),Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+AccessEntryResponse,Identifier
+>,Operator
+ ,Whitespace
+revoke,Identifier
+(,Punctuation
+@,Punctuation
+PathVariable,Identifier
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+",",Punctuation
+ ,Whitespace
+@,Punctuation
+PathVariable,Identifier
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+uuid,Identifier
+",",Punctuation
+ ,Whitespace
+AccessRequest,Identifier
+ ,Whitespace
+accessRequest,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+AclEntity,Identifier
+ ,Whitespace
+ae,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+getAclEntity,Identifier
+(,Punctuation
+type,Identifier
+",",Punctuation
+ ,Whitespace
+uuid,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Acl,Identifier
+ ,Whitespace
+acl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+revoke,Identifier
+(,Punctuation
+ae,Identifier
+",",Punctuation
+ ,Whitespace
+accessRequest,Identifier
+.,Punctuation
+getAccessEntryId,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+accessService,Identifier
+.,Punctuation
+generateAceResponses,Identifier
+(,Punctuation
+acl,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param accessService
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setAccessService,Identifier
+(,Punctuation
+AccessService,Identifier
+ ,Whitespace
+accessService,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+accessService,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+accessService,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,1142 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+source,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+CounterGroup,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+PollableSource,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+EventBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * StressSource is an internal load-generating source implementation
+ * which is very useful for stress tests. It allows User to configure
+ * the size of Event payload, with empty headers. User can configure
+ * total number of events to be sent as well maximum number of Successful
+ * Events to be delivered. Useful for tests
+ *
+ * Example configuration for Agent a1
+ * <PRE>
+ *   a1.sources = stresssource-1
+ *   a1.channels = memoryChannel-1
+ *   a1.sources.stresssource-1.type = org.apache.flume.source.StressSource
+ *   a1.sources.stresssource-1.size = 10240
+ *   a1.sources.stresssource-1.maxTotalEvents = 1000000
+ *   a1.sources.stresssource-1.channels = memoryChannel-1
+ * </PRE>
+ *
+ * See {@link StressSource#configure(Context)} for configuration options.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+StressSource,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractSource,Identifier
+ ,Whitespace
+implements,Keyword
+"
+",Newline
+  ,Whitespace
+Configurable,Identifier
+",",Punctuation
+ ,Whitespace
+PollableSource,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+StressSource,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+CounterGroup,Identifier
+ ,Whitespace
+counterGroup,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+buffer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+maxTotalEvents,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+maxSuccessfulEvents,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+batchSize,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+lastSent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventBatchList,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventBatchListToProcess,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+StressSource,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+counterGroup,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CounterGroup,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Read parameters from context
+   * <li>-maxTotalEvents = type long that defines the total number of Events to be sent
+   * <li>-maxSuccessfulEvents = type long that defines the number of successful Events
+   * <li>-size = type int that defines the number of bytes in each Event
+   * <li>-batchSize = type int that defines the number of Events being sent in one batch
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+/* Limit on the total number of events. */,Comment
+"
+",Newline
+    ,Whitespace
+maxTotalEvents,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+"""maxTotalEvents""",String
+",",Punctuation
+ ,Whitespace
+-,Operator
+1L,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+/* Limit on the total number of successful events. */,Comment
+"
+",Newline
+    ,Whitespace
+maxSuccessfulEvents,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+"""maxSuccessfulEvents""",String
+",",Punctuation
+ ,Whitespace
+-,Operator
+1L,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+/* Set max events in a batch submission */,Comment
+"
+",Newline
+    ,Whitespace
+batchSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+"""batchSize""",String
+",",Punctuation
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+/* Size of events to be generated. */,Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+size,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+"""size""",String
+",",Punctuation
+ ,Whitespace
+500,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+prepEventData,Identifier
+(,Punctuation
+size,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+prepEventData,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+bufferSize,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+buffer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+bufferSize,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Arrays,Identifier
+.,Punctuation
+fill,Identifier
+(,Punctuation
+buffer,Identifier
+",",Punctuation
+ ,Whitespace
+Byte,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+batchSize,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+//Create event objects in case of batch test,Comment
+"
+",Newline
+      ,Whitespace
+eventBatchList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+batchSize,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+"
+",Newline
+      ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+eventBatchList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+buffer,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+//Create single event in case of non-batch test,Comment
+"
+",Newline
+      ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+buffer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+Status,Identifier
+ ,Whitespace
+process,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+totalEventSent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterGroup,Identifier
+.,Punctuation
+addAndGet,Identifier
+(,Punctuation
+"""events.total""",String
+",",Punctuation
+ ,Whitespace
+lastSent,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+maxTotalEvents,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+&&,Operator
+"
+",Newline
+        ,Whitespace
+totalEventSent,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+maxTotalEvents,Identifier
+),Punctuation
+ ,Whitespace
+||,Operator
+"
+",Newline
+        ,Whitespace
+(,Punctuation
+maxSuccessfulEvents,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+&&,Operator
+"
+",Newline
+        ,Whitespace
+counterGroup,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""events.successful""",String
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+maxSuccessfulEvents,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+lastSent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+batchSize,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+batchSize,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+getChannelProcessor,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+processEvent,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+eventsLeft,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+maxTotalEvents,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+totalEventSent,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+maxTotalEvents,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+eventsLeft,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+batchSize,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+eventBatchListToProcess,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+eventBatchList,Identifier
+.,Punctuation
+subList,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+eventsLeft,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+eventBatchListToProcess,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+eventBatchList,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+lastSent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+eventBatchListToProcess,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+getChannelProcessor,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+processEventBatch,Identifier
+(,Punctuation
+eventBatchListToProcess,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+counterGroup,Identifier
+.,Punctuation
+addAndGet,Identifier
+(,Punctuation
+"""events.successful""",String
+",",Punctuation
+ ,Whitespace
+lastSent,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ChannelException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+counterGroup,Identifier
+.,Punctuation
+addAndGet,Identifier
+(,Punctuation
+"""events.failed""",String
+",",Punctuation
+ ,Whitespace
+lastSent,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+Status,Identifier
+.,Punctuation
+READY,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+start,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Stress source starting""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Stress source started""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Stress source stopping""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Stress source stopped. Metrics:{}""",String
+",",Punctuation
+ ,Whitespace
+counterGroup,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

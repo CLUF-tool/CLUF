@@ -1,0 +1,1108 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+response,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Serializable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+SelectedColumnMeta,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Serializable,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+serialVersionUID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1L,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// private static final Logger logger =,Comment
+"
+",Newline
+    ,Whitespace
+// LoggerFactory.getLogger(SQLResponse.class);,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// the data type for each column,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+SelectedColumnMeta,Identifier
+>,Operator
+ ,Whitespace
+columnMetas,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// the results rows, each row contains several columns",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+results,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * for historical reasons it is named ""cube"", however it might also refer to any realizations like hybrid, II or etc.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+cube,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// if not select query, only return affected row count",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+affectedRowCount,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// flag indicating whether an exception occurred,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// if isException, the detailed exception message",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+exceptionMessage,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+duration,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isPartial,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+totalScanCount,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+hitExceptionCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+storageCacheUsed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+SelectedColumnMeta,Identifier
+>,Operator
+ ,Whitespace
+columnMetas,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+results,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+affectedRowCount,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isException,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+exceptionMessage,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+columnMetas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columnMetas,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+results,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+results,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+affectedRowCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+affectedRowCount,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+isException,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+isException,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+exceptionMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+exceptionMessage,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+SelectedColumnMeta,Identifier
+>,Operator
+ ,Whitespace
+columnMetas,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+results,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+affectedRowCount,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isException,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+exceptionMessage,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+columnMetas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columnMetas,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+results,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+results,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+cube,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cube,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+affectedRowCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+affectedRowCount,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+isException,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+isException,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+exceptionMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+exceptionMessage,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+SelectedColumnMeta,Identifier
+>,Operator
+ ,Whitespace
+columnMetas,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+results,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+affectedRowCount,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isException,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+exceptionMessage,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isPartial,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+columnMetas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columnMetas,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+results,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+results,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+cube,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cube,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+affectedRowCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+affectedRowCount,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+isException,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+isException,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+exceptionMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+exceptionMessage,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+isPartial,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+isPartial,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+SelectedColumnMeta,Identifier
+>,Operator
+ ,Whitespace
+getColumnMetas,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+columnMetas,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+getResults,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+results,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setResults,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+results,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+results,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+results,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getCube,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+cube,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getAffectedRowCount,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+affectedRowCount,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+getIsException,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+isException,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getExceptionMessage,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+exceptionMessage,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getDuration,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+duration,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setDuration,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+duration,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+duration,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+duration,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isPartial,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+isPartial,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getTotalScanCount,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+totalScanCount,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setTotalScanCount,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+totalScanCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+totalScanCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+totalScanCount,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isHitExceptionCache,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+hitExceptionCache,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setHitExceptionCache,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+hitExceptionCache,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+hitExceptionCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hitExceptionCache,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isStorageCacheUsed,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+storageCacheUsed,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setStorageCacheUsed,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+storageCacheUsed,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+storageCacheUsed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+storageCacheUsed,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,1979 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+kafka,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Iterator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+OffsetRequest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+cluster,Identifier
+.,Punctuation
+Broker,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+javaapi,Identifier
+.,Punctuation
+FetchResponse,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+javaapi,Identifier
+.,Punctuation
+PartitionMetadata,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+message,Identifier
+.,Punctuation
+MessageAndOffset,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Pair,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+StreamingMessage,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+kafka,Identifier
+.,Punctuation
+StreamingParser,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+kafka,Identifier
+.,Punctuation
+config,Identifier
+.,Punctuation
+KafkaClusterConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KafkaUtils,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+KafkaUtils,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+MAX_RETRY_TIMES,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+6,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+KafkaUtils,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Broker,Identifier
+ ,Whitespace
+getLeadBroker,Identifier
+(,Punctuation
+KafkaClusterConfig,Identifier
+ ,Whitespace
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+PartitionMetadata,Identifier
+ ,Whitespace
+partitionMetadata,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KafkaRequester,Identifier
+.,Punctuation
+getPartitionMetadata,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+.,Punctuation
+getTopic,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+kafkaClusterConfig,Identifier
+.,Punctuation
+getBrokers,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+kafkaClusterConfig,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+partitionMetadata,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+partitionMetadata,Identifier
+.,Punctuation
+errorCode,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""PartitionMetadata errorCode: """,String
++,Operator
+partitionMetadata,Identifier
+.,Punctuation
+errorCode,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+partitionMetadata,Identifier
+.,Punctuation
+leader,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+sleep,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+retryTimes,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+seconds,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+pow,Identifier
+(,Punctuation
+2,Literal
+",",Punctuation
+ ,Whitespace
+retryTimes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""retry times:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+retryTimes,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" sleep:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+seconds,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" seconds""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+seconds,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1000,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+MessageAndOffset,Identifier
+ ,Whitespace
+getKafkaMessage,Identifier
+(,Punctuation
+KafkaClusterConfig,Identifier
+ ,Whitespace
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+topic,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kafkaClusterConfig,Identifier
+.,Punctuation
+getTopic,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+retry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+retry,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+MAX_RETRY_TIMES,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+//max sleep time 63 seconds,Comment
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+Broker,Identifier
+ ,Whitespace
+leadBroker,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getLeadBroker,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+leadBroker,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""unable to find leadBroker with config:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+kafkaClusterConfig,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" partitionId:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+sleep,Identifier
+(,Punctuation
+retry,Identifier
+++,Operator
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+FetchResponse,Identifier
+ ,Whitespace
+response,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KafkaRequester,Identifier
+.,Punctuation
+fetchResponse,Identifier
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+leadBroker,Identifier
+",",Punctuation
+ ,Whitespace
+kafkaClusterConfig,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+response,Identifier
+.,Punctuation
+errorCode,Identifier
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""errorCode of FetchResponse is:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+response,Identifier
+.,Punctuation
+errorCode,Identifier
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+sleep,Identifier
+(,Punctuation
+retry,Identifier
+++,Operator
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+Iterator,Identifier
+<,Operator
+MessageAndOffset,Identifier
+>,Operator
+ ,Whitespace
+iterator,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+response,Identifier
+.,Punctuation
+messageSet,Identifier
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+.,Punctuation
+iterator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+iterator,Identifier
+.,Punctuation
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""messageSet is empty""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+sleep,Identifier
+(,Punctuation
+retry,Identifier
+++,Operator
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+iterator,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+format,Identifier
+(,Punctuation
+"""try to get timestamp of topic: %s, partitionId: %d, offset: %d, failed to get StreamMessage from kafka""",String
+",",Punctuation
+ ,Whitespace
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+findClosestOffsetWithDataTimestamp,Identifier
+(,Punctuation
+KafkaClusterConfig,Identifier
+ ,Whitespace
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+timestamp,Identifier
+",",Punctuation
+ ,Whitespace
+StreamingParser,Identifier
+ ,Whitespace
+streamingParser,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Pair,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+firstAndLast,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getFirstAndLastOffset,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+topic,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kafkaClusterConfig,Identifier
+.,Punctuation
+getTopic,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+format,Identifier
+(,Punctuation
+"""topic: %s, partitionId: %d, try to find closest offset with timestamp: %d between offset {%d, %d}""",String
+",",Punctuation
+ ,Whitespace
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+timestamp,Identifier
+",",Punctuation
+ ,Whitespace
+firstAndLast,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+firstAndLast,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+binarySearch,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+firstAndLast,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+firstAndLast,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+timestamp,Identifier
+",",Punctuation
+ ,Whitespace
+streamingParser,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+format,Identifier
+(,Punctuation
+"""topic: %s, partitionId: %d, found offset: %d""",String
+",",Punctuation
+ ,Whitespace
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+result,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Pair,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+getFirstAndLastOffset,Identifier
+(,Punctuation
+KafkaClusterConfig,Identifier
+ ,Whitespace
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+topic,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kafkaClusterConfig,Identifier
+.,Punctuation
+getTopic,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+Broker,Identifier
+ ,Whitespace
+leadBroker,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+getLeadBroker,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""unable to find leadBroker with config:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+kafkaClusterConfig,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" partitionId:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+partitionId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+earliestOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KafkaRequester,Identifier
+.,Punctuation
+getLastOffset,Identifier
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+OffsetRequest,Identifier
+.,Punctuation
+EarliestTime,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+leadBroker,Identifier
+",",Punctuation
+ ,Whitespace
+kafkaClusterConfig,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+latestOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KafkaRequester,Identifier
+.,Punctuation
+getLastOffset,Identifier
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+OffsetRequest,Identifier
+.,Punctuation
+LatestTime,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+leadBroker,Identifier
+",",Punctuation
+ ,Whitespace
+kafkaClusterConfig,Identifier
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Pair,Identifier
+.,Punctuation
+newPair,Identifier
+(,Punctuation
+earliestOffset,Identifier
+",",Punctuation
+ ,Whitespace
+latestOffset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+binarySearch,Identifier
+(,Punctuation
+KafkaClusterConfig,Identifier
+ ,Whitespace
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+startOffset,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+endOffset,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+targetTimestamp,Identifier
+",",Punctuation
+ ,Whitespace
+StreamingParser,Identifier
+ ,Whitespace
+streamingParser,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Map,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+cache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+startOffset,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+endOffset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+midOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+endOffset,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+startOffset,Identifier
+),Punctuation
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+startTimestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDataTimestamp,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+startOffset,Identifier
+",",Punctuation
+ ,Whitespace
+streamingParser,Identifier
+",",Punctuation
+ ,Whitespace
+cache,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+endTimestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDataTimestamp,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+endOffset,Identifier
+",",Punctuation
+ ,Whitespace
+streamingParser,Identifier
+",",Punctuation
+ ,Whitespace
+cache,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+midTimestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDataTimestamp,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+midOffset,Identifier
+",",Punctuation
+ ,Whitespace
+streamingParser,Identifier
+",",Punctuation
+ ,Whitespace
+cache,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+// hard to ensure these 2 conditions,Comment
+"
+",Newline
+            ,Whitespace
+//            Preconditions.checkArgument(startTimestamp <= midTimestamp);,Comment
+"
+",Newline
+            ,Whitespace
+//            Preconditions.checkArgument(midTimestamp <= endTimestamp);,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+startTimestamp,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+targetTimestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+startOffset,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+endTimestamp,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+targetTimestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+endOffset,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+targetTimestamp,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+midTimestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+midOffset,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+targetTimestamp,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+midTimestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+endOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+midOffset,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+startOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+midOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+startOffset,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getDataTimestamp,Identifier
+(,Punctuation
+KafkaClusterConfig,Identifier
+ ,Whitespace
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+StreamingParser,Identifier
+ ,Whitespace
+streamingParser,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+cache,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+cache,Identifier
+.,Punctuation
+containsKey,Identifier
+(,Punctuation
+offset,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+cache,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDataTimestamp,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+streamingParser,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+cache,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+t,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getDataTimestamp,Identifier
+(,Punctuation
+KafkaClusterConfig,Identifier
+ ,Whitespace
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+StreamingParser,Identifier
+ ,Whitespace
+streamingParser,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+topic,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kafkaClusterConfig,Identifier
+.,Punctuation
+getTopic,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+MessageAndOffset,Identifier
+ ,Whitespace
+messageAndOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getKafkaMessage,Identifier
+(,Punctuation
+kafkaClusterConfig,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+payload,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+messageAndOffset,Identifier
+.,Punctuation
+message,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+payload,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+payload,Identifier
+.,Punctuation
+limit,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+payload,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+bytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+StreamingMessage,Identifier
+ ,Whitespace
+streamingMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+streamingParser,Identifier
+.,Punctuation
+parse,Identifier
+(,Punctuation
+messageAndOffset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+format,Identifier
+(,Punctuation
+"""The timestamp of topic: %s, partitionId: %d, offset: %d is: %d""",String
+",",Punctuation
+ ,Whitespace
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+partitionId,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+streamingMessage,Identifier
+.,Punctuation
+getTimestamp,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+streamingMessage,Identifier
+.,Punctuation
+getTimestamp,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

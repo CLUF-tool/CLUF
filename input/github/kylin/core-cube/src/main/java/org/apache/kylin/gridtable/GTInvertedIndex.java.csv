@@ -1,0 +1,2035 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+gridtable,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ByteArray,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ImmutableBitSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+CompareTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+LogicalTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+TupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+it,Identifier
+.,Punctuation
+uniroma3,Identifier
+.,Punctuation
+mat,Identifier
+.,Punctuation
+extendedset,Identifier
+.,Punctuation
+intset,Identifier
+.,Punctuation
+ConciseSet,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A thread-safe inverted index of row blocks in memory.
+ * 
+ * Note function not() must return all blocks, because index only know what block contains a value,
+ * but not sure what block does not contain a value.
+ * 
+ * @author yangli9
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+GTInvertedIndex,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+GTInfo,Identifier
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+colPreferIndex,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+colBlocks,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+GTInvertedIndexOfColumn,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+index,Identifier
+;,Punctuation
+ ,Whitespace
+// for each column,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nIndexedBlocks,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+GTInvertedIndex,Identifier
+(,Punctuation
+GTInfo,Identifier
+ ,Whitespace
+info,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+info,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+colPreferIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+.,Punctuation
+colPreferIndex,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+colBlocks,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+.,Punctuation
+selectColumnBlocks,Identifier
+(,Punctuation
+colPreferIndex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+index,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTInvertedIndexOfColumn,Identifier
+[,Punctuation
+info,Identifier
+.,Punctuation
+getColumnCount,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+colPreferIndex,Identifier
+.,Punctuation
+trueBitCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colPreferIndex,Identifier
+.,Punctuation
+trueBitAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+index,Identifier
+[,Punctuation
+c,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTInvertedIndexOfColumn,Identifier
+(,Punctuation
+info,Identifier
+.,Punctuation
+codeSystem,Identifier
+.,Punctuation
+getComparator,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+add,Identifier
+(,Punctuation
+GTRowBlock,Identifier
+ ,Whitespace
+block,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+ByteArray,Identifier
+>,Operator
+[,Punctuation
+],Punctuation
+ ,Whitespace
+distinctValues,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Set,Identifier
+[,Punctuation
+info,Identifier
+.,Punctuation
+getColumnCount,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+colPreferIndex,Identifier
+.,Punctuation
+trueBitCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colPreferIndex,Identifier
+.,Punctuation
+trueBitAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+distinctValues,Identifier
+[,Punctuation
+c,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashSet,Identifier
+<,Operator
+ByteArray,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+GTRowBlock,Identifier
+.,Punctuation
+Reader,Identifier
+ ,Whitespace
+reader,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+block,Identifier
+.,Punctuation
+getReader,Identifier
+(,Punctuation
+colBlocks,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+GTRecord,Identifier
+ ,Whitespace
+record,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTRecord,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+reader,Identifier
+.,Punctuation
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+reader,Identifier
+.,Punctuation
+fetchNext,Identifier
+(,Punctuation
+record,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+colPreferIndex,Identifier
+.,Punctuation
+trueBitCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colPreferIndex,Identifier
+.,Punctuation
+trueBitAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+distinctValues,Identifier
+[,Punctuation
+c,Identifier
+],Punctuation
+.,Punctuation
+add,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+colPreferIndex,Identifier
+.,Punctuation
+trueBitCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colPreferIndex,Identifier
+.,Punctuation
+trueBitAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+index,Identifier
+[,Punctuation
+c,Identifier
+],Punctuation
+.,Punctuation
+add,Identifier
+(,Punctuation
+distinctValues,Identifier
+[,Punctuation
+c,Identifier
+],Punctuation
+",",Punctuation
+ ,Whitespace
+block,Identifier
+.,Punctuation
+getSequenceId,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+nIndexedBlocks,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+nIndexedBlocks,Identifier
+",",Punctuation
+ ,Whitespace
+block,Identifier
+.,Punctuation
+seqId,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+filter,Identifier
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+filter,Identifier
+(,Punctuation
+filter,Identifier
+",",Punctuation
+ ,Whitespace
+nIndexedBlocks,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+filter,Identifier
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+totalBlocks,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// number of indexed blocks may increase as we do evaluation,Comment
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+indexedBlocks,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+nIndexedBlocks,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Evaluator,Identifier
+ ,Whitespace
+evaluator,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Evaluator,Identifier
+(,Punctuation
+indexedBlocks,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+r,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+evaluator,Identifier
+.,Punctuation
+evaluate,Identifier
+(,Punctuation
+filter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// add blocks that have not been indexed,Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+indexedBlocks,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+totalBlocks,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+r,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+r,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Evaluator,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+indexedBlocks,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Evaluator,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+indexedBlocks,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+indexedBlocks,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+indexedBlocks,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+evaluate,Identifier
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+LogicalTupleFilter,Identifier
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+evalLogical,Identifier
+(,Punctuation
+(,Punctuation
+LogicalTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+filter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+CompareTupleFilter,Identifier
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+evalCompare,Identifier
+(,Punctuation
+(,Punctuation
+CompareTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+filter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// unable to evaluate,Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+evalCompare,Identifier
+(,Punctuation
+CompareTupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+col,Identifier
+(,Punctuation
+filter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+index,Identifier
+[,Punctuation
+col,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+.,Punctuation
+getOperator,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+ISNULL,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+index,Identifier
+[,Punctuation
+col,Identifier
+],Punctuation
+.,Punctuation
+getNull,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+ISNOTNULL,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+EQ,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+index,Identifier
+[,Punctuation
+col,Identifier
+],Punctuation
+.,Punctuation
+getEquals,Identifier
+(,Punctuation
+(,Punctuation
+ByteArray,Identifier
+),Punctuation
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getFirstValue,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+NEQ,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+IN,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+index,Identifier
+[,Punctuation
+col,Identifier
+],Punctuation
+.,Punctuation
+getIn,Identifier
+(,Punctuation
+(,Punctuation
+Iterable,Identifier
+<,Operator
+ByteArray,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getValues,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+NOTIN,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+LT,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+index,Identifier
+[,Punctuation
+col,Identifier
+],Punctuation
+.,Punctuation
+getRange,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+ByteArray,Identifier
+),Punctuation
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getFirstValue,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+LTE,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+index,Identifier
+[,Punctuation
+col,Identifier
+],Punctuation
+.,Punctuation
+getRange,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+ByteArray,Identifier
+),Punctuation
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getFirstValue,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+GT,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+index,Identifier
+[,Punctuation
+col,Identifier
+],Punctuation
+.,Punctuation
+getRange,Identifier
+(,Punctuation
+(,Punctuation
+ByteArray,Identifier
+),Punctuation
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getFirstValue,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+GTE,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+index,Identifier
+[,Punctuation
+col,Identifier
+],Punctuation
+.,Punctuation
+getRange,Identifier
+(,Punctuation
+(,Punctuation
+ByteArray,Identifier
+),Punctuation
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getFirstValue,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""Unsupported operator """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getOperator,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+evalLogical,Identifier
+(,Punctuation
+LogicalTupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+.,Punctuation
+getOperator,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+AND,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+evalLogicalAnd,Identifier
+(,Punctuation
+children,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+OR,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+evalLogicalOr,Identifier
+(,Punctuation
+children,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+NOT,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+evalLogicalNot,Identifier
+(,Punctuation
+children,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""Unsupported operator """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getOperator,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+evalLogicalAnd,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+set,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+evaluate,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+t,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+continue,Keyword
+;,Punctuation
+ ,Whitespace
+// because it's AND,Comment
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+set,Identifier
+.,Punctuation
+retainAll,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+set,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+evalLogicalOr,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+set,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+evaluate,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+t,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+ ,Whitespace
+// because it's OR,Comment
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+set,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+set,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+evalLogicalNot,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+all,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+not,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+ConciseSet,Identifier
+ ,Whitespace
+not,Identifier
+(,Punctuation
+ConciseSet,Identifier
+ ,Whitespace
+set,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+set,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+indexedBlocks,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+set,Identifier
+.,Punctuation
+complement,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+set,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+col,Identifier
+(,Punctuation
+CompareTupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getColumn,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getColumnDesc,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getZeroBasedIndex,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

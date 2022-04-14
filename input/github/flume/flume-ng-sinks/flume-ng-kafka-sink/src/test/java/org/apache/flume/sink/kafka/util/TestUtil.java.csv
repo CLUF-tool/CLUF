@@ -1,0 +1,1310 @@
+"/**
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the ""License""); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an ""AS IS"" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+kafka,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+message,Identifier
+.,Punctuation
+MessageAndMetadata,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+BindException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+InetAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+UnknownHostException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Random,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A utility class for starting/stopping Kafka Server.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestUtil,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+TestUtil,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+TestUtil,Identifier
+ ,Whitespace
+instance,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TestUtil,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Random,Identifier
+ ,Whitespace
+randPortGen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Random,Identifier
+(,Punctuation
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+KafkaLocal,Identifier
+ ,Whitespace
+kafkaServer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+KafkaConsumer,Identifier
+ ,Whitespace
+kafkaConsumer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""localhost""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+kafkaLocalPort,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+zkLocalPort,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+TestUtil,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+init,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+TestUtil,Identifier
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+instance,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+init,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// get the localhost.,Comment
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+hostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+InetAddress,Identifier
+.,Punctuation
+getLocalHost,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getHostName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+UnknownHostException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error getting the value of localhost. """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""Proceeding with 'localhost'.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+startKafkaServer,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+kafkaProperties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+zkProperties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Starting kafka server.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+//load properties,Comment
+"
+",Newline
+      ,Whitespace
+zkProperties,Identifier
+.,Punctuation
+load,Identifier
+(,Punctuation
+Class,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getResourceAsStream,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+"""/zookeeper.properties""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+ZooKeeperLocal,Identifier
+ ,Whitespace
+zookeeper,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+//start local Zookeeper,Comment
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+zkLocalPort,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getNextPort,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+// override the Zookeeper client port with the generated one.,Comment
+"
+",Newline
+          ,Whitespace
+zkProperties,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+"""clientPort""",String
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+zkLocalPort,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+zookeeper,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ZooKeeperLocal,Identifier
+(,Punctuation
+zkProperties,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+BindException,Identifier
+ ,Whitespace
+bindEx,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+// bind exception. port is already in use. Try a different port.,Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""ZooKeeper instance is successfully started on port """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+zkLocalPort,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+kafkaProperties,Identifier
+.,Punctuation
+load,Identifier
+(,Punctuation
+Class,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getResourceAsStream,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+"""/kafka-server.properties""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+// override the Zookeeper url.,Comment
+"
+",Newline
+      ,Whitespace
+kafkaProperties,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+"""zookeeper.connect""",String
+",",Punctuation
+ ,Whitespace
+getZkUrl,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+kafkaLocalPort,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getNextPort,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+// override the Kafka server port,Comment
+"
+",Newline
+        ,Whitespace
+kafkaProperties,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+"""port""",String
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+kafkaLocalPort,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+kafkaServer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaLocal,Identifier
+(,Punctuation
+kafkaProperties,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+kafkaServer,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+BindException,Identifier
+ ,Whitespace
+bindEx,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+// let's try another port.,Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Kafka Server is successfully started on port """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+kafkaLocalPort,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error starting the Kafka Server.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+KafkaConsumer,Identifier
+ ,Whitespace
+getKafkaConsumer,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+kafkaConsumer,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+kafkaConsumer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaConsumer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+kafkaConsumer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initTopicList,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+topics,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+getKafkaConsumer,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+initTopicList,Identifier
+(,Punctuation
+topics,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+MessageAndMetadata,Identifier
+ ,Whitespace
+getNextMessageFromConsumer,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+topic,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getKafkaConsumer,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getNextMessage,Identifier
+(,Punctuation
+topic,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+prepare,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+startStatus,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startKafkaServer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+startStatus,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""Error starting the server!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+3,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1000,Literal
+),Punctuation
+;,Punctuation
+   ,Whitespace
+// add this sleep time to,Comment
+"
+",Newline
+      ,Whitespace
+// ensure that the server is fully started before proceeding with tests.,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// ignore,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+getKafkaConsumer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Completed the prepare phase.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Shutting down the Kafka Consumer.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+getKafkaConsumer,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+shutdown,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+3,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1000,Literal
+),Punctuation
+;,Punctuation
+   ,Whitespace
+// add this sleep time to,Comment
+"
+",Newline
+      ,Whitespace
+// ensure that the server is fully started before proceeding with tests.,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// ignore,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Shutting down the kafka Server.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaServer,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Completed the tearDown phase.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getNextPort,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// generate a random port number between 49152 and 65535,Comment
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+randPortGen,Identifier
+.,Punctuation
+nextInt,Identifier
+(,Punctuation
+65535,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+49152,Literal
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+49152,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getZkUrl,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+hostname,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""":""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+zkLocalPort,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getKafkaServerUrl,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+hostname,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""":""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+kafkaLocalPort,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

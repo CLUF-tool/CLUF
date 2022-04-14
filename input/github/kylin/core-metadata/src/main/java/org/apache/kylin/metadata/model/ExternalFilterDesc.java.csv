@@ -1,0 +1,834 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+.,Punctuation
+ResourceStore,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+.,Punctuation
+RootPersistentEntity,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+function,Identifier
+.,Punctuation
+Functions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+JsonAutoDetect,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+JsonAutoDetect,Identifier
+.,Punctuation
+Visibility,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+JsonProperty,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * External filter enables user to register dynamic external filters out the scope of cubes.
+ * External filters are maintained logically in a filter store (which may or may not share same physical store with cubes),
+ * and are accessed by each cube shard at runtime.
+ * 
+ * Currently the way to use external filter is 1. register external filter through REST 2. use UDF to specify conditions on external filter
+ */",Comment
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""serial""",String
+),Punctuation
+"
+",Newline
+@,Punctuation
+JsonAutoDetect,Identifier
+(,Punctuation
+fieldVisibility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Visibility,Identifier
+.,Punctuation
+NONE,Identifier
+",",Punctuation
+ ,Whitespace
+getterVisibility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Visibility,Identifier
+.,Punctuation
+NONE,Identifier
+",",Punctuation
+ ,Whitespace
+isGetterVisibility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Visibility,Identifier
+.,Punctuation
+NONE,Identifier
+",",Punctuation
+ ,Whitespace
+setterVisibility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Visibility,Identifier
+.,Punctuation
+NONE,Identifier
+),Punctuation
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ExternalFilterDesc,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+RootPersistentEntity,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+ISourceAware,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+JsonProperty,Identifier
+(,Punctuation
+"""name""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+name,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+JsonProperty,Identifier
+(,Punctuation
+"""filter_resource_identifier""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+filterResourceIdentifier,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+JsonProperty,Identifier
+(,Punctuation
+"""filter_table_type""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+Functions,Identifier
+.,Punctuation
+FilterTableType,Identifier
+ ,Whitespace
+filterTableType,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+JsonProperty,Identifier
+(,Punctuation
+"""source_type""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+sourceType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ISourceAware,Identifier
+.,Punctuation
+ID_EXTERNAL,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+JsonProperty,Identifier
+(,Punctuation
+"""description""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+description,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getResourcePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+concatResourcePath,Identifier
+(,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+concatResourcePath,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+name,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+ResourceStore,Identifier
+.,Punctuation
+EXTERNAL_FILTER_RESOURCE_ROOT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+name,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".json""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getFilterResourceIdentifier,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+filterResourceIdentifier,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setFilterResourceIdentifier,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+filterResourceIdentifier,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+filterResourceIdentifier,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+filterResourceIdentifier,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Functions,Identifier
+.,Punctuation
+FilterTableType,Identifier
+ ,Whitespace
+getFilterTableType,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+filterTableType,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setFilterTableType,Identifier
+(,Punctuation
+Functions,Identifier
+.,Punctuation
+FilterTableType,Identifier
+ ,Whitespace
+filterTableType,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+filterTableType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+filterTableType,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+.,Punctuation
+name,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setName,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+name,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+name,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+name,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+init,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+name,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+name,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+name,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+"""ExternalFilterDesc [ name=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+name,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" filter table resource identifier """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+filterResourceIdentifier,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""]""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** create a mockup table for unit test */,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+ExternalFilterDesc,Identifier
+ ,Whitespace
+mockup,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ExternalFilterDesc,Identifier
+ ,Whitespace
+mockup,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ExternalFilterDesc,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+mockup,Identifier
+.,Punctuation
+setName,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+mockup,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getSourceType,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+sourceType,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setSourceType,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+sourceType,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+sourceType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sourceType,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getDescription,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+description,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setDescription,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+description,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+description,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+description,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,1142 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+jms,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+ByteArrayOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+ObjectOutput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+ObjectOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+charset,Identifier
+.,Punctuation
+Charset,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Enumeration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+jms,Identifier
+.,Punctuation
+BytesMessage,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+jms,Identifier
+.,Punctuation
+JMSException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+jms,Identifier
+.,Punctuation
+Message,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+jms,Identifier
+.,Punctuation
+ObjectMessage,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+jms,Identifier
+.,Punctuation
+TextMessage,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+SimpleEvent,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * <p>Converts BytesMessage, TextMessage, and ObjectMessage
+ * to a Flume Event. All Message Property names are added
+ * as headers to the Event. The conversion of the body is
+ * as follows:</p>
+ *
+ * <p><strong>BytesMessage:</strong> Body from message is
+ * set as the body of the Event.</p>
+ * <p><strong>TextMessage:</strong> String body converted to a byte
+ * array byte getBytes(charset). Charset defaults to UTF-8 but can be
+ * configured.</p>
+ * <p><strong>ObjectMessage:</strong> Object is written to
+ *  an ByteArrayOutputStream wrapped by an ObjectOutputStream
+ *  and the resulting byte array is the body of the message.</p>
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+DefaultJMSMessageConverter,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+JMSMessageConverter,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Charset,Identifier
+ ,Whitespace
+charset,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+DefaultJMSMessageConverter,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+charset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+charset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Charset,Identifier
+.,Punctuation
+forName,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Builder,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+JMSMessageConverter,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+JMSMessageConverter,Identifier
+ ,Whitespace
+build,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DefaultJMSMessageConverter,Identifier
+(,Punctuation
+context,Identifier
+.,Punctuation
+"
+",Newline
+          ,Whitespace
+getString,Identifier
+(,Punctuation
+JMSSourceConfiguration,Identifier
+.,Punctuation
+CONVERTER_CHARSET,Identifier
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+JMSSourceConfiguration,Identifier
+.,Punctuation
+CONVERTER_CHARSET_DEFAULT,Identifier
+),Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+convert,Identifier
+(,Punctuation
+Message,Identifier
+ ,Whitespace
+message,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+JMSException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SimpleEvent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""rawtypes""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+Enumeration,Identifier
+ ,Whitespace
+propertyNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+message,Identifier
+.,Punctuation
+getPropertyNames,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+(,Punctuation
+propertyNames,Identifier
+.,Punctuation
+hasMoreElements,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+name,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+propertyNames,Identifier
+.,Punctuation
+nextElement,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+message,Identifier
+.,Punctuation
+getStringProperty,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+headers,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+name,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+message,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+BytesMessage,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+BytesMessage,Identifier
+ ,Whitespace
+bytesMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+BytesMessage,Identifier
+),Punctuation
+message,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+length,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bytesMessage,Identifier
+.,Punctuation
+getBodyLength,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0L,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+JMSException,Identifier
+(,Punctuation
+"""Unable to process message """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""of size """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+body,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+(,Punctuation
+int,Keyword
+),Punctuation
+length,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bytesMessage,Identifier
+.,Punctuation
+readBytes,Identifier
+(,Punctuation
+body,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+(,Punctuation
+count,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+JMSException,Identifier
+(,Punctuation
+"""Unable to read full message. """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+              ,Whitespace
+"""Read """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+count,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" of total """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+body,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+(,Punctuation
+message,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+TextMessage,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+TextMessage,Identifier
+ ,Whitespace
+textMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+TextMessage,Identifier
+),Punctuation
+message,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+textMessage,Identifier
+.,Punctuation
+getText,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+(,Punctuation
+message,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+ObjectMessage,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ObjectMessage,Identifier
+ ,Whitespace
+objectMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+ObjectMessage,Identifier
+),Punctuation
+message,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Object,Identifier
+ ,Whitespace
+object,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+objectMessage,Identifier
+.,Punctuation
+getObject,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+object,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ByteArrayOutputStream,Identifier
+ ,Whitespace
+bos,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ByteArrayOutputStream,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ObjectOutput,Identifier
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ObjectOutputStream,Identifier
+(,Punctuation
+bos,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+out,Identifier
+.,Punctuation
+writeObject,Identifier
+(,Punctuation
+object,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+bos,Identifier
+.,Punctuation
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Error serializing object""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+(,Punctuation
+out,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+out,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Error closing ObjectOutputStream""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+(,Punctuation
+bos,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+bos,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Error closing ByteArrayOutputStream""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+events,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+events,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+events,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

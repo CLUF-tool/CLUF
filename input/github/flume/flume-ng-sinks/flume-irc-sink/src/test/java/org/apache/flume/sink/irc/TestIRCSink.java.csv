@@ -1,0 +1,1302 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+irc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+MemoryChannel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurables,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+EventBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+After,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Before,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Rule,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Test,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+rules,Identifier
+.,Punctuation
+TemporaryFolder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+ServerSocket,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+Socket,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+UUID,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Assert,Identifier
+.,Punctuation
+fail,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestIRCSink,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+File,Identifier
+ ,Whitespace
+eventFile,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+int,Keyword
+ ,Whitespace
+ircServerPort,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+DumbIRCServer,Identifier
+ ,Whitespace
+dumbIRCServer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Rule,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+TemporaryFolder,Identifier
+ ,Whitespace
+folder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TemporaryFolder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+findFreePort,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ServerSocket,Identifier
+ ,Whitespace
+socket,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ServerSocket,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+socket,Identifier
+.,Punctuation
+getLocalPort,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+socket,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Before,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setUp,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ircServerPort,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+findFreePort,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+dumbIRCServer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DumbIRCServer,Identifier
+(,Punctuation
+ircServerPort,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+dumbIRCServer,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+eventFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+folder,Identifier
+.,Punctuation
+newFile,Identifier
+(,Punctuation
+"""eventFile.txt""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+After,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+dumbIRCServer,Identifier
+.,Punctuation
+shutdownServer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testIRCSinkMissingSplitLineProperty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Sink,Identifier
+ ,Whitespace
+ircSink,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IRCSink,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ircSink,Identifier
+.,Punctuation
+setName,Identifier
+(,Punctuation
+"""IRC Sink - """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+UUID,Identifier
+.,Punctuation
+randomUUID,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""hostname""",String
+",",Punctuation
+ ,Whitespace
+"""localhost""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""port""",String
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+ircServerPort,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""nick""",String
+",",Punctuation
+ ,Whitespace
+"""flume""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""password""",String
+",",Punctuation
+ ,Whitespace
+"""flume""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""user""",String
+",",Punctuation
+ ,Whitespace
+"""flume""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""name""",String
+",",Punctuation
+ ,Whitespace
+"""flume-dev""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""chan""",String
+",",Punctuation
+ ,Whitespace
+"""flume""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""splitchars""",String
+",",Punctuation
+ ,Whitespace
+"""false""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+ircSink,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Channel,Identifier
+ ,Whitespace
+memoryChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MemoryChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+memoryChannel,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ircSink,Identifier
+.,Punctuation
+setChannel,Identifier
+(,Punctuation
+memoryChannel,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ircSink,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+txn,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+memoryChannel,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+txn,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+"""Dummy Event""",String
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+memoryChannel,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+txn,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+txn,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+ ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ircSink,Identifier
+.,Punctuation
+process,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+status,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+fail,Identifier
+(,Punctuation
+"""Error occured""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+EventDeliveryException,Identifier
+ ,Whitespace
+eDelExcp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// noop,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+class,Keyword
+ ,Whitespace
+DumbIRCServer,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+Thread,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ServerSocket,Identifier
+ ,Whitespace
+ss,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+DumbIRCServer,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+port,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ss,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ServerSocket,Identifier
+(,Punctuation
+port,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Socket,Identifier
+ ,Whitespace
+socket,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ss,Identifier
+.,Punctuation
+accept,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+process,Identifier
+(,Punctuation
+socket,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+/* noop */,Comment
+ ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// noop,Comment
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+shutdownServer,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ss,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Process the incoming request from IRC client
+     *
+     * @param socket  IRC client connection socket
+     * @throws IOException
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+process,Identifier
+(,Punctuation
+Socket,Identifier
+ ,Whitespace
+socket,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+FileOutputStream,Identifier
+ ,Whitespace
+fileOutputStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FileUtils,Identifier
+.,Punctuation
+openOutputStream,Identifier
+(,Punctuation
+eventFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+input,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+IOUtils,Identifier
+.,Punctuation
+readLines,Identifier
+(,Punctuation
+socket,Identifier
+.,Punctuation
+getInputStream,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+next,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+input,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isPrivMessage,Identifier
+(,Punctuation
+next,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+fileOutputStream,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+next,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+fileOutputStream,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""\n""",String
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+fileOutputStream,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+socket,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Checks if the message is Priv message
+     *
+     * @param input command received from IRC client
+     * @return true, if command received is PrivMessage
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isPrivMessage,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+input,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+input,Identifier
+.,Punctuation
+startsWith,Identifier
+(,Punctuation
+"""PRIVMSG""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

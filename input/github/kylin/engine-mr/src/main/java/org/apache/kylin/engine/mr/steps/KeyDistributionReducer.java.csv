@@ -1,0 +1,317 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+steps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+///*,Comment
+"
+",Newline
+// * Copyright 2013-2014 eBay Software Foundation,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+"// * Licensed under the Apache License, Version 2.0 (the ""License"");",Comment
+"
+",Newline
+// * you may not use this file except in compliance with the License.,Comment
+"
+",Newline
+// * You may obtain a copy of the License at,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+// *   http://www.apache.org/licenses/LICENSE-2.0,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+"// * Unless required by applicable law or agreed to in writing, software",Comment
+"
+",Newline
+"// * distributed under the License is distributed on an ""AS IS"" BASIS,",Comment
+"
+",Newline
+"// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.",Comment
+"
+",Newline
+// * See the License for the specific language governing permissions and,Comment
+"
+",Newline
+// * limitations under the License.,Comment
+"
+",Newline
+// */,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//package org.apache.kylin.index.cube;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import java.io.IOException;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import org.apache.hadoop.io.LongWritable;,Comment
+"
+",Newline
+//import org.apache.hadoop.io.Text;,Comment
+"
+",Newline
+//import org.apache.hadoop.mapreduce.Reducer;,Comment
+"
+",Newline
+//import org.apache.hadoop.util.StringUtils;,Comment
+"
+",Newline
+//import org.slf4j.Logger;,Comment
+"
+",Newline
+//import org.slf4j.LoggerFactory;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+///**,Comment
+"
+",Newline
+// * @author xjiang,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+// */,Comment
+"
+",Newline
+"//public class KeyDistributionReducer extends KylinReducer<Text, LongWritable, Text, LongWritable> {",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private static final Logger logger = LoggerFactory.getLogger(KeyDistributionReducer.class);,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private LongWritable outputValue;,Comment
+"
+",Newline
+//    private boolean isTotalCount;,Comment
+"
+",Newline
+//    private long totalCount;,Comment
+"
+",Newline
+//    private int splitNumber;,Comment
+"
+",Newline
+//    private long splitQuota;,Comment
+"
+",Newline
+//    private long splitRemain;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+"//    protected void setup(Context context) throws IOException, InterruptedException {",Comment
+"
+",Newline
+//        super.publishConfiguration(context.getConfiguration());,Comment
+"
+",Newline
+"
+",Newline
+//        String splitStr = context.getConfiguration().get(KeyDistributionJob.KEY_SPLIT_NUMBER);,Comment
+"
+",Newline
+//        splitNumber = Integer.valueOf(splitStr).intValue();,Comment
+"
+",Newline
+//        outputValue = new LongWritable();,Comment
+"
+",Newline
+//        isTotalCount = true;,Comment
+"
+",Newline
+//        totalCount = 0;,Comment
+"
+",Newline
+//        splitQuota = 0;,Comment
+"
+",Newline
+//        splitRemain = 0;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+"//    protected void cleanup(Context context) throws IOException, InterruptedException {",Comment
+"
+",Newline
+"//        logger.info(""---------------"");",Comment
+"
+",Newline
+//        long splitCount = splitQuota - splitRemain;,Comment
+"
+",Newline
+"//        logger.info(""Total Count = "" + totalCount + "", Left Count = "" + splitCount);",Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+"//    public void reduce(Text key, Iterable<LongWritable> values, Context context) throws IOException,",Comment
+"
+",Newline
+//            InterruptedException {,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        // calculate split quota,Comment
+"
+",Newline
+//        if (isTotalCount) {,Comment
+"
+",Newline
+//            for (LongWritable count : values) {,Comment
+"
+",Newline
+//                totalCount += count.get();,Comment
+"
+",Newline
+//            },Comment
+"
+",Newline
+//            splitQuota = totalCount / splitNumber;,Comment
+"
+",Newline
+//            splitRemain = splitQuota;,Comment
+"
+",Newline
+//            isTotalCount = false;,Comment
+"
+",Newline
+//            return;,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        // output key when split quota is used up ,Comment
+"
+",Newline
+//        for (LongWritable count : values) {,Comment
+"
+",Newline
+//            splitRemain -= count.get();,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        if (splitRemain <= 0) {,Comment
+"
+",Newline
+//            long splitCount = splitQuota - splitRemain;,Comment
+"
+",Newline
+//            String hexKey = StringUtils.byteToHexString(key.getBytes());,Comment
+"
+",Newline
+"//            logger.info(hexKey + ""\t\t"" + splitCount);",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            outputValue.set(splitCount);,Comment
+"
+",Newline
+"//            context.write(key, outputValue);",Comment
+"
+",Newline
+//            splitRemain = splitQuota;,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+// },Comment
+"
+",Newline

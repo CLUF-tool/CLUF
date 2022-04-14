@@ -1,0 +1,942 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+common,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+SplittedBytes,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+CubeSegment,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+cuboid,Identifier
+.,Punctuation
+Cuboid,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+kv,Identifier
+.,Punctuation
+CubeDimEncMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+kv,Identifier
+.,Punctuation
+RowConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+kv,Identifier
+.,Punctuation
+RowKeyColumnIO,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+CubeDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+RowKeySplitter,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+CubeDesc,Identifier
+ ,Whitespace
+cubeDesc,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+RowKeyColumnIO,Identifier
+ ,Whitespace
+colIO,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+SplittedBytes,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+splitBuffers,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+bufferSize,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+lastSplittedCuboidId,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+enableSharding,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SplittedBytes,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getSplitBuffers,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+splitBuffers,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getBodySplitOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+enableSharding,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+2,Literal
+;,Punctuation
+//shard+cuboid,Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+1,Literal
+;,Punctuation
+//cuboid,Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getBufferSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+bufferSize,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+RowKeySplitter,Identifier
+(,Punctuation
+CubeSegment,Identifier
+ ,Whitespace
+cubeSeg,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+splitLen,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+bytesLen,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+enableSharding,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cubeSeg,Identifier
+.,Punctuation
+isEnableSharding,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+cubeDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cubeSeg,Identifier
+.,Punctuation
+getCubeDesc,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+colIO,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RowKeyColumnIO,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+CubeDimEncMap,Identifier
+(,Punctuation
+cubeSeg,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+splitBuffers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SplittedBytes,Identifier
+[,Punctuation
+splitLen,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+splitLen,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+splitBuffers,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SplittedBytes,Identifier
+(,Punctuation
+bytesLen,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+bufferSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param bytes
+     * @return cuboid ID
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+split,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+bufferSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+enableSharding,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// extract shard,Comment
+"
+",Newline
+            ,Whitespace
+SplittedBytes,Identifier
+ ,Whitespace
+shardSplit,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+splitBuffers,Identifier
+[,Punctuation
+this,Keyword
+.,Punctuation
+bufferSize,Identifier
+++,Operator
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+shardSplit,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+RowConstants,Identifier
+.,Punctuation
+ROWKEY_SHARDID_LEN,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+shardSplit,Identifier
+.,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+RowConstants,Identifier
+.,Punctuation
+ROWKEY_SHARDID_LEN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+offset,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+RowConstants,Identifier
+.,Punctuation
+ROWKEY_SHARDID_LEN,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+"//lastSplittedShard = Bytes.toShort(shardSplit.value, 0, shardSplit.length);",Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// extract cuboid id,Comment
+"
+",Newline
+        ,Whitespace
+SplittedBytes,Identifier
+ ,Whitespace
+cuboidIdSplit,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+splitBuffers,Identifier
+[,Punctuation
+this,Keyword
+.,Punctuation
+bufferSize,Identifier
+++,Operator
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+cuboidIdSplit,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+RowConstants,Identifier
+.,Punctuation
+ROWKEY_CUBOIDID_LEN,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+cuboidIdSplit,Identifier
+.,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+RowConstants,Identifier
+.,Punctuation
+ROWKEY_CUBOIDID_LEN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+offset,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+RowConstants,Identifier
+.,Punctuation
+ROWKEY_CUBOIDID_LEN,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+lastSplittedCuboidId,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toLong,Identifier
+(,Punctuation
+cuboidIdSplit,Identifier
+.,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+cuboidIdSplit,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Cuboid,Identifier
+ ,Whitespace
+cuboid,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Cuboid,Identifier
+.,Punctuation
+findById,Identifier
+(,Punctuation
+cubeDesc,Identifier
+",",Punctuation
+ ,Whitespace
+lastSplittedCuboidId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// rowkey columns,Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+cuboid,Identifier
+.,Punctuation
+getColumns,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+TblColRef,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cuboid,Identifier
+.,Punctuation
+getColumns,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+colLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colIO,Identifier
+.,Punctuation
+getColumnLength,Identifier
+(,Punctuation
+col,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+SplittedBytes,Identifier
+ ,Whitespace
+split,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+splitBuffers,Identifier
+[,Punctuation
+this,Keyword
+.,Punctuation
+bufferSize,Identifier
+++,Operator
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+split,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colLength,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+split,Identifier
+.,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+colLength,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+offset,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+colLength,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+lastSplittedCuboidId,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

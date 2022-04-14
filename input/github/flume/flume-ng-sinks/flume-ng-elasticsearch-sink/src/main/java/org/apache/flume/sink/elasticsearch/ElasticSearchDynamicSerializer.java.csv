@@ -1,0 +1,454 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentFactory,Identifier
+.,Punctuation
+jsonBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+ComponentConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Basic serializer that serializes the event body and header fields into
+ * individual fields</p>
+ *
+ * A best effort will be used to determine the content-type, if it cannot be
+ * determined fields will be indexed as Strings
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ElasticSearchDynamicSerializer,Identifier
+ ,Whitespace
+implements,Keyword
+"
+",Newline
+    ,Whitespace
+ElasticSearchEventSerializer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// NO-OP...,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+ComponentConfiguration,Identifier
+ ,Whitespace
+conf,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// NO-OP...,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+XContentBuilder,Identifier
+ ,Whitespace
+getContentBuilder,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+jsonBuilder,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+startObject,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+appendBody,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+appendHeaders,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+builder,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+appendBody,Identifier
+(,Punctuation
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ContentBuilderUtil,Identifier
+.,Punctuation
+appendField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+"""body""",String
+",",Punctuation
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+appendHeaders,Identifier
+(,Punctuation
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+key,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ContentBuilderUtil,Identifier
+.,Punctuation
+appendField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+key,Identifier
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+key,Identifier
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

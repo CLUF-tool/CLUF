@@ -1,0 +1,1445 @@
+"/*
+ *
+ *
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *
+ *  contributor license agreements. See the NOTICE file distributed with
+ *
+ *  this work for additional information regarding copyright ownership.
+ *
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *
+ *  (the ""License""); you may not use this file except in compliance with
+ *
+ *  the License. You may obtain a copy of the License at
+ *
+ *
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *
+ *  distributed under the License is distributed on an ""AS IS"" BASIS,
+ *
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ *  See the License for the specific language governing permissions and
+ *
+ *  limitations under the License.
+ *
+ * /
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+kafka,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+message,Identifier
+.,Punctuation
+MessageAndOffset,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang3,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+DateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+StreamingMessage,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TimeUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+databind,Identifier
+.,Punctuation
+JavaType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+databind,Identifier
+.,Punctuation
+ObjectMapper,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+databind,Identifier
+.,Punctuation
+type,Identifier
+.,Punctuation
+MapType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+databind,Identifier
+.,Punctuation
+type,Identifier
+.,Punctuation
+SimpleType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * each json message with a ""timestamp"" field
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TimedJsonStreamParser,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+StreamingParser,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+TimedJsonStreamParser,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+allColumns,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+formatTs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+//not used,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ObjectMapper,Identifier
+ ,Whitespace
+mapper,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ObjectMapper,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tsColName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""timestamp""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+JavaType,Identifier
+ ,Whitespace
+mapType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MapType,Identifier
+.,Punctuation
+construct,Identifier
+(,Punctuation
+HashMap,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+SimpleType,Identifier
+.,Punctuation
+construct,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+",",Punctuation
+ ,Whitespace
+SimpleType,Identifier
+.,Punctuation
+construct,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+TimedJsonStreamParser,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+allColumns,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+propertiesStr,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+allColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+allColumns,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+propertiesStr,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+properties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+propertiesStr,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+""";""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+prop,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+properties,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+parts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prop,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+"""=""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+parts,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+2,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+parts,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+case,Keyword
+ ,Whitespace
+"""formatTs""",String
+:,Operator
+"
+",Newline
+                            ,Whitespace
+this,Keyword
+.,Punctuation
+formatTs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+parts,Identifier
+[,Punctuation
+1,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+case,Keyword
+ ,Whitespace
+"""tsColName""",String
+:,Operator
+"
+",Newline
+                            ,Whitespace
+this,Keyword
+.,Punctuation
+tsColName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+parts,Identifier
+[,Punctuation
+1,Literal
+],Punctuation
+;,Punctuation
+"
+",Newline
+                            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+                            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Failed to parse property """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+prop,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+//ignore,Comment
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""TimedJsonStreamParser with formatTs {} tsColName {}""",String
+",",Punctuation
+ ,Whitespace
+formatTs,Identifier
+",",Punctuation
+ ,Whitespace
+tsColName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+StreamingMessage,Identifier
+ ,Whitespace
+parse,Identifier
+(,Punctuation
+MessageAndOffset,Identifier
+ ,Whitespace
+messageAndOffset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+message,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mapper,Identifier
+.,Punctuation
+readValue,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ByteBufferBackedInputStream,Identifier
+(,Punctuation
+messageAndOffset,Identifier
+.,Punctuation
+message,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+payload,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+mapType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+root,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+root,Identifier
+.,Punctuation
+putAll,Identifier
+(,Punctuation
+message,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+tsStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+root,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+tsColName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+"//Preconditions.checkArgument(!StringUtils.isEmpty(tsStr), ""Timestamp field "" + tsColName + //",Comment
+"
+",Newline
+            ,Whitespace
+"//"" cannot be null, the message offset is "" + messageAndOffset.getOffset() + "" content is "" + new String(messageAndOffset.getRawData()));",Comment
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+t,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+tsStr,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+tsStr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+normalized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TblColRef,Identifier
+ ,Whitespace
+column,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+allColumns,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+String,Identifier
+ ,Whitespace
+columnName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+column,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columnName,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""minute_start""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+normalized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimeUtil,Identifier
+.,Punctuation
+getMinuteStart,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+DateFormat,Identifier
+.,Punctuation
+formatToTimeStr,Identifier
+(,Punctuation
+normalized,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columnName,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""hour_start""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+normalized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimeUtil,Identifier
+.,Punctuation
+getHourStart,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+DateFormat,Identifier
+.,Punctuation
+formatToTimeStr,Identifier
+(,Punctuation
+normalized,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columnName,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""day_start""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+"//from day_start on, formatTs will output date format",Comment
+"
+",Newline
+                    ,Whitespace
+normalized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimeUtil,Identifier
+.,Punctuation
+getDayStart,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+DateFormat,Identifier
+.,Punctuation
+formatToDateStr,Identifier
+(,Punctuation
+normalized,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columnName,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""week_start""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+normalized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimeUtil,Identifier
+.,Punctuation
+getWeekStart,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+DateFormat,Identifier
+.,Punctuation
+formatToDateStr,Identifier
+(,Punctuation
+normalized,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columnName,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""month_start""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+normalized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimeUtil,Identifier
+.,Punctuation
+getMonthStart,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+DateFormat,Identifier
+.,Punctuation
+formatToDateStr,Identifier
+(,Punctuation
+normalized,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columnName,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""quarter_start""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+normalized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimeUtil,Identifier
+.,Punctuation
+getQuarterStart,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+DateFormat,Identifier
+.,Punctuation
+formatToDateStr,Identifier
+(,Punctuation
+normalized,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columnName,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""year_start""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+normalized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimeUtil,Identifier
+.,Punctuation
+getYearStart,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+DateFormat,Identifier
+.,Punctuation
+formatToDateStr,Identifier
+(,Punctuation
+normalized,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+String,Identifier
+ ,Whitespace
+x,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+root,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+columnName,Identifier
+.,Punctuation
+toLowerCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+x,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StreamingMessage,Identifier
+(,Punctuation
+result,Identifier
+",",Punctuation
+ ,Whitespace
+messageAndOffset,Identifier
+.,Punctuation
+offset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+t,Identifier
+",",Punctuation
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+>,Operator
+ ,Whitespace
+emptyMap,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""error""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+filter,Identifier
+(,Punctuation
+StreamingMessage,Identifier
+ ,Whitespace
+streamingMessage,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

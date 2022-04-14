@@ -1,0 +1,2074 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ConcurrentHashMap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang3,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+.,Punctuation
+JsonSerializer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+.,Punctuation
+ResourceStore,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+.,Punctuation
+Serializer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+restclient,Identifier
+.,Punctuation
+Broadcaster,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+restclient,Identifier
+.,Punctuation
+CaseInsensitiveStringCache,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+IIDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+MetadataConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+MetadataManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * copied from CubeDescManager
+ * 
+ * @author honma
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+IIDescManager,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+IIDescManager,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Serializer,Identifier
+<,Operator
+IIDesc,Identifier
+>,Operator
+ ,Whitespace
+II_DESC_SERIALIZER,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+JsonSerializer,Identifier
+<,Operator
+IIDesc,Identifier
+>,Operator
+(,Punctuation
+IIDesc,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// static cached instances,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ConcurrentHashMap,Identifier
+<,Operator
+KylinConfig,Identifier
+",",Punctuation
+ ,Whitespace
+IIDescManager,Identifier
+>,Operator
+ ,Whitespace
+CACHE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConcurrentHashMap,Identifier
+<,Operator
+KylinConfig,Identifier
+",",Punctuation
+ ,Whitespace
+IIDescManager,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+// name ==> IIDesc,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+CaseInsensitiveStringCache,Identifier
+<,Operator
+IIDesc,Identifier
+>,Operator
+ ,Whitespace
+iiDescMap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+IIDescManager,Identifier
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+IIDescManager,Identifier
+ ,Whitespace
+r,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+CACHE,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+r,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+r,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+IIDescManager,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+r,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+CACHE,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+r,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+r,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+r,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IIDescManager,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+CACHE,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+config,Identifier
+",",Punctuation
+ ,Whitespace
+r,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+CACHE,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""More than one singleton exist""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+r,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""Failed to init IIDescManager from """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+config,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+clearCache,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+CACHE,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+IIDescManager,Identifier
+(,Punctuation
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Initializing IIDescManager with config """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+config,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+iiDescMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CaseInsensitiveStringCache,Identifier
+<,Operator
+IIDesc,Identifier
+>,Operator
+(,Punctuation
+config,Identifier
+",",Punctuation
+ ,Whitespace
+Broadcaster,Identifier
+.,Punctuation
+TYPE,Identifier
+.,Punctuation
+INVERTED_INDEX_DESC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+reloadAllIIDesc,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+IIDesc,Identifier
+>,Operator
+ ,Whitespace
+listAllDesc,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+IIDesc,Identifier
+>,Operator
+(,Punctuation
+iiDescMap,Identifier
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+getIIDesc,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+name,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Reload IIDesc from resource store It will be triggered by an desc update
+     * event.
+     * 
+     * @param name
+     * @throws IOException
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+reloadIIDescLocal,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+name,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Save Source,Comment
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+path,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+getIIDescResourcePath,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Reload the IIDesc,Comment
+"
+",Newline
+        ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+ndesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+loadIIDesc,Identifier
+(,Punctuation
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Here replace the old one,Comment
+"
+",Newline
+        ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+putLocal,Identifier
+(,Punctuation
+ndesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+ndesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+ndesc,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+loadIIDesc,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+path,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ResourceStore,Identifier
+ ,Whitespace
+store,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Loading IIDesc """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+store,Identifier
+.,Punctuation
+getReadableResourcePath,Identifier
+(,Punctuation
+path,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+ndesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+store,Identifier
+.,Punctuation
+getResource,Identifier
+(,Punctuation
+path,Identifier
+",",Punctuation
+ ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+II_DESC_SERIALIZER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+ndesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""IIDesc name must not be blank""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ndesc,Identifier
+.,Punctuation
+init,Identifier
+(,Punctuation
+getMetadataManager,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+ndesc,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Create a new IIDesc
+     * 
+     * @param iiDesc
+     * @return
+     * @throws IOException
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+createIIDesc,Identifier
+(,Punctuation
+IIDesc,Identifier
+ ,Whitespace
+iiDesc,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+iiDesc,Identifier
+.,Punctuation
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+iiDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+iiDescMap,Identifier
+.,Punctuation
+containsKey,Identifier
+(,Punctuation
+iiDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""IIDesc '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+iiDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' already exists""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+iiDesc,Identifier
+.,Punctuation
+init,Identifier
+(,Punctuation
+getMetadataManager,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Check base validation,Comment
+"
+",Newline
+        ,Whitespace
+// Semantic validation,Comment
+"
+",Newline
+        ,Whitespace
+// TODO,Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+iiDesc,Identifier
+.,Punctuation
+setSignature,Identifier
+(,Punctuation
+iiDesc,Identifier
+.,Punctuation
+calculateSignature,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+path,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+iiDesc,Identifier
+.,Punctuation
+getResourcePath,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+putResource,Identifier
+(,Punctuation
+path,Identifier
+",",Punctuation
+ ,Whitespace
+iiDesc,Identifier
+",",Punctuation
+ ,Whitespace
+II_DESC_SERIALIZER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+iiDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+iiDesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+iiDesc,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// remove iiDesc,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+removeIIDesc,Identifier
+(,Punctuation
+IIDesc,Identifier
+ ,Whitespace
+iiDesc,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+path,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+iiDesc,Identifier
+.,Punctuation
+getResourcePath,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+deleteResource,Identifier
+(,Punctuation
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+iiDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+removeIIDescLocal,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+name,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+removeLocal,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+reloadAllIIDesc,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ResourceStore,Identifier
+ ,Whitespace
+store,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Reloading all II desc from folder """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+store,Identifier
+.,Punctuation
+getReadableResourcePath,Identifier
+(,Punctuation
+ResourceStore,Identifier
+.,Punctuation
+II_DESC_RESOURCE_ROOT,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+paths,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+store,Identifier
+.,Punctuation
+collectResourceRecursively,Identifier
+(,Punctuation
+ResourceStore,Identifier
+.,Punctuation
+II_DESC_RESOURCE_ROOT,Identifier
+",",Punctuation
+ ,Whitespace
+MetadataConstants,Identifier
+.,Punctuation
+FILE_SURFIX,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+path,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+paths,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""loading II Desc from path""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+desc,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+desc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+loadIIDesc,Identifier
+(,Punctuation
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error loading II desc """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+path,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+path,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+desc,Identifier
+.,Punctuation
+getResourcePath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Skip suspicious desc at """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+path,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+desc,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" should be at """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getResourcePath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+iiDescMap,Identifier
+.,Punctuation
+containsKey,Identifier
+(,Punctuation
+desc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Dup IIDesc name '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' on path """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+putLocal,Identifier
+(,Punctuation
+desc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+desc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Loaded """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" II desc(s)""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Update IIDesc with the input. Broadcast the event into cluster
+     * 
+     * @param desc
+     * @return
+     * @throws IOException
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+updateIIDesc,Identifier
+(,Punctuation
+IIDesc,Identifier
+ ,Whitespace
+desc,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// Validate IIDesc,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+desc,Identifier
+.,Punctuation
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+name,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+iiDescMap,Identifier
+.,Punctuation
+containsKey,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""IIDesc '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+name,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' does not exist.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+desc,Identifier
+.,Punctuation
+init,Identifier
+(,Punctuation
+getMetadataManager,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// TODO: Semantic validation,Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+desc,Identifier
+.,Punctuation
+setSignature,Identifier
+(,Punctuation
+desc,Identifier
+.,Punctuation
+calculateSignature,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Save Source,Comment
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+path,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getResourcePath,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+putResource,Identifier
+(,Punctuation
+path,Identifier
+",",Punctuation
+ ,Whitespace
+desc,Identifier
+",",Punctuation
+ ,Whitespace
+II_DESC_SERIALIZER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Reload the IIDesc,Comment
+"
+",Newline
+        ,Whitespace
+IIDesc,Identifier
+ ,Whitespace
+ndesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+loadIIDesc,Identifier
+(,Punctuation
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+// Here replace the old one,Comment
+"
+",Newline
+        ,Whitespace
+iiDescMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+ndesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+desc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+ndesc,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+MetadataManager,Identifier
+ ,Whitespace
+getMetadataManager,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+MetadataManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ResourceStore,Identifier
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+ResourceStore,Identifier
+.,Punctuation
+getStore,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,1375 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Channel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Transaction,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * <p>
+ * An implementation of basic {@link Transaction} semantics designed
+ * to work in concert with {@link BasicChannelSemantics} to simplify
+ * creation of robust {@link Channel} implementations.  This class
+ * ensures that each transaction implementation method is called only
+ * while the transaction is in the correct state for that method, and
+ * only by the thread that created the transaction.  Nested calls to
+ * <code>begin()</code> and <code>close()</code> are supported as long
+ * as they are balanced.
+ * </p>
+ * <p>
+ * Subclasses need only implement <code>doPut</code>,
+ * <code>doTake</code>, <code>doCommit</code>, and
+ * <code>doRollback</code>, and the developer can rest assured that
+ * those methods are called only after transaction state preconditions
+ * have been properly met.  <code>doBegin</code> and
+ * <code>doClose</code> may also be implemented if there is work to be
+ * done at those points.
+ * </p>
+ * <p>
+ * All InterruptedException exceptions thrown from the implementations
+ * of the <code>doXXX</code> methods are automatically wrapped to
+ * become ChannelExceptions, but only after restoring the interrupted
+ * status of the thread so that any subsequent blocking method calls
+ * will themselves throw InterruptedException rather than blocking.
+ * The exception to this rule is <code>doTake</code>, which simply
+ * returns null instead of wrapping and propagating the
+ * InterruptedException, though it still first restores the
+ * interrupted status of the thread.
+ * </p>
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+State,Identifier
+ ,Whitespace
+state,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+initialThreadId,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doBegin,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+},Punctuation
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doPut,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+doTake,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doCommit,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doRollback,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doClose,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+BasicTransactionSemantics,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+state,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+State,Identifier
+.,Punctuation
+NEW,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+initialThreadId,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * The method to which {@link BasicChannelSemantics} delegates calls
+   * to <code>put</code>.
+   * </p>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+put,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+initialThreadId,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""put() called from different thread than getTransaction()!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+state,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+State,Identifier
+.,Punctuation
+OPEN,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""put() called when transaction is %s!""",String
+",",Punctuation
+ ,Whitespace
+state,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+event,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""put() called with null event!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+doPut,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * The method to which {@link BasicChannelSemantics} delegates calls
+   * to <code>take</code>.
+   * </p>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+take,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+initialThreadId,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""take() called from different thread than getTransaction()!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+state,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+State,Identifier
+.,Punctuation
+OPEN,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""take() called when transaction is %s!""",String
+",",Punctuation
+ ,Whitespace
+state,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+doTake,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * @return the current state of the transaction
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+State,Identifier
+ ,Whitespace
+getState,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+state,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+begin,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+initialThreadId,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""begin() called from different thread than getTransaction()!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+state,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+State,Identifier
+.,Punctuation
+NEW,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""begin() called when transaction is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+state,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+doBegin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+state,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+State,Identifier
+.,Punctuation
+OPEN,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+commit,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+initialThreadId,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""commit() called from different thread than getTransaction()!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+state,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+State,Identifier
+.,Punctuation
+OPEN,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""commit() called when transaction is %s!""",String
+",",Punctuation
+ ,Whitespace
+state,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+doCommit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+state,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+State,Identifier
+.,Punctuation
+COMPLETED,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+rollback,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+initialThreadId,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""rollback() called from different thread than getTransaction()!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+state,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+State,Identifier
+.,Punctuation
+OPEN,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""rollback() called when transaction is %s!""",String
+",",Punctuation
+ ,Whitespace
+state,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+state,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+State,Identifier
+.,Punctuation
+COMPLETED,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+doRollback,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+initialThreadId,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""close() called from different thread than getTransaction()!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+state,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+State,Identifier
+.,Punctuation
+NEW,Identifier
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+state,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+State,Identifier
+.,Punctuation
+COMPLETED,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""close() called when transaction is %s""",String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+""" - you must either commit or rollback first""",String
+",",Punctuation
+ ,Whitespace
+state,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+state,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+State,Identifier
+.,Punctuation
+CLOSED,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+doClose,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""BasicTransactionSemantics: {""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" state:""",String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+state,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" initialThreadId:""",String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+initialThreadId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" }""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+builder,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * The state of the {@link Transaction} to which it belongs.
+   * </p>
+   * <dl>
+   * <dt>NEW</dt>
+   * <dd>A newly created transaction that has not yet begun.</dd>
+   * <dt>OPEN</dt>
+   * <dd>A transaction that is open. It is permissible to commit or rollback.
+   * </dd>
+   * <dt>COMPLETED</dt>
+   * <dd>This transaction has been committed or rolled back. It is illegal to
+   * perform any further operations beyond closing it.</dd>
+   * <dt>CLOSED</dt>
+   * <dd>A closed transaction. No further operations are permitted.</dd>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+enum,Identifier
+ ,Whitespace
+State,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+NEW,Identifier
+",",Punctuation
+ ,Whitespace
+OPEN,Identifier
+",",Punctuation
+ ,Whitespace
+COMPLETED,Identifier
+",",Punctuation
+ ,Whitespace
+CLOSED,Identifier
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

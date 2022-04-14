@@ -1,0 +1,2211 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+api,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+InetSocketAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Avro/Netty implementation of {@link RpcClient} which supports failover. This
+ * takes a list of hostname port combinations and connects to the next available
+ * (looping back to the first) host, from a given list of agents in the order
+ * provided.
+ *
+ *
+ * The properties used to build a FailoverRpcClient must have:
+ * <p><tt>hosts</tt> = <i>alias_for_host1</i> <i>alias_for_host2</i></p> ...
+ * <p><tt>hosts.alias_for_host1</tt> = <i>hostname1:port1</i>. </p>
+ * <p><tt>hosts.alias_for_host2</tt> = <i>hostname2:port2</i>. </p> etc
+ * <p>Optionally it can also have a <p>
+ * <tt>batch-size</tt> = <i>batchSize</i>
+ * <tt>max-attempts</tt> = <i>maxAttempts</i>
+ *
+ * Given a failure, this client will attempt to append to <i>maxAttempts</i>
+ * clients in the <i>hosts</i> list immediately following the failed host
+ * (looping back to the beginning of the <i>hosts</i> list.
+ */",Comment
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+FailoverRpcClient,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractRpcClient,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+HostInfo,Identifier
+>,Operator
+ ,Whitespace
+hosts,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+maxTries,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+lastCheckedhost,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isActive,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Properties,Identifier
+ ,Whitespace
+configurationProperties,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+FailoverRpcClient,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+FailoverRpcClient,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+lastCheckedhost,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+//This function has to be synchronized to establish a happens-before,Comment
+"
+",Newline
+  ,Whitespace
+//relationship for different threads that access this object,Comment
+"
+",Newline
+  ,Whitespace
+//since shared data structures are created here.,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configureHosts,Identifier
+(,Punctuation
+Properties,Identifier
+ ,Whitespace
+properties,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+isActive,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""This client was already configured, """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""cannot reconfigure.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""This client was already configured, """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""cannot reconfigure.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+hosts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HostInfo,Identifier
+.,Punctuation
+getHostInfoList,Identifier
+(,Punctuation
+properties,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+tries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+properties,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_MAX_ATTEMPTS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tries,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+tries,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+maxTries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hosts,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+maxTries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+tries,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+maxTries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hosts,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+strBatchSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+properties,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_BATCH_SIZE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+strBatchSize,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+strBatchSize,Identifier
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+batchSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+strBatchSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+batchSize,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""A batch-size less than 1 was specified: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+batchSize,Identifier
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+""". Using default instead.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+batchSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+DEFAULT_BATCH_SIZE,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Invalid batch size specified: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+strBatchSize,Identifier
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+""". Using default instead.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+isActive,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Get the maximum number of ""failed"" hosts the client will try to establish
+   * connection to before throwing an exception. Failed = was able to set up a
+   * connection, but failed / returned error when the client tried to send data,
+   *
+   * @return The maximum number of failed retries
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+getMaxTries,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+maxTries,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getClient,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+client,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+!,Operator
+this,Keyword
+.,Punctuation
+client,Identifier
+.,Punctuation
+isActive,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getNextClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Tries to append an event to the currently connected client. If it cannot
+   * send the event, it tries to send to next available host
+   *
+   * @param event The event to be appended.
+   *
+   * @throws EventDeliveryException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+append,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+//Why a local variable rather than just calling getClient()?,Comment
+"
+",Newline
+    ,Whitespace
+"//If we get an EventDeliveryException, we need to call close on",Comment
+"
+",Newline
+    ,Whitespace
+"//that specific client, getClient in this case, will get us",Comment
+"
+",Newline
+    ,Whitespace
+//the next client - leaving a resource leak.,Comment
+"
+",Newline
+    ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+isActive,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Attempting to append to an already closed client.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+"""Attempting to append to an already closed client.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+// Sit in an infinite loop and try to append!,Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+tries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+tries,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+maxTries,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+tries,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+EventDeliveryException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+"// Could not send event through this client, try to pick another client.",Comment
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Client failed. Exception follows: """,String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e2,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Failed to send event: """,String
+",",Punctuation
+ ,Whitespace
+e2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+"""Failed to send event. Exception follows: """,String
+",",Punctuation
+ ,Whitespace
+e2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Tried many times, could not send event.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+(,Punctuation
+"""Failed to send the event!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Tries to append a list of events to the currently connected client. If it
+   * cannot send the event, it tries to send to next available host
+   *
+   * @param events The events to be appended.
+   *
+   * @throws EventDeliveryException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+appendBatch,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+events,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+isActive,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Attempting to append to an already closed client.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+"""Attempting to append to an already closed client!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+tries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+tries,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+maxTries,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+tries,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+.,Punctuation
+appendBatch,Identifier
+(,Punctuation
+events,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+EventDeliveryException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+"// Could not send event through this client, try to pick another client.",Comment
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Client failed. Exception follows: """,String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e1,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""No clients active: """,String
+",",Punctuation
+ ,Whitespace
+e1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+(,Punctuation
+"""No clients currently active. """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""Exception follows: """,String
+",",Punctuation
+ ,Whitespace
+e1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Tried many times, could not send event.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+(,Punctuation
+"""Failed to send the event!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// Returns false if and only if this client has been closed explicitly.,Comment
+"
+",Newline
+  ,Whitespace
+"// Should we check if any clients are active, if none are then return false?",Comment
+"
+",Newline
+  ,Whitespace
+"// This method has to be lightweight, so not checking if hosts are active.",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isActive,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+isActive,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Close the connection. This function is safe to call over and over.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+client,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+client,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+isActive,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Get the last socket address this client connected to. No guarantee this
+   * will be the next it will connect to. If this host is down, it will connect
+   * to another host. To be used only from the unit tests!
+   * @return The last socket address this client connected to
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+InetSocketAddress,Identifier
+ ,Whitespace
+getLastConnectedServerAddress,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+HostInfo,Identifier
+ ,Whitespace
+hostInfo,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hosts,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+lastCheckedhost,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+InetSocketAddress,Identifier
+(,Punctuation
+hostInfo,Identifier
+.,Punctuation
+getHostName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+hostInfo,Identifier
+.,Punctuation
+getPortNumber,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getNextClient,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+lastCheckedhost,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+(,Punctuation
+lastCheckedhost,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+(,Punctuation
+hosts,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+ ,Whitespace
+:,Operator
+ ,Whitespace
+lastCheckedhost,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+limit,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hosts,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+putAll,Identifier
+(,Punctuation
+configurationProperties,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_CLIENT_TYPE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+DEFAULT_CLIENT_TYPE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"//Try to connect to all hosts again, till we find one available",Comment
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+lastCheckedhost,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+limit,Identifier
+;,Punctuation
+ ,Whitespace
+count,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+HostInfo,Identifier
+ ,Whitespace
+hostInfo,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hosts,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setDefaultProperties,Identifier
+(,Punctuation
+hostInfo,Identifier
+",",Punctuation
+ ,Whitespace
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+RpcClientFactory,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+lastCheckedhost,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+count,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+localClient,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+FlumeException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Could not connect to """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+hostInfo,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+(,Punctuation
+int,Keyword
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+lastCheckedhost,Identifier
+;,Punctuation
+ ,Whitespace
+count,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+HostInfo,Identifier
+ ,Whitespace
+hostInfo,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hosts,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setDefaultProperties,Identifier
+(,Punctuation
+hostInfo,Identifier
+",",Punctuation
+ ,Whitespace
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+localClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+RpcClientFactory,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+lastCheckedhost,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+count,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+localClient,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+FlumeException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Could not connect to """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+hostInfo,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+localClient,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+lastCheckedhost,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""No active client found.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""No active client.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+// This return should never be reached!,Comment
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+localClient,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setDefaultProperties,Identifier
+(,Punctuation
+HostInfo,Identifier
+ ,Whitespace
+hostInfo,Identifier
+",",Punctuation
+ ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_CLIENT_TYPE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+RpcClientFactory,Identifier
+.,Punctuation
+ClientType,Identifier
+.,Punctuation
+DEFAULT,Identifier
+.,Punctuation
+name,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_HOSTS,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+hostInfo,Identifier
+.,Punctuation
+getReferenceName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Properties,Identifier
+ ,Whitespace
+properties,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+configurationProperties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+configurationProperties,Identifier
+.,Punctuation
+putAll,Identifier
+(,Punctuation
+properties,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+configureHosts,Identifier
+(,Punctuation
+configurationProperties,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,3634 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+formatter,Identifier
+.,Punctuation
+output,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+SimpleDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Calendar,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Date,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TimeZone,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ConcurrentHashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Matcher,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Pattern,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Clock,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+SystemClock,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+tools,Identifier
+.,Punctuation
+TimestampRoundDownUtil,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+BucketPath,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * These are useful to other classes which might want to search for tags in
+   * strings.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+final,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+TAG_REGEX,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""\\%(\\w|\\%)|\\%\\{([\\w\\.-]+)\\}""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+final,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+tagPattern,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+TAG_REGEX,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Clock,Identifier
+ ,Whitespace
+clock,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SystemClock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Returns true if in contains a substring matching TAG_REGEX (i.e. of the
+   * form %{...} or %x.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+containsTag,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+in,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+tagPattern,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+expandShorthand,Identifier
+(,Punctuation
+char,Keyword
+ ,Whitespace
+c,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// It's a date,Comment
+"
+",Newline
+    ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'a',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""weekday_short""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'A',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""weekday_full""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'b',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""monthname_short""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'B',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""monthname_full""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'c',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""datetime""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'d',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""day_of_month_xx""",String
+;,Punctuation
+ ,Whitespace
+// two digit,Comment
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'e',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""day_of_month_x""",String
+;,Punctuation
+ ,Whitespace
+// 1 or 2 digit,Comment
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'D',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""date_short""",String
+;,Punctuation
+ ,Whitespace
+"// ""MM/dd/yy"";",Comment
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'H',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""hour_24_xx""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'I',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""hour_12_xx""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'j',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""day_of_year_xxx""",String
+;,Punctuation
+ ,Whitespace
+// three digits,Comment
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'k',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""hour_24""",String
+;,Punctuation
+ ,Whitespace
+// 1 or 2 digits,Comment
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'l',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""hour_12""",String
+;,Punctuation
+ ,Whitespace
+// 1 or 2 digits,Comment
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'m',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""month_xx""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'n',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""month_x""",String
+;,Punctuation
+ ,Whitespace
+// 1 or 2 digits,Comment
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'M',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""minute_xx""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'p',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""am_pm""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'s',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""unix_seconds""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'S',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""seconds_xx""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'t',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+// This is different from unix date (which would insert a tab character,Comment
+"
+",Newline
+      ,Whitespace
+// here),Comment
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""unix_millis""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'y',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""year_xx""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'Y',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""year_xxxx""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'z',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""timezone_delta""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+"//      LOG.warn(""Unrecognized escape in event format string: %"" + c);",Comment
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+c,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Hardcoded lookups for %x style escape replacement. Add your own!
+   *
+   * All shorthands are Date format strings, currently.
+   *
+   * Returns the empty string if an escape is not recognized.
+   *
+   * Dates follow the same format as unix date, with a few exceptions.
+   *
+   * <p>This static method will be REMOVED in a future version of Flume</p>
+   *
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+char,Keyword
+ ,Whitespace
+c,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * A wrapper around
+   * {@link BucketPath#replaceShorthand(char, Map, TimeZone, boolean, int,
+   * int, boolean)}
+   * with the timezone set to the default.
+   *
+   * <p>This static method will be REMOVED in a future version of Flume</p>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+char,Keyword
+ ,Whitespace
+c,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+roundDown,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+roundDown,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Hardcoded lookups for %x style escape replacement. Add your own!
+   *
+   * All shorthands are Date format strings, currently.
+   *
+   * Returns the empty string if an escape is not recognized.
+   *
+   * Dates follow the same format as unix date, with a few exceptions.
+   *
+   * <p>This static method will be REMOVED in a future version of Flume</p>
+   *
+   * @param c - The character to replace.
+   * @param headers - Event headers
+   * @param timeZone - The timezone to use for formatting the timestamp
+   * @param needRounding - Should the timestamp be rounded down?
+   * @param unit - if needRounding is true, what unit to round down to. This
+   * must be one of the units specified by {@link java.util.Calendar} -
+   * HOUR, MINUTE or SECOND. Defaults to second, if none of these are present.
+   * Ignored if needRounding is false.
+   * @param roundDown - if needRounding is true,
+   * The time should be rounded to the largest multiple of this
+   * value, smaller than the time supplied, defaults to 1, if <= 0(rounds off
+   * to the second/minute/hour immediately lower than the timestamp supplied.
+   * Ignored if needRounding is false.
+   *
+   * @return
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+char,Keyword
+ ,Whitespace
+c,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+TimeZone,Identifier
+ ,Whitespace
+timeZone,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+roundDown,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+useLocalTimestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+ts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+useLocalTimestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clock,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+timeZone,Identifier
+",",Punctuation
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+roundDown,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+ts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+SimpleDateFormat,Identifier
+>>,Operator
+ ,Whitespace
+simpleDateFormatCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+SimpleDateFormat,Identifier
+>>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+	  ,Whitespace
+"
+",Newline
+	  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+	  ,Whitespace
+protected,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+SimpleDateFormat,Identifier
+>,Operator
+ ,Whitespace
+initialValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+		  ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+SimpleDateFormat,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+	  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+SimpleDateFormat,Identifier
+ ,Whitespace
+getSimpleDateFormat,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+string,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+	,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+SimpleDateFormat,Identifier
+>,Operator
+ ,Whitespace
+localCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+simpleDateFormatCache,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+	,Whitespace
+"
+",Newline
+	,Whitespace
+SimpleDateFormat,Identifier
+ ,Whitespace
+simpleDateFormat,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+localCache,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+string,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+	,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+simpleDateFormat,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+		,Whitespace
+simpleDateFormat,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SimpleDateFormat,Identifier
+(,Punctuation
+string,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+		,Whitespace
+localCache,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+string,Identifier
+",",Punctuation
+ ,Whitespace
+simpleDateFormat,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+		,Whitespace
+simpleDateFormatCache,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+localCache,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+	,Whitespace
+},Punctuation
+"
+",Newline
+	,Whitespace
+"
+",Newline
+	,Whitespace
+return,Keyword
+ ,Whitespace
+simpleDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Not intended as a public API
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+char,Keyword
+ ,Whitespace
+c,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+TimeZone,Identifier
+ ,Whitespace
+timeZone,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+roundDown,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+boolean,Keyword
+ ,Whitespace
+useLocalTimestamp,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+ts,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+timestampHeader,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+useLocalTimestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+timestampHeader,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""timestamp""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+timestampHeader,Identifier
+",",Punctuation
+ ,Whitespace
+"""Expected timestamp in """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""the Flume event headers, but it was null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+timestampHeader,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+timestampHeader,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+ts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""Flume wasn't able to parse timestamp header""",String
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+""" in the event to resolve time based bucketing. Please check that""",String
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+""" you're correctly populating timestamp header (for example using""",String
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+""" TimestampInterceptor source interceptor).""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+needRounding,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+roundDown,Identifier
+(,Punctuation
+roundDown,Identifier
+",",Punctuation
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+ts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// It's a date,Comment
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'%',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""%""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'a',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""EEE""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'A',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""EEEE""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'b',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""MMM""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'B',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""MMMM""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'c',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""EEE MMM d HH:mm:ss yyyy""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'d',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""dd""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'e',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""d""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'D',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""MM/dd/yy""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'H',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""HH""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'I',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""hh""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'j',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""DDD""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'k',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""H""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'l',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""h""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'m',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""MM""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'M',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""mm""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'n',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""M""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'p',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""a""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'s',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+ts,Identifier
+/,Operator
+1000,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'S',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""ss""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'t',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+// This is different from unix date (which would insert a tab character,Comment
+"
+",Newline
+      ,Whitespace
+// here),Comment
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+timestampHeader,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'y',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""yy""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'Y',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""yyyy""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+case,Keyword
+ ,Whitespace
+'z',String
+:,Operator
+"
+",Newline
+      ,Whitespace
+formatString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""ZZZ""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+"//      LOG.warn(""Unrecognized escape in event format string: %"" + c);",Comment
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+SimpleDateFormat,Identifier
+ ,Whitespace
+format,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getSimpleDateFormat,Identifier
+(,Punctuation
+formatString,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+timeZone,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+format,Identifier
+.,Punctuation
+setTimeZone,Identifier
+(,Punctuation
+timeZone,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+format,Identifier
+.,Punctuation
+setTimeZone,Identifier
+(,Punctuation
+TimeZone,Identifier
+.,Punctuation
+getDefault,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Date,Identifier
+ ,Whitespace
+date,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Date,Identifier
+(,Punctuation
+ts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+format,Identifier
+.,Punctuation
+format,Identifier
+(,Punctuation
+date,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+roundDown,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+roundDown,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+ts,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ts,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+roundDown,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+roundDown,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+unit,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+case,Keyword
+ ,Whitespace
+Calendar,Identifier
+.,Punctuation
+SECOND,Identifier
+:,Operator
+"
+",Newline
+        ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimestampRoundDownUtil,Identifier
+.,Punctuation
+roundDownTimeStampSeconds,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+ts,Identifier
+",",Punctuation
+ ,Whitespace
+roundDown,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+case,Keyword
+ ,Whitespace
+Calendar,Identifier
+.,Punctuation
+MINUTE,Identifier
+:,Operator
+"
+",Newline
+        ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimestampRoundDownUtil,Identifier
+.,Punctuation
+roundDownTimeStampMinutes,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+ts,Identifier
+",",Punctuation
+ ,Whitespace
+roundDown,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+case,Keyword
+ ,Whitespace
+Calendar,Identifier
+.,Punctuation
+HOUR_OF_DAY,Identifier
+:,Operator
+"
+",Newline
+        ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimestampRoundDownUtil,Identifier
+.,Punctuation
+roundDownTimeStampHours,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+ts,Identifier
+",",Punctuation
+ ,Whitespace
+roundDown,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+        ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ts,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+timestamp,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Replace all substrings of form %{tagname} with get(tagname).toString() and
+   * all shorthand substrings of form %x with a special value.
+   *
+   * Any unrecognized / not found tags will be replaced with the empty string.
+   *
+   * TODO(henry): we may want to consider taking this out of Event and into a
+   * more general class when we get more use cases for this pattern.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+escapeString,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+in,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+escapeString,Identifier
+(,Punctuation
+in,Identifier
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * A wrapper around
+   * {@link BucketPath#escapeString(String, Map, TimeZone, boolean, int, int,
+   boolean)}
+   * with the timezone set to the default.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+escapeString,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+in,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+roundDown,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+escapeString,Identifier
+(,Punctuation
+in,Identifier
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+roundDown,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Replace all substrings of form %{tagname} with get(tagname).toString() and
+   * all shorthand substrings of form %x with a special value.
+   *
+   * Any unrecognized / not found tags will be replaced with the empty string.
+   *
+   * TODO(henry): we may want to consider taking this out of Event and into a
+   * more general class when we get more use cases for this pattern.
+   *
+   * @param needRounding - Should the timestamp be rounded down?
+   * @param unit - if needRounding is true, what unit to round down to. This
+   * must be one of the units specified by {@link java.util.Calendar} -
+   * HOUR, MINUTE or SECOND. Defaults to second, if none of these are present.
+   * Ignored if needRounding is false.
+   * @param roundDown - if needRounding is true,
+   * The time should be rounded to the largest multiple of this
+   * value, smaller than the time supplied, defaults to 1, if <= 0(rounds off
+   * to the second/minute/hour immediately lower than the timestamp supplied.
+   * Ignored if needRounding is false.
+   * @return Escaped string.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+escapeString,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+in,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+TimeZone,Identifier
+ ,Whitespace
+timeZone,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+roundDown,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+useLocalTimeStamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+ts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clock,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+matcher,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tagPattern,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+StringBuffer,Identifier
+ ,Whitespace
+sb,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+// Group 2 is the %{...} pattern,Comment
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+replacement,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+"//          LOG.warn(""Tag "" + matcher.group(2) + "" not found"");",Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// The %x pattern.,Comment
+"
+",Newline
+        ,Whitespace
+"// Since we know the match is a single character, we can",Comment
+"
+",Newline
+        ,Whitespace
+// switch on that rather than the string.,Comment
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+"
+",Newline
+            ,Whitespace
+&&,Operator
+ ,Whitespace
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Expected to match single character tag in string """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+char,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+timeZone,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+roundDown,Identifier
+",",Punctuation
+ ,Whitespace
+useLocalTimeStamp,Identifier
+",",Punctuation
+ ,Whitespace
+ts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+// The replacement string must have '$' and '\' chars escaped. This,Comment
+"
+",Newline
+      ,Whitespace
+// replacement string is pretty arcane.,Comment
+"
+",Newline
+      ,Whitespace
+//,Comment
+"
+",Newline
+      ,Whitespace
+"// replacee : '$' -> for java '\$' -> for regex ""\\$""",Comment
+"
+",Newline
+      ,Whitespace
+"// replacement: '\$' -> for regex '\\\$' -> for java ""\\\\\\$""",Comment
+"
+",Newline
+      ,Whitespace
+//,Comment
+"
+",Newline
+      ,Whitespace
+"// replacee : '\' -> for java ""\\"" -> for regex ""\\\\""",Comment
+"
+",Newline
+      ,Whitespace
+"// replacement: '\\' -> for regex ""\\\\"" -> for java ""\\\\\\\\""",Comment
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+// note: order matters,Comment
+"
+",Newline
+      ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+replacement,Identifier
+.,Punctuation
+replaceAll,Identifier
+(,Punctuation
+"""\\\\""",String
+",",Punctuation
+ ,Whitespace
+"""\\\\\\\\""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+replacement,Identifier
+.,Punctuation
+replaceAll,Identifier
+(,Punctuation
+"""\\$""",String
+",",Punctuation
+ ,Whitespace
+"""\\\\\\$""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+matcher,Identifier
+.,Punctuation
+appendReplacement,Identifier
+(,Punctuation
+sb,Identifier
+",",Punctuation
+ ,Whitespace
+replacement,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+matcher,Identifier
+.,Punctuation
+appendTail,Identifier
+(,Punctuation
+sb,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+sb,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Instead of replacing escape sequences in a string, this method returns a
+   * mapping of an attribute name to the value based on the escape sequence
+   * found in the argument string.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+getEscapeMapping,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+in,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getEscapeMapping,Identifier
+(,Punctuation
+in,Identifier
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+getEscapeMapping,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+in,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needRounding,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+roundDown,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+mapping,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+matcher,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tagPattern,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+// Group 2 is the %{...} pattern,Comment
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+replacement,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+"//          LOG.warn(""Tag "" + matcher.group(2) + "" not found"");",Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+mapping,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+",",Punctuation
+ ,Whitespace
+replacement,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// The %x pattern.,Comment
+"
+",Newline
+        ,Whitespace
+"// Since we know the match is a single character, we can",Comment
+"
+",Newline
+        ,Whitespace
+// switch on that rather than the string.,Comment
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+"
+",Newline
+            ,Whitespace
+&&,Operator
+ ,Whitespace
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Expected to match single character tag in string """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+char,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+replacement,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+replaceShorthand,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+needRounding,Identifier
+",",Punctuation
+ ,Whitespace
+unit,Identifier
+",",Punctuation
+ ,Whitespace
+roundDown,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+mapping,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+expandShorthand,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+replacement,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+mapping,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/*
+   * May not be called from outside unit tests.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setClock,Identifier
+(,Punctuation
+Clock,Identifier
+ ,Whitespace
+clk,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+clock,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clk,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/*
+   * May not be called from outside unit tests.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Clock,Identifier
+ ,Whitespace
+getClock,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+clock,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline
+"
+",Newline

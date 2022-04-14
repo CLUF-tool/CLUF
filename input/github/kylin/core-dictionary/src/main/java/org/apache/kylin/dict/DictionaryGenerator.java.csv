@@ -1,0 +1,1860 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dict,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+ParseException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+SimpleDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+JsonUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dimension,Identifier
+.,Punctuation
+Dictionary,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+datatype,Identifier
+.,Punctuation
+DataType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+ReadableTable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+{,Punctuation
+ ,Whitespace
+"""rawtypes""",String
+",",Punctuation
+ ,Whitespace
+"""unchecked""",String
+ ,Whitespace
+},Punctuation
+),Punctuation
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+DictionaryGenerator,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DICT_MAX_CARDINALITY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDictionaryMaxCardinality,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+DictionaryGenerator,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+DATE_PATTERNS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+"""yyyy-MM-dd""",String
+",",Punctuation
+ ,Whitespace
+"""yyyyMMdd""",String
+ ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getDictionaryMaxCardinality,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getDictionaryMaxCardinality,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Throwable,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+5000000,Literal
+;,Punctuation
+ ,Whitespace
+// some test case does not KylinConfig setup properly,Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Dictionary,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+buildDictionaryFromValueEnumerator,Identifier
+(,Punctuation
+DataType,Identifier
+ ,Whitespace
+dataType,Identifier
+",",Punctuation
+ ,Whitespace
+IDictionaryValueEnumerator,Identifier
+ ,Whitespace
+valueEnumerator,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+dataType,Identifier
+",",Punctuation
+ ,Whitespace
+"""dataType cannot be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Dictionary,Identifier
+ ,Whitespace
+dict,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+baseId,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+// always 0 for now,Comment
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+nSamples,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+5,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ArrayList,Identifier
+ ,Whitespace
+samples,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// build dict, case by data type",Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dataType,Identifier
+.,Punctuation
+isDateTimeFamily,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dataType,Identifier
+.,Punctuation
+isDate,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+dict,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buildDateDict,Identifier
+(,Punctuation
+valueEnumerator,Identifier
+",",Punctuation
+ ,Whitespace
+baseId,Identifier
+",",Punctuation
+ ,Whitespace
+nSamples,Identifier
+",",Punctuation
+ ,Whitespace
+samples,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+else,Keyword
+"
+",Newline
+                ,Whitespace
+dict,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TimeStrDictionary,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// base ID is always 0,Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dataType,Identifier
+.,Punctuation
+isNumberFamily,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+dict,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buildNumberDict,Identifier
+(,Punctuation
+valueEnumerator,Identifier
+",",Punctuation
+ ,Whitespace
+baseId,Identifier
+",",Punctuation
+ ,Whitespace
+nSamples,Identifier
+",",Punctuation
+ ,Whitespace
+samples,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+dict,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buildStringDict,Identifier
+(,Punctuation
+valueEnumerator,Identifier
+",",Punctuation
+ ,Whitespace
+baseId,Identifier
+",",Punctuation
+ ,Whitespace
+nSamples,Identifier
+",",Punctuation
+ ,Whitespace
+samples,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// log a few samples,Comment
+"
+",Newline
+        ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+buf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Object,Identifier
+ ,Whitespace
+s,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+samples,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""", """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+s,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""=>""",String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+dict,Identifier
+.,Punctuation
+getIdFromValue,Identifier
+(,Punctuation
+s,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Dictionary value samples: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Dictionary cardinality """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dict,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+TrieDictionary,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+DICT_MAX_CARDINALITY,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Too high cardinality is not suitable for dictionary -- cardinality: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+dict,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Dictionary,Identifier
+ ,Whitespace
+mergeDictionaries,Identifier
+(,Punctuation
+DataType,Identifier
+ ,Whitespace
+dataType,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+DictionaryInfo,Identifier
+>,Operator
+ ,Whitespace
+sourceDicts,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+buildDictionaryFromValueEnumerator,Identifier
+(,Punctuation
+dataType,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MultipleDictionaryValueEnumerator,Identifier
+(,Punctuation
+sourceDicts,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Dictionary,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+buildDictionary,Identifier
+(,Punctuation
+DictionaryInfo,Identifier
+ ,Whitespace
+info,Identifier
+",",Punctuation
+ ,Whitespace
+ReadableTable,Identifier
+ ,Whitespace
+inpTable,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// currently all data types are casted to string to build dictionary,Comment
+"
+",Newline
+        ,Whitespace
+// String dataType = info.getDataType();,Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+IDictionaryValueEnumerator,Identifier
+ ,Whitespace
+columnValueEnumerator,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Building dictionary object """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+JsonUtil,Identifier
+.,Punctuation
+writeValueAsString,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+columnValueEnumerator,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TableColumnValueEnumerator,Identifier
+(,Punctuation
+inpTable,Identifier
+.,Punctuation
+getReader,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+info,Identifier
+.,Punctuation
+getSourceColumnIndex,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+buildDictionaryFromValueEnumerator,Identifier
+(,Punctuation
+DataType,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+info,Identifier
+.,Punctuation
+getDataType,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+columnValueEnumerator,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columnValueEnumerator,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+columnValueEnumerator,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Dictionary,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+buildDateDict,Identifier
+(,Punctuation
+IDictionaryValueEnumerator,Identifier
+ ,Whitespace
+valueEnumerator,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+baseId,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nSamples,Identifier
+",",Punctuation
+ ,Whitespace
+ArrayList,Identifier
+ ,Whitespace
+samples,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+BAD_THRESHOLD,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+matchPattern,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+ptn,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+DATE_PATTERNS,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+matchPattern,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ptn,Identifier
+;,Punctuation
+ ,Whitespace
+// be optimistic,Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+badCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+SimpleDateFormat,Identifier
+ ,Whitespace
+sdf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SimpleDateFormat,Identifier
+(,Punctuation
+ptn,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+valueEnumerator,Identifier
+.,Punctuation
+moveNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+valueEnumerator,Identifier
+.,Punctuation
+current,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+value,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+String,Identifier
+ ,Whitespace
+str,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+sdf,Identifier
+.,Punctuation
+parse,Identifier
+(,Punctuation
+str,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+samples,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nSamples,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+samples,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+str,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+samples,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+str,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ParseException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Unrecognized date value: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+str,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+badCount,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+badCount,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+BAD_THRESHOLD,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+matchPattern,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+matchPattern,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DateStrDictionary,Identifier
+(,Punctuation
+matchPattern,Identifier
+",",Punctuation
+ ,Whitespace
+baseId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""Unrecognized datetime value""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Dictionary,Identifier
+ ,Whitespace
+buildStringDict,Identifier
+(,Punctuation
+IDictionaryValueEnumerator,Identifier
+ ,Whitespace
+valueEnumerator,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+baseId,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nSamples,Identifier
+",",Punctuation
+ ,Whitespace
+ArrayList,Identifier
+ ,Whitespace
+samples,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+TrieDictionaryBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TrieDictionaryBuilder,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+StringBytesConverter,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+valueEnumerator,Identifier
+.,Punctuation
+moveNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+valueEnumerator,Identifier
+.,Punctuation
+current,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+v,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+builder,Identifier
+.,Punctuation
+addValue,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+samples,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nSamples,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+samples,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+samples,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+builder,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+baseId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Dictionary,Identifier
+ ,Whitespace
+buildNumberDict,Identifier
+(,Punctuation
+IDictionaryValueEnumerator,Identifier
+ ,Whitespace
+valueEnumerator,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+baseId,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nSamples,Identifier
+",",Punctuation
+ ,Whitespace
+ArrayList,Identifier
+ ,Whitespace
+samples,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+NumberDictionaryBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NumberDictionaryBuilder,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+StringBytesConverter,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+valueEnumerator,Identifier
+.,Punctuation
+moveNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+valueEnumerator,Identifier
+.,Punctuation
+current,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+v,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+// empty string is null for numbers,Comment
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+builder,Identifier
+.,Punctuation
+addValue,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+samples,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nSamples,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+samples,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+samples,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+builder,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+baseId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

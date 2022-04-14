@@ -1,0 +1,2302 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+irc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Channel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+CounterGroup,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Transaction,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+AbstractSink,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+schwering,Identifier
+.,Punctuation
+irc,Identifier
+.,Punctuation
+lib,Identifier
+.,Punctuation
+IRCConnection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+schwering,Identifier
+.,Punctuation
+irc,Identifier
+.,Punctuation
+lib,Identifier
+.,Punctuation
+IRCEventListener,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+schwering,Identifier
+.,Punctuation
+irc,Identifier
+.,Punctuation
+lib,Identifier
+.,Punctuation
+IRCModeParser,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+schwering,Identifier
+.,Punctuation
+irc,Identifier
+.,Punctuation
+lib,Identifier
+.,Punctuation
+IRCUser,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+IRCSink,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractSink,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Configurable,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+IRCSink,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_PORT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+6667,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+DEFAULT_SPLIT_CHARS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""\n""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+IRC_CHANNEL_PREFIX,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""#""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+IRCConnection,Identifier
+ ,Whitespace
+connection,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+nick,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+password,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+user,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+name,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+chan,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Boolean,Identifier
+ ,Whitespace
+splitLines,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+splitChars,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+CounterGroup,Identifier
+ ,Whitespace
+counterGroup,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+IRCConnectionListener,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+IRCEventListener,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onRegistered,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onDisconnected,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""IRC sink disconnected""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onError,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""IRC sink error: {}""",String
+",",Punctuation
+ ,Whitespace
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onError,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+num,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""IRC sink error: {} - {}""",String
+",",Punctuation
+ ,Whitespace
+num,Identifier
+",",Punctuation
+ ,Whitespace
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onInvite,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+nickPass,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onJoin,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onKick,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+nickPass,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onMode,Identifier
+(,Punctuation
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+nickPass,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+mode,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onMode,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+IRCModeParser,Identifier
+ ,Whitespace
+mp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onNick,Identifier
+(,Punctuation
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+nickNew,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onNotice,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+target,Identifier
+",",Punctuation
+ ,Whitespace
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onPart,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onPrivmsg,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onQuit,Identifier
+(,Punctuation
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onReply,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+num,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onTopic,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+IRCUser,Identifier
+ ,Whitespace
+u,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+topic,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+onPing,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+p,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+unknown,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+a,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+b,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+c,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+d,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+IRCSink,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+counterGroup,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CounterGroup,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+hostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""hostname""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+portStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""port""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+nick,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""nick""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+password,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""password""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+user,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""user""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+name,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""name""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+chan,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""chan""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+splitLines,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getBoolean,Identifier
+(,Punctuation
+"""splitlines""",String
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+splitChars,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""splitchars""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+portStr,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+portStr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DEFAULT_PORT,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+splitChars,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+splitChars,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DEFAULT_SPLIT_CHARS,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+hostname,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+"""No hostname specified""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+nick,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+"""No nick specified""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+chan,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+"""No chan specified""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+createConnection,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+connection,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+"""Creating new connection to hostname:{} port:{}""",String
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IRCConnection,Identifier
+(,Punctuation
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+int,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+port,Identifier
+ ,Whitespace
+},Punctuation
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+password,Identifier
+",",Punctuation
+ ,Whitespace
+nick,Identifier
+",",Punctuation
+ ,Whitespace
+user,Identifier
+",",Punctuation
+ ,Whitespace
+name,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+addIRCEventListener,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+IRCConnectionListener,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+setEncoding,Identifier
+(,Punctuation
+"""UTF-8""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+setPong,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+setDaemon,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+setColors,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+connect,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+send,Identifier
+(,Punctuation
+"""join """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+IRC_CHANNEL_PREFIX,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+chan,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+destroyConnection,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+connection,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Destroying connection to: {}:{}""",String
+",",Punctuation
+ ,Whitespace
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+connection,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+start,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""IRC sink starting""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+createConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Unable to create irc client using hostname:""",String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+hostname,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" port:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+port,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". Exception follows.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+/* Try to prevent leaking resources. */,Comment
+"
+",Newline
+      ,Whitespace
+destroyConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+/* FIXME: Mark ourselves as failed. */,Comment
+"
+",Newline
+      ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""IRC sink {} started""",String
+",",Punctuation
+ ,Whitespace
+this,Keyword
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""IRC sink {} stopping""",String
+",",Punctuation
+ ,Whitespace
+this,Keyword
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+destroyConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""IRC sink {} stopped. Metrics:{}""",String
+",",Punctuation
+ ,Whitespace
+this,Keyword
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+counterGroup,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+sendLine,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+body,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+splitLines,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+lines,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+body,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+splitChars,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+(,Punctuation
+String,Identifier
+ ,Whitespace
+line,Identifier
+:,Operator
+ ,Whitespace
+lines,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+connection,Identifier
+.,Punctuation
+doPrivmsg,Identifier
+(,Punctuation
+IRC_CHANNEL_PREFIX,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+line,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+connection,Identifier
+.,Punctuation
+doPrivmsg,Identifier
+(,Punctuation
+IRC_CHANNEL_PREFIX,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+chan,Identifier
+",",Punctuation
+ ,Whitespace
+body,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+Status,Identifier
+ ,Whitespace
+process,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Status,Identifier
+ ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Status,Identifier
+.,Punctuation
+READY,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Channel,Identifier
+ ,Whitespace
+channel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+transaction,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+channel,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transaction,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+createConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+channel,Identifier
+.,Punctuation
+take,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+event,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+counterGroup,Identifier
+.,Punctuation
+incrementAndGet,Identifier
+(,Punctuation
+"""event.empty""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+sendLine,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+counterGroup,Identifier
+.,Punctuation
+incrementAndGet,Identifier
+(,Punctuation
+"""event.irc""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+transaction,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ChannelException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transaction,Identifier
+.,Punctuation
+rollback,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+"""Unable to get event from channel. Exception follows.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transaction,Identifier
+.,Punctuation
+rollback,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+"""Unable to communicate with IRC server. Exception follows.""",String
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+destroyConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transaction,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+status,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

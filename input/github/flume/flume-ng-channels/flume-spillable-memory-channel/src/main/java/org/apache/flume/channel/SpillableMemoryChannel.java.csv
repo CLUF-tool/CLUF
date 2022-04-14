@@ -1,0 +1,7078 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayDeque,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+Semaphore,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+TimeUnit,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+GuardedBy,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+Recyclable,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceAudience,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceStability,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+.,Punctuation
+FileChannel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+instrumentation,Identifier
+.,Punctuation
+ChannelCounter,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+lifecycle,Identifier
+.,Punctuation
+LifecycleState,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * <p>
+ * SpillableMemoryChannel will use main memory for buffering events until it has reached capacity.
+ * Thereafter file channel will be used as overflow.
+ * </p>
+ */",Comment
+"
+",Newline
+@,Punctuation
+InterfaceAudience,Identifier
+.,Punctuation
+Private,Identifier
+"
+",Newline
+@,Punctuation
+InterfaceStability,Identifier
+.,Punctuation
+Evolving,Identifier
+"
+",Newline
+@,Punctuation
+Recyclable,Identifier
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SpillableMemoryChannel,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+FileChannel,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+// config settings,Comment
+"
+",Newline
+  ,Whitespace
+/** Max number of events to be stored in memory */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+MEMORY_CAPACITY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""memoryCapacity""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+/** Seconds to wait before enabling disk overflow when memory fills up */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+OVERFLOW_TIMEOUT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""overflowTimeout""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+"/** Internal use only. To remain undocumented in User guide. Determines the
+   * percent free space available in mem queue when we stop spilling to overflow
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+OVERFLOW_DEACTIVATION_THRESHOLD,Identifier
+"
+",Newline
+          ,Whitespace
+=,Operator
+ ,Whitespace
+"""overflowDeactivationThreshold""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+/** percent of buffer between byteCapacity and the estimated event size. */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+BYTE_CAPACITY_BUFFER_PERCENTAGE,Identifier
+"
+",Newline
+          ,Whitespace
+=,Operator
+ ,Whitespace
+"""byteCapacityBufferPercentage""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+/** max number of bytes used for all events in the queue. */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+BYTE_CAPACITY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""byteCapacity""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+/** max number of events in overflow. */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+OVERFLOW_CAPACITY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""overflowCapacity""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+/** file channel setting that is overriden by Spillable Channel */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+KEEP_ALIVE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""keep-alive""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+/** file channel capacity overridden by Spillable Channel */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CAPACITY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""capacity""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+/** Estimated average size of events expected to be in the channel */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+AVG_EVENT_SIZE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""avgEventSize""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOGGER,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+SpillableMemoryChannel,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+defaultMemoryCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+defaultOverflowCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+100000000,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+defaultOverflowTimeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+3,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+defaultOverflowDeactivationThreshold,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+5,Literal
+;,Punctuation
+ ,Whitespace
+// percent,Comment
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// memory consumption control,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+defaultAvgEventSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+500,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Long,Identifier
+ ,Whitespace
+defaultByteCapacity,Identifier
+"
+",Newline
+          ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+long,Keyword
+),Punctuation
+(,Punctuation
+Runtime,Identifier
+.,Punctuation
+getRuntime,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+maxMemory,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+.80,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+defaultByteCapacityBufferPercentage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+20,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+byteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+avgEventSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultAvgEventSize,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+lastByteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+byteCapacityBufferPercentage,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Semaphore,Identifier
+ ,Whitespace
+bytesRemaining,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// for synchronizing access to primary/overflow channels & drain order,Comment
+"
+",Newline
+  ,Whitespace
+final,Keyword
+ ,Whitespace
+private,Keyword
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+queueLock,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Object,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+GuardedBy,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""queueLock""",String
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+memQueue,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// This semaphore tracks number of free slots in primary channel (includes,Comment
+"
+",Newline
+  ,Whitespace
+// all active put lists) .. used to determine if the puts,Comment
+"
+",Newline
+  ,Whitespace
+// should go into primary or overflow,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Semaphore,Identifier
+ ,Whitespace
+memQueRemaining,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// tracks number of events in both channels. Takes will block on this,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Semaphore,Identifier
+ ,Whitespace
+totalStored,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+maxMemQueueSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+     ,Whitespace
+// max sie of memory Queue,Comment
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+overflowDisabled,Identifier
+;,Punctuation
+         ,Whitespace
+// if true indicates the overflow should not be used at all.,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+overflowActivated,Identifier
+=,Operator
+false,Keyword
+;,Punctuation
+  ,Whitespace
+// indicates if overflow can be used. invariant: false if overflowDisabled is true.,Comment
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// if true overflow can be used. invariant: false if overflowDisabled is true.,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+memoryCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+     ,Whitespace
+// max events that the channel can hold  in memory,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+overflowCapacity,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+overflowTimeout,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// mem full % at which we stop spill to overflow,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+overflowDeactivationThreshold,Identifier
+"
+",Newline
+          ,Whitespace
+=,Operator
+ ,Whitespace
+defaultOverflowDeactivationThreshold,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+100,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+SpillableMemoryChannel,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getTotalStored,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+totalStored,Identifier
+.,Punctuation
+availablePermits,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getMemoryCapacity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+memoryCapacity,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getOverflowTimeout,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+overflowTimeout,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getMaxMemQueueSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+maxMemQueueSize,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+getOverflowCapacity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+overflowCapacity,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isOverflowDisabled,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+overflowDisabled,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+ChannelCounter,Identifier
+ ,Whitespace
+channelCounter,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+DrainOrderQueue,Identifier
+ ,Whitespace
+drainOrder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DrainOrderQueue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+queueSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MutableInteger,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MutableInteger,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+val,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+add,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+amount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+value,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+amount,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+//  pop on a empty queue will throw NoSuchElementException,Comment
+"
+",Newline
+  ,Whitespace
+// invariant: 0 will never be left in the queue,Comment
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+DrainOrderQueue,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+MutableInteger,Identifier
+>,Operator
+ ,Whitespace
+queue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+MutableInteger,Identifier
+>,Operator
+(,Punctuation
+1000,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+totalPuts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+  ,Whitespace
+// for debugging only,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+overflowCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+// # of items in overflow channel,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+  ,Whitespace
+String,Identifier
+ ,Whitespace
+dump,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+sb,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""  [ """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+MutableInteger,Identifier
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+queue,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+i,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""]""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+  ,Whitespace
+sb,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+putPrimary,Identifier
+(,Punctuation
+Integer,Identifier
+ ,Whitespace
+eventCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+totalPuts,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+eventCount,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+  ,Whitespace
+(,Punctuation
+queue,Identifier
+.,Punctuation
+peekLast,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+getLast,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+addLast,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+MutableInteger,Identifier
+(,Punctuation
+eventCount,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+getLast,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+add,Identifier
+(,Punctuation
+eventCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+putFirstPrimary,Identifier
+(,Punctuation
+Integer,Identifier
+ ,Whitespace
+eventCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ ,Whitespace
+(,Punctuation
+queue,Identifier
+.,Punctuation
+peekFirst,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+addFirst,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+MutableInteger,Identifier
+(,Punctuation
+eventCount,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+add,Identifier
+(,Punctuation
+eventCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+putOverflow,Identifier
+(,Punctuation
+Integer,Identifier
+ ,Whitespace
+eventCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+totalPuts,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+eventCount,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ ,Whitespace
+(,Punctuation
+queue,Identifier
+.,Punctuation
+peekLast,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+||,Operator
+  ,Whitespace
+queue,Identifier
+.,Punctuation
+getLast,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+addLast,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+MutableInteger,Identifier
+(,Punctuation
+-,Operator
+eventCount,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+getLast,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+add,Identifier
+(,Punctuation
+-,Operator
+eventCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+overflowCounter,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+eventCount,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+putFirstOverflow,Identifier
+(,Punctuation
+Integer,Identifier
+ ,Whitespace
+eventCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ ,Whitespace
+(,Punctuation
+queue,Identifier
+.,Punctuation
+peekFirst,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+||,Operator
+  ,Whitespace
+queue,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+addFirst,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+MutableInteger,Identifier
+(,Punctuation
+-,Operator
+eventCount,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+  ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+add,Identifier
+(,Punctuation
+-,Operator
+eventCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+overflowCounter,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+eventCount,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+front,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+takePrimary,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+takeCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+MutableInteger,Identifier
+ ,Whitespace
+headValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+// this condition is optimization to avoid redundant conversions of,Comment
+"
+",Newline
+      ,Whitespace
+// int -> Integer -> string in hot path,Comment
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+headValue,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+takeCount,Identifier
+),Punctuation
+  ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""Cannot take """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+takeCount,Identifier
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+""" from """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+headValue,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in DrainOrder Queue""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+headValue,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+-,Operator
+takeCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+headValue,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+removeFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+takeOverflow,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+takeCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+MutableInteger,Identifier
+ ,Whitespace
+headValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+headValue,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+-,Operator
+takeCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""Cannot take """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+takeCount,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" from """,String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+headValue,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in DrainOrder Queue head """,String
+ ,Whitespace
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+headValue,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+takeCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+headValue,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+.,Punctuation
+removeFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+overflowCounter,Identifier
+ ,Whitespace
+-=,Operator
+ ,Whitespace
+takeCount,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SpillableMemoryTransaction,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+overflowTakeTx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+ ,Whitespace
+// Take-Txn for overflow,Comment
+"
+",Newline
+    ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+overflowPutTx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+  ,Whitespace
+// Put-Txn for overflow,Comment
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+useOverflow,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+putCalled,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+    ,Whitespace
+// set on first invocation to put,Comment
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+takeCalled,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+   ,Whitespace
+// set on first invocation to take,Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+largestTakeTxSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+5000,Literal
+;,Punctuation
+ ,Whitespace
+"// not a constraint, just hint for allocation",Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+largestPutTxSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+5000,Literal
+;,Punctuation
+  ,Whitespace
+"// not a constraint, just hint for allocation",Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Integer,Identifier
+ ,Whitespace
+overflowPutCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+    ,Whitespace
+// # of puts going to overflow in this Txn,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putListByteCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+takeListByteCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+takeCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+takeList,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+putList,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ChannelCounter,Identifier
+ ,Whitespace
+channelCounter,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SpillableMemoryTransaction,Identifier
+(,Punctuation
+ChannelCounter,Identifier
+ ,Whitespace
+counter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+takeList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+largestTakeTxSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+putList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+largestPutTxSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counter,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+begin,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+super,Keyword
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowTakeTx,Identifier
+!=,Operator
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+overflowTakeTx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowPutTx,Identifier
+!=,Operator
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+overflowPutTx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+super,Keyword
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doPut,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+incrementEventPutAttemptCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+putCalled,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+eventByteSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+Math,Identifier
+.,Punctuation
+ceil,Identifier
+(,Punctuation
+estimateEventSize,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+/,Operator
+ ,Whitespace
+avgEventSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+putList,Identifier
+.,Punctuation
+offer,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelFullException,Identifier
+(,Punctuation
+"""Put queue in """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+""" channel's Transaction having capacity """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+""" full, consider reducing batch size of sources""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+putListByteCount,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+eventByteSize,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Take will limit itself to a single channel within a transaction.,Comment
+"
+",Newline
+    ,Whitespace
+// This ensures commits/rollbacks are restricted to a single channel.,Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+doTake,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+incrementEventTakeAttemptCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+totalStored,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+overflowTimeout,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Take is backing off as channel is empty.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+boolean,Keyword
+ ,Whitespace
+takeSuceeded,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+int,Keyword
+ ,Whitespace
+drainOrderTop,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+front,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+takeCalled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+takeCalled,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+drainOrderTop,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+useOverflow,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+overflowTakeTx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOverflowTx,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+overflowTakeTx,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+useOverflow,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+drainOrderTop,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Take is switching to primary""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+       ,Whitespace
+// takes should now occur from primary channel,Comment
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+overflowTakeTx,Identifier
+.,Punctuation
+take,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+++,Operator
+takeCount,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+takeOverflow,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+drainOrderTop,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Take is switching to overflow""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+      ,Whitespace
+// takes should now occur from overflow channel,Comment
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+memQueue,Identifier
+.,Punctuation
+poll,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+++,Operator
+takeCount,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+takePrimary,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+event,Identifier
+",",Punctuation
+ ,Whitespace
+"""Queue.poll returned NULL despite""",String
+"
+",Newline
+                    ,Whitespace
++,Operator
+ ,Whitespace
+""" semaphore signalling existence of entry""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+eventByteSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+Math,Identifier
+.,Punctuation
+ceil,Identifier
+(,Punctuation
+estimateEventSize,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+/,Operator
+ ,Whitespace
+avgEventSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+useOverflow,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+"// takeList is thd pvt, so no need to do this in synchronized block",Comment
+"
+",Newline
+          ,Whitespace
+takeList,Identifier
+.,Punctuation
+offer,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+takeListByteCount,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+eventByteSize,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+takeSuceeded,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+takeSuceeded,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+totalStored,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doCommit,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+putCalled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+putCommit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+LOGGER,Identifier
+.,Punctuation
+isDebugEnabled,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Put Committed. Drain Order Queue state : """,String
+"
+",Newline
+                  ,Whitespace
++,Operator
+ ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+dump,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+takeCalled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+takeCommit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+LOGGER,Identifier
+.,Punctuation
+isDebugEnabled,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Take Committed. Drain Order Queue state : """,String
+"
+",Newline
+                  ,Whitespace
++,Operator
+ ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+dump,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+takeCommit,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+takeCount,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+largestTakeTxSize,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+largestTakeTxSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+takeCount,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowTakeTx,Identifier
+!=,Operator
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+overflowTakeTx,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+double,Keyword
+ ,Whitespace
+memoryPercentFree,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+memoryCapacity,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+?,Operator
+  ,Whitespace
+0,Literal
+"
+",Newline
+           ,Whitespace
+:,Operator
+  ,Whitespace
+(,Punctuation
+memoryCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+takeCount,Identifier
+ ,Whitespace
+),Punctuation
+ ,Whitespace
+/,Operator
+ ,Whitespace
+(,Punctuation
+double,Keyword
+),Punctuation
+memoryCapacity,Identifier
+ ,Whitespace
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowActivated,Identifier
+"
+",Newline
+                ,Whitespace
+&&,Operator
+  ,Whitespace
+memoryPercentFree,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+overflowDeactivationThreshold,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+overflowActivated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Overflow Deactivated""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+getTotalStored,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+useOverflow,Identifier
+),Punctuation
+  ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+memQueRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+takeCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+bytesRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+takeListByteCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+addToEventTakeSuccessCount,Identifier
+(,Punctuation
+takeCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+putCommit,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// decide if overflow needs to be used,Comment
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+timeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+overflowActivated,Identifier
+  ,Whitespace
+?,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+:,Operator
+ ,Whitespace
+overflowTimeout,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memoryCapacity,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// check for enough event slots(memoryCapacity) for using memory queue,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+memQueRemaining,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowDisabled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelFullException,Identifier
+(,Punctuation
+"""Spillable Memory Channel's """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+              ,Whitespace
+"""memory capacity has been reached and overflow is """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+              ,Whitespace
+"""disabled. Consider increasing memoryCapacity.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+overflowActivated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+useOverflow,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+// check if we have enough byteCapacity for using memory queue,Comment
+"
+",Newline
+        ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+bytesRemaining,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+putListByteCount,Identifier
+",",Punctuation
+ ,Whitespace
+overflowTimeout,Identifier
+"
+",Newline
+          ,Whitespace
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+memQueRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowDisabled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelFullException,Identifier
+(,Punctuation
+"""Spillable Memory Channel's """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""memory capacity has been reached.  """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+bytesRemaining,Identifier
+.,Punctuation
+availablePermits,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+avgEventSize,Identifier
+),Punctuation
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+""" bytes are free and overflow is disabled. Consider """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""increasing byteCapacity or capacity.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+overflowActivated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+useOverflow,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+useOverflow,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+largestPutTxSize,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+largestPutTxSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+useOverflow,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+commitPutsToOverflow,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+commitPutsToPrimary,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+commitPutsToOverflow,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowPutTx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOverflowTx,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowPutTx,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+putList,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+overflowPutTx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+commitPutsToOverflow_core,Identifier
+(,Punctuation
+overflowPutTx,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+totalStored,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowPutCount,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+addToEventPutSuccessCount,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+commitPutsToOverflow_core,Identifier
+(,Punctuation
+Transaction,Identifier
+ ,Whitespace
+overflowPutTx,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// reattempt only once if overflow is full first time around,Comment
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+ ,Whitespace
+++,Operator
+i,Identifier
+),Punctuation
+  ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+overflowPutTx,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+putOverflow,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+                    ,Whitespace
++,Operator
+ ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+overflowCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ChannelFullException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+  ,Whitespace
+{,Punctuation
+ ,Whitespace
+// drop lock & reattempt,Comment
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+==,Operator
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+overflowTimeout,Identifier
+ ,Whitespace
+*,Operator
+1000,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+e,Identifier
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+commitPutsToPrimary,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+e,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+putList,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+memQueue,Identifier
+.,Punctuation
+offer,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+"""Unable to insert event into memory """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+                    ,Whitespace
+"""queue in spite of spare capacity, this is very unexpected""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+putPrimary,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+maxMemQueueSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+maxMemQueueSize,Identifier
+),Punctuation
+ ,Whitespace
+?,Operator
+  ,Whitespace
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+                                                              ,Whitespace
+:,Operator
+ ,Whitespace
+maxMemQueueSize,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+overflowCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+// update counters and semaphores,Comment
+"
+",Newline
+      ,Whitespace
+totalStored,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+addToEventPutSuccessCount,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doRollback,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Rollback() of """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+              ,Whitespace
+(,Punctuation
+takeCalled,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+""" Take Tx""",String
+ ,Whitespace
+:,Operator
+ ,Whitespace
+(,Punctuation
+putCalled,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+""" Put Tx""",String
+ ,Whitespace
+:,Operator
+ ,Whitespace
+"""Empty Tx""",String
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+putCalled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowPutTx,Identifier
+!=,Operator
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+overflowPutTx,Identifier
+.,Punctuation
+rollback,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+useOverflow,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+bytesRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+putListByteCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+putList,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+putListByteCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+takeCalled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowTakeTx,Identifier
+!=,Operator
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+overflowTakeTx,Identifier
+.,Punctuation
+rollback,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+useOverflow,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+putFirstOverflow,Identifier
+(,Punctuation
+takeCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+remainingCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+memoryCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+remainingCapacity,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+takeCount,Identifier
+",",Punctuation
+"
+",Newline
+                    ,Whitespace
+"""Not enough space in memory queue to rollback takes. This""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                            ,Whitespace
+""" should never happen, please report""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+takeList,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+memQueue,Identifier
+.,Punctuation
+addFirst,Identifier
+(,Punctuation
+takeList,Identifier
+.,Punctuation
+removeLast,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+putFirstPrimary,Identifier
+(,Punctuation
+takeCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+totalStored,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+takeCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+overflowTakeTx,Identifier
+.,Punctuation
+rollback,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+overflowCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+ ,Whitespace
+// Transaction,Comment
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Read parameters from context
+   * <li>memoryCapacity = total number of events allowed at one time in the memory queue.
+   * <li>overflowCapacity = total number of events allowed at one time in the overflow file channel.
+   * <li>byteCapacity = the max number of bytes used for events in the memory queue.
+   * <li>byteCapacityBufferPercentage = type int. Defines the percent of buffer between byteCapacity and the estimated event size.
+   * <li>overflowTimeout = type int. Number of seconds to wait on a full memory before deciding to enable overflow
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+getLifecycleState,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+LifecycleState,Identifier
+.,Punctuation
+START,Identifier
+    ,Whitespace
+// does not support reconfig when running,Comment
+"
+",Newline
+            ,Whitespace
+||,Operator
+ ,Whitespace
+getLifecycleState,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+LifecycleState,Identifier
+.,Punctuation
+ERROR,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+totalStored,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+totalStored,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Semaphore,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+channelCounter,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelCounter,Identifier
+(,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 1) Memory Capacity,Comment
+"
+",Newline
+    ,Whitespace
+Integer,Identifier
+ ,Whitespace
+newMemoryCapacity,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+newMemoryCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+MEMORY_CAPACITY,Identifier
+"
+",Newline
+              ,Whitespace
+",",Punctuation
+ ,Whitespace
+defaultMemoryCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+newMemoryCapacity,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+newMemoryCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultMemoryCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+newMemoryCapacity,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NumberFormatException,Identifier
+(,Punctuation
+MEMORY_CAPACITY,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" must be >= 0""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+newMemoryCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultMemoryCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Invalid """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+MEMORY_CAPACITY,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" specified, initializing """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" channel to default value of {}""",String
+",",Punctuation
+ ,Whitespace
+defaultMemoryCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+resizePrimaryQueue,Identifier
+(,Punctuation
+newMemoryCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// overflowTimeout - wait time before switching to overflow when mem is full,Comment
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Integer,Identifier
+ ,Whitespace
+newOverflowTimeout,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+              ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+OVERFLOW_TIMEOUT,Identifier
+",",Punctuation
+ ,Whitespace
+defaultOverflowTimeout,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowTimeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+newOverflowTimeout,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+newOverflowTimeout,Identifier
+"
+",Newline
+                                                     ,Whitespace
+:,Operator
+ ,Whitespace
+defaultOverflowTimeout,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Incorrect value for """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'s """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+OVERFLOW_TIMEOUT,Identifier
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+""" setting. Using default value {}""",String
+",",Punctuation
+ ,Whitespace
+defaultOverflowTimeout,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowTimeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultOverflowTimeout,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Integer,Identifier
+ ,Whitespace
+newThreshold,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+OVERFLOW_DEACTIVATION_THRESHOLD,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowDeactivationThreshold,Identifier
+ ,Whitespace
+=,Operator
+  ,Whitespace
+(,Punctuation
+newThreshold,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+?,Operator
+"
+",Newline
+                                   ,Whitespace
+newThreshold,Identifier
+/,Operator
+100.0,Literal
+"
+",Newline
+                                 ,Whitespace
+:,Operator
+ ,Whitespace
+defaultOverflowDeactivationThreshold,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+100.0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Incorrect value for """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'s """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+              ,Whitespace
+OVERFLOW_DEACTIVATION_THRESHOLD,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". Using default value {} %""",String
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+defaultOverflowDeactivationThreshold,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowDeactivationThreshold,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultOverflowDeactivationThreshold,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+100.0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 3) Memory consumption control,Comment
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byteCapacityBufferPercentage,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+              ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+BYTE_CAPACITY_BUFFER_PERCENTAGE,Identifier
+"
+",Newline
+                      ,Whitespace
+",",Punctuation
+ ,Whitespace
+defaultByteCapacityBufferPercentage,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error parsing """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_CAPACITY_BUFFER_PERCENTAGE,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" for """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". Using default=""",String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+defaultByteCapacityBufferPercentage,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+byteCapacityBufferPercentage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultByteCapacityBufferPercentage,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+avgEventSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+AVG_EVENT_SIZE,Identifier
+",",Punctuation
+ ,Whitespace
+defaultAvgEventSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ ,Whitespace
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error parsing """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+AVG_EVENT_SIZE,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" for """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+""". Using default = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+defaultAvgEventSize,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+avgEventSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultAvgEventSize,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+context,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+BYTE_CAPACITY,Identifier
+",",Punctuation
+ ,Whitespace
+defaultByteCapacity,Identifier
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+1,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+byteCapacityBufferPercentage,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+.01,Literal
+ ,Whitespace
+),Punctuation
+),Punctuation
+ ,Whitespace
+/,Operator
+ ,Whitespace
+avgEventSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+byteCapacity,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+byteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error parsing """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_CAPACITY,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" setting for """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+""". Using default = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+defaultByteCapacity,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+byteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+(,Punctuation
+ ,Whitespace
+(,Punctuation
+defaultByteCapacity,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+1,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+byteCapacityBufferPercentage,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+.01,Literal
+ ,Whitespace
+),Punctuation
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+/,Operator
+ ,Whitespace
+avgEventSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+bytesRemaining,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+bytesRemaining,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Semaphore,Identifier
+(,Punctuation
+byteCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+lastByteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+byteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+byteCapacity,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+lastByteCapacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+bytesRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+byteCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+lastByteCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+lastByteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+byteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+bytesRemaining,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+lastByteCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+byteCapacity,Identifier
+",",Punctuation
+ ,Whitespace
+overflowTimeout,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Couldn't acquire permits to downsize the byte capacity, resizing has been aborted""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+lastByteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+byteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+OVERFLOW_CAPACITY,Identifier
+",",Punctuation
+ ,Whitespace
+defaultOverflowCapacity,Identifier
+),Punctuation
+;,Punctuation
+  ,Whitespace
+// file channel capacity,Comment
+"
+",Newline
+      ,Whitespace
+// Determine if File channel needs to be disabled,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ ,Whitespace
+memoryCapacity,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+1,Literal
+   ,Whitespace
+&&,Operator
+   ,Whitespace
+overflowCapacity,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""For channel """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+OVERFLOW_CAPACITY,Identifier
+ ,Whitespace
++,Operator
+"
+",Newline
+                  ,Whitespace
+""" cannot be set to 0 if """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+MEMORY_CAPACITY,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" is also 0. """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+                  ,Whitespace
+"""Using default value """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+OVERFLOW_CAPACITY,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" = """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+                  ,Whitespace
+defaultOverflowCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+overflowCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultOverflowCapacity,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+overflowDisabled,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+overflowCapacity,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overflowDisabled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+overflowActivated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+overflowCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultOverflowCapacity,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Configure File channel,Comment
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+KEEP_ALIVE,Identifier
+",",Punctuation
+"""0""",String
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// override keep-alive for  File channel,Comment
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+CAPACITY,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+overflowCapacity,Identifier
+),Punctuation
+ ,Whitespace
+),Punctuation
+;,Punctuation
+  ,Whitespace
+// file channel capacity,Comment
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+configure,Identifier
+(,Punctuation
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+resizePrimaryQueue,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+newMemoryCapacity,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memQueue,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+   ,Whitespace
+&&,Operator
+   ,Whitespace
+memoryCapacity,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+newMemoryCapacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memoryCapacity,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+newMemoryCapacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+diff,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+memoryCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+newMemoryCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+memQueRemaining,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+diff,Identifier
+",",Punctuation
+ ,Whitespace
+overflowTimeout,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Memory buffer currently contains more events than the new size. Downsizing has been aborted.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+newQueue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+newMemoryCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+newQueue,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+memQueue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+memQueue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newQueue,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+memoryCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newMemoryCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+  ,Whitespace
+{,Punctuation
+   ,Whitespace
+// if (memoryCapacity <= newMemoryCapacity),Comment
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+newQueue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+newMemoryCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memQueue,Identifier
+ ,Whitespace
+!=,Operator
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+newQueue,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+memQueue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+memQueue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newQueue,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memQueRemaining,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+memQueRemaining,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Semaphore,Identifier
+(,Punctuation
+newMemoryCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+int,Keyword
+ ,Whitespace
+diff,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newMemoryCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+memoryCapacity,Identifier
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+memQueRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+diff,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+memoryCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newMemoryCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+start,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+overFlowCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+super,Keyword
+.,Punctuation
+getDepth,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+drainOrder,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+putOverflow,Identifier
+(,Punctuation
+overFlowCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+totalStored,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+overFlowCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+totalCount,Identifier
+ ,Whitespace
+=,Operator
+  ,Whitespace
+overFlowCount,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelCapacity,Identifier
+(,Punctuation
+memoryCapacity,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+getOverflowCapacity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+totalCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+getLifecycleState,Identifier
+(,Punctuation
+),Punctuation
+==,Operator
+LifecycleState,Identifier
+.,Punctuation
+STOP,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+memQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+drainOrder,Identifier
+.,Punctuation
+overflowCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+createTransaction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SpillableMemoryTransaction,Identifier
+(,Punctuation
+channelCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+getOverflowTx,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+super,Keyword
+.,Punctuation
+createTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+estimateEventSize,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+body,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+body,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+body,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+body,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"//Each event occupies at least 1 slot, so return 1.",Comment
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

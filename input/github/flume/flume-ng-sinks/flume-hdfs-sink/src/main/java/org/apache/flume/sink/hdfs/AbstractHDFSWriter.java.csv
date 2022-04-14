@@ -1,0 +1,2371 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+hdfs,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceAudience,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceStability,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FSDataOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FileSystem,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+Path,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+OutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+InvocationTargetException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+Method,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+@,Punctuation
+InterfaceAudience,Identifier
+.,Punctuation
+Private,Identifier
+"
+",Newline
+@,Punctuation
+InterfaceStability,Identifier
+.,Punctuation
+Evolving,Identifier
+"
+",Newline
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+AbstractHDFSWriter,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+HDFSWriter,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+AbstractHDFSWriter,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+FSDataOutputStream,Identifier
+ ,Whitespace
+outputStream,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+FileSystem,Identifier
+ ,Whitespace
+fs,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Path,Identifier
+ ,Whitespace
+destPath,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Method,Identifier
+ ,Whitespace
+refGetNumCurrentReplicas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Method,Identifier
+ ,Whitespace
+refGetDefaultReplication,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Method,Identifier
+ ,Whitespace
+refHflushOrSync,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+configuredMinReplicas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+numberOfCloseRetries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+timeBetweenCloseRetries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+final,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+[,Punctuation
+],Punctuation
+ ,Whitespace
+NO_ARGS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+[,Punctuation
+],Punctuation
+{,Punctuation
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+configuredMinReplicas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+"""hdfs.minBlockReplicas""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+configuredMinReplicas,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+configuredMinReplicas,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+"""hdfs.minBlockReplicas must be greater than or equal to 0""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+numberOfCloseRetries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+"""hdfs.closeTries""",String
+",",Punctuation
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+numberOfCloseRetries,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+timeBetweenCloseRetries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+"""hdfs.callTimeout""",String
+",",Punctuation
+ ,Whitespace
+10000l,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""hdfs.callTimeout can not be parsed to a long: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+"""hdfs.callTimeout""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+timeBetweenCloseRetries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+timeBetweenCloseRetries,Identifier
+/,Operator
+numberOfCloseRetries,Identifier
+",",Punctuation
+ ,Whitespace
+1000,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Contract for subclasses: Call registerCurrentStream() on open,
+   * unregisterCurrentStream() on close, and the base class takes care of the
+   * rest.
+   * @return
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isUnderReplicated,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+numBlocks,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getNumCurrentReplicas,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+numBlocks,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+desiredBlocks,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+configuredMinReplicas,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+desiredBlocks,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+configuredMinReplicas,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+desiredBlocks,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getFsDesiredReplication,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+numBlocks,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+desiredBlocks,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IllegalAccessException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Unexpected error while checking replication factor""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InvocationTargetException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Unexpected error while checking replication factor""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IllegalArgumentException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Unexpected error while checking replication factor""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+registerCurrentStream,Identifier
+(,Punctuation
+FSDataOutputStream,Identifier
+ ,Whitespace
+outputStream,Identifier
+",",Punctuation
+"
+",Newline
+                                      ,Whitespace
+FileSystem,Identifier
+ ,Whitespace
+fs,Identifier
+",",Punctuation
+ ,Whitespace
+Path,Identifier
+ ,Whitespace
+destPath,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+outputStream,Identifier
+",",Punctuation
+ ,Whitespace
+"""outputStream must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+fs,Identifier
+",",Punctuation
+ ,Whitespace
+"""fs must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+destPath,Identifier
+",",Punctuation
+ ,Whitespace
+"""destPath must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+outputStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+outputStream,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+fs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fs,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+destPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+destPath,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+refGetNumCurrentReplicas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+reflectGetNumCurrentReplicas,Identifier
+(,Punctuation
+outputStream,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+refGetDefaultReplication,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+reflectGetDefaultReplication,Identifier
+(,Punctuation
+fs,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+refHflushOrSync,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+reflectHflushOrSync,Identifier
+(,Punctuation
+outputStream,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+unregisterCurrentStream,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+outputStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+fs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+destPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+refGetNumCurrentReplicas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+refGetDefaultReplication,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getFsDesiredReplication,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+short,Keyword
+ ,Whitespace
+replication,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+fs,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+destPath,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+refGetDefaultReplication,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+replication,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+Short,Identifier
+),Punctuation
+ ,Whitespace
+refGetDefaultReplication,Identifier
+.,Punctuation
+invoke,Identifier
+(,Punctuation
+fs,Identifier
+",",Punctuation
+ ,Whitespace
+destPath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IllegalAccessException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Unexpected error calling getDefaultReplication(Path)""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InvocationTargetException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Unexpected error calling getDefaultReplication(Path)""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// will not work on Federated HDFS (see HADOOP-8014),Comment
+"
+",Newline
+        ,Whitespace
+replication,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+getDefaultReplication,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+replication,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * This method gets the datanode replication count for the current open file.
+   *
+   * If the pipeline isn't started yet or is empty, you will get the default
+   * replication factor.
+   *
+   * <p/>If this function returns -1, it means you
+   * are not properly running with the HDFS-826 patch.
+   * @throws InvocationTargetException
+   * @throws IllegalAccessException
+   * @throws IllegalArgumentException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getNumCurrentReplicas,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+",",Punctuation
+ ,Whitespace
+IllegalAccessException,Identifier
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+InvocationTargetException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+refGetNumCurrentReplicas,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+outputStream,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+OutputStream,Identifier
+ ,Whitespace
+dfsOutputStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+outputStream,Identifier
+.,Punctuation
+getWrappedStream,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dfsOutputStream,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Object,Identifier
+ ,Whitespace
+repl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+refGetNumCurrentReplicas,Identifier
+.,Punctuation
+invoke,Identifier
+(,Punctuation
+dfsOutputStream,Identifier
+",",Punctuation
+ ,Whitespace
+NO_ARGS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+repl,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+Integer,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+Integer,Identifier
+),Punctuation
+repl,Identifier
+),Punctuation
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Find the 'getNumCurrentReplicas' on the passed <code>os</code> stream.
+   * @return Method or null.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Method,Identifier
+ ,Whitespace
+reflectGetNumCurrentReplicas,Identifier
+(,Punctuation
+FSDataOutputStream,Identifier
+ ,Whitespace
+os,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Method,Identifier
+ ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+os,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+OutputStream,Identifier
+>,Operator
+ ,Whitespace
+wrappedStreamClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+os,Identifier
+.,Punctuation
+getWrappedStream,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+wrappedStreamClass,Identifier
+.,Punctuation
+getDeclaredMethod,Identifier
+(,Punctuation
+"""getNumCurrentReplicas""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+>,Operator
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+m,Identifier
+.,Punctuation
+setAccessible,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NoSuchMethodException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""FileSystem's output stream doesn't support""",String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+""" getNumCurrentReplicas; --HDFS-826 not available; fsOut=""",String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+wrappedStreamClass,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""; err=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+SecurityException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Doesn't have access to getNumCurrentReplicas on """,String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+"""FileSystems's output stream --HDFS-826 not available; fsOut=""",String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+wrappedStreamClass,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+ ,Whitespace
+// could happen on setAccessible(),Comment
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+m,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Using getNumCurrentReplicas--HDFS-826""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+m,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Find the 'getDefaultReplication' method on the passed <code>fs</code>
+   * FileSystem that takes a Path argument.
+   * @return Method or null.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Method,Identifier
+ ,Whitespace
+reflectGetDefaultReplication,Identifier
+(,Punctuation
+FileSystem,Identifier
+ ,Whitespace
+fileSystem,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Method,Identifier
+ ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+fileSystem,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+fsClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fileSystem,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fsClass,Identifier
+.,Punctuation
+getMethod,Identifier
+(,Punctuation
+"""getDefaultReplication""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+>,Operator
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+Path,Identifier
+.,Punctuation
+class,Keyword
+ ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NoSuchMethodException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""FileSystem implementation doesn't support""",String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+""" getDefaultReplication(Path); -- HADOOP-8014 not available; """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""className = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+fsClass,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""; err = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+SecurityException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""No access to getDefaultReplication(Path) on """,String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+"""FileSystem implementation -- HADOOP-8014 not available; """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""className = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+fsClass,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""; err = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+m,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Using FileSystem.getDefaultReplication(Path) from """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""HADOOP-8014""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+m,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Method,Identifier
+ ,Whitespace
+reflectHflushOrSync,Identifier
+(,Punctuation
+FSDataOutputStream,Identifier
+ ,Whitespace
+os,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Method,Identifier
+ ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+os,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+fsDataOutputStreamClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+os,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fsDataOutputStreamClass,Identifier
+.,Punctuation
+getMethod,Identifier
+(,Punctuation
+"""hflush""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NoSuchMethodException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""HFlush not found. Will use sync() instead""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fsDataOutputStreamClass,Identifier
+.,Punctuation
+getMethod,Identifier
+(,Punctuation
+"""sync""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex1,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""Neither hflush not sync were found. That seems to be """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""a problem!""",String
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+msg,Identifier
+",",Punctuation
+ ,Whitespace
+ex1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+m,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * If hflush is available in this version of HDFS, then this method calls
+   * hflush, else it calls sync.
+   * @param os - The stream to flush/sync
+   * @throws IOException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+hflushOrSync,Identifier
+(,Punctuation
+FSDataOutputStream,Identifier
+ ,Whitespace
+os,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+"// At this point the refHflushOrSync cannot be null,",Comment
+"
+",Newline
+      ,Whitespace
+// since register method would have thrown if it was.,Comment
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+refHflushOrSync,Identifier
+.,Punctuation
+invoke,Identifier
+(,Punctuation
+os,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InvocationTargetException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""Error while trying to hflushOrSync!""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Throwable,Identifier
+ ,Whitespace
+cause,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+getCause,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+cause,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+cause,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+IOException,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+),Punctuation
+cause,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+msg,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""Error while trying to hflushOrSync!""",String
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+msg,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

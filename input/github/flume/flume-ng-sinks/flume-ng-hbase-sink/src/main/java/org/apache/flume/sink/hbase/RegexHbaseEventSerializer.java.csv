@@ -1,0 +1,1802 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+hbase,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+charset,Identifier
+.,Punctuation
+Charset,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Calendar,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+atomic,Identifier
+.,Punctuation
+AtomicInteger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Matcher,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Pattern,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+RandomStringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+ComponentConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+Increment,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+Put,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+Row,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Charsets,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * An {@link HbaseEventSerializer} which parses columns based on a supplied 
+ * regular expression and column name list. 
+ * 
+ * Note that if the regular expression does not return the correct number of
+ * groups for a particular event, or it does not correctly match an event,
+ * the event is silently dropped.
+ * 
+ * Row keys for each event consist of a timestamp concatenated with an
+ * identifier which enforces uniqueness of keys across flume agents.
+ * 
+ * See static constant variables for configuration options.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+RegexHbaseEventSerializer,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+HbaseEventSerializer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+// Config vars,Comment
+"
+",Newline
+  ,Whitespace
+/** Regular expression used to parse groups from event data. */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+REGEX_CONFIG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""regex""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+REGEX_DEFAULT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""(.*)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+/** Whether to ignore case when performing regex matches. */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+IGNORE_CASE_CONFIG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""regexIgnoreCase""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+INGORE_CASE_DEFAULT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+/** Comma separated list of column names to place matching groups in. */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+COL_NAME_CONFIG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""colNames""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+COLUMN_NAME_DEFAULT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""payload""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+/** Index of the row key in matched regex groups */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+ROW_KEY_INDEX_CONFIG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""rowKeyIndex""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+/** Placeholder in colNames for row key */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+ROW_KEY_NAME,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""ROW_KEY""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+/** Whether to deposit event headers into corresponding column qualifiers */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+DEPOSIT_HEADERS_CONFIG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""depositHeaders""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+DEPOSIT_HEADERS_DEFAULT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+/** What charset to use when serializing into HBase's byte arrays */,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CHARSET_CONFIG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""charset""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CHARSET_DEFAULT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""UTF-8""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/* This is a nonce used in HBase row-keys, such that the same row-key
+   * never gets written more than once from within this JVM. */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+ ,Whitespace
+nonce,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+randomKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+RandomStringUtils,Identifier
+.,Punctuation
+randomAlphanumeric,Identifier
+(,Punctuation
+10,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+cf,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+payload,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+colNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+regexIgnoreCase,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+depositHeaders,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+inputPattern,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Charset,Identifier
+ ,Whitespace
+charset,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rowKeyIndex,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+regex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+REGEX_CONFIG,Identifier
+",",Punctuation
+ ,Whitespace
+REGEX_DEFAULT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+regexIgnoreCase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getBoolean,Identifier
+(,Punctuation
+IGNORE_CASE_CONFIG,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+INGORE_CASE_DEFAULT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+depositHeaders,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getBoolean,Identifier
+(,Punctuation
+DEPOSIT_HEADERS_CONFIG,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+DEPOSIT_HEADERS_DEFAULT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+inputPattern,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+regex,Identifier
+",",Punctuation
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+DOTALL,Identifier
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+regexIgnoreCase,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+CASE_INSENSITIVE,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+charset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Charset,Identifier
+.,Punctuation
+forName,Identifier
+(,Punctuation
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+CHARSET_CONFIG,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+CHARSET_DEFAULT,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+colNameStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+COL_NAME_CONFIG,Identifier
+",",Punctuation
+ ,Whitespace
+COLUMN_NAME_DEFAULT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+columnNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colNameStr,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+:,Operator
+ ,Whitespace
+columnNames,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+colNames,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+s,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"//Rowkey is optional, default is -1",Comment
+"
+",Newline
+    ,Whitespace
+rowKeyIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+ROW_KEY_INDEX_CONFIG,Identifier
+",",Punctuation
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"//if row key is being used, make sure it is specified correct",Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+rowKeyIndex,Identifier
+ ,Whitespace
+>=,Operator
+0,Literal
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+rowKeyIndex,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+columnNames,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+ROW_KEY_INDEX_CONFIG,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" must be """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""less than num columns """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+columnNames,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+ROW_KEY_NAME,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+columnNames,Identifier
+[,Punctuation
+rowKeyIndex,Identifier
+],Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Column at """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+rowKeyIndex,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" must be """,String
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+ROW_KEY_NAME,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" and is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+columnNames,Identifier
+[,Punctuation
+rowKeyIndex,Identifier
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+ComponentConfiguration,Identifier
+ ,Whitespace
+conf,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initialize,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+columnFamily,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+payload,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+cf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columnFamily,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Returns a row-key with the following format:
+   * [time in millis]-[random key]-[nonce]
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getRowKey,Identifier
+(,Punctuation
+Calendar,Identifier
+ ,Whitespace
+cal,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+"/* NOTE: This key generation strategy has the following properties:
+     * 
+     * 1) Within a single JVM, the same row key will never be duplicated.
+     * 2) Amongst any two JVM's operating at different time periods (according
+     *    to their respective clocks), the same row key will never be 
+     *    duplicated.
+     * 3) Amongst any two JVM's operating concurrently (according to their
+     *    respective clocks), the odds of duplicating a row-key are non-zero
+     *    but infinitesimal. This would require simultaneous collision in (a) 
+     *    the timestamp (b) the respective nonce and (c) the random string.
+     *    The string is necessary since (a) and (b) could collide if a fleet
+     *    of Flume agents are restarted in tandem.
+     *    
+     *  Row-key uniqueness is important because conflicting row-keys will cause
+     *  data loss. */",Comment
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+rowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+format,Identifier
+(,Punctuation
+"""%s-%s-%s""",String
+",",Punctuation
+ ,Whitespace
+cal,Identifier
+.,Punctuation
+getTimeInMillis,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+randomKey,Identifier
+",",Punctuation
+ ,Whitespace
+nonce,Identifier
+.,Punctuation
+getAndIncrement,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+rowKey,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getRowKey,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getRowKey,Identifier
+(,Punctuation
+Calendar,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Row,Identifier
+>,Operator
+ ,Whitespace
+getActions,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Row,Identifier
+>,Operator
+ ,Whitespace
+actions,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+rowKey,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+inputPattern,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+payload,Identifier
+",",Punctuation
+ ,Whitespace
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+m,Identifier
+.,Punctuation
+matches,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+m,Identifier
+.,Punctuation
+groupCount,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+colNames,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+rowKeyIndex,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+rowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getRowKey,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+else,Keyword
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+rowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+m,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+rowKeyIndex,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+Put,Identifier
+ ,Whitespace
+put,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Put,Identifier
+(,Punctuation
+rowKey,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+colNames,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+(,Punctuation
+i,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+rowKeyIndex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+put,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+cf,Identifier
+",",Punctuation
+ ,Whitespace
+colNames,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+m,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+depositHeaders,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Map,Identifier
+.,Punctuation
+Entry,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+entrySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+put,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+cf,Identifier
+",",Punctuation
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getKey,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+actions,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+put,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Could not get row key!""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+actions,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Increment,Identifier
+>,Operator
+ ,Whitespace
+getIncrements,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,3075 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+project,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collections,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+MetadataManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+ColumnDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+ExternalFilterDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+FunctionDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+MeasureDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TableDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+IRealization,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+RealizationRegistry,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * This is a second level cache that is built on top of first level cached objects,
+ * including Realization, TableDesc, ColumnDesc etc, to speed up query time metadata lookup.
+ * <p/>
+ * On any object update, the L2 cache simply gets wiped out because it's cheap to rebuild.
+ */",Comment
+"
+",Newline
+class,Keyword
+ ,Whitespace
+ProjectL2Cache,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+ProjectL2Cache,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ProjectManager,Identifier
+ ,Whitespace
+mgr,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+ProjectCache,Identifier
+>,Operator
+ ,Whitespace
+projectCaches,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newConcurrentMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ProjectL2Cache,Identifier
+(,Punctuation
+ProjectManager,Identifier
+ ,Whitespace
+mgr,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+mgr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mgr,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+clear,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+projectCaches,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ExternalFilterDesc,Identifier
+ ,Whitespace
+getExternalFilterDesc,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+extFilterName,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+prjCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+prjCache,Identifier
+.,Punctuation
+extFilters,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+extFilterName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+ExternalFilterDesc,Identifier
+>,Operator
+ ,Whitespace
+listExternalFilterDesc,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+prjCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+unmodifiableMap,Identifier
+(,Punctuation
+prjCache,Identifier
+.,Punctuation
+extFilters,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+TableDesc,Identifier
+>,Operator
+ ,Whitespace
+listDefinedTables,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+prjCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+TableDesc,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayListWithCapacity,Identifier
+(,Punctuation
+prjCache,Identifier
+.,Punctuation
+tables,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TableCache,Identifier
+ ,Whitespace
+tableCache,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+prjCache,Identifier
+.,Punctuation
+tables,Identifier
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+tableCache,Identifier
+.,Punctuation
+tableDesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+TableDesc,Identifier
+>,Operator
+ ,Whitespace
+listExposedTables,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+prjCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+unmodifiableSet,Identifier
+(,Punctuation
+prjCache,Identifier
+.,Punctuation
+exposedTables,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+ColumnDesc,Identifier
+>,Operator
+ ,Whitespace
+listExposedColumns,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+table,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+TableCache,Identifier
+ ,Whitespace
+tableCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+.,Punctuation
+tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableCache,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+emptySet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+else,Keyword
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+unmodifiableSet,Identifier
+(,Punctuation
+tableCache,Identifier
+.,Punctuation
+exposedColumns,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isExposedTable,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+table,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+TableCache,Identifier
+ ,Whitespace
+tableCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+.,Punctuation
+tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableCache,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+else,Keyword
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+tableCache,Identifier
+.,Punctuation
+exposed,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isExposedColumn,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+table,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+col,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+TableCache,Identifier
+ ,Whitespace
+tableCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+.,Punctuation
+tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableCache,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ColumnDesc,Identifier
+ ,Whitespace
+colDesc,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tableCache,Identifier
+.,Punctuation
+exposedColumns,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+colDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+col,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+listAllRealizations,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+prjCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+unmodifiableSet,Identifier
+(,Punctuation
+prjCache,Identifier
+.,Punctuation
+realizations,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+getRealizationsByTable,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+table,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+TableCache,Identifier
+ ,Whitespace
+tableCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+.,Punctuation
+tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableCache,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+emptySet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+else,Keyword
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+unmodifiableSet,Identifier
+(,Punctuation
+tableCache,Identifier
+.,Punctuation
+realizations,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+getOnlineRealizationByFactTable,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+factTable,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+realizations,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getRealizationsByTable,Identifier
+(,Punctuation
+project,Identifier
+",",Punctuation
+ ,Whitespace
+factTable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayListWithCapacity,Identifier
+(,Punctuation
+realizations,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+IRealization,Identifier
+ ,Whitespace
+r,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+realizations,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+r,Identifier
+.,Punctuation
+getFactTable,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+factTable,Identifier
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+r,Identifier
+.,Punctuation
+isReady,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+r,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+MeasureDesc,Identifier
+>,Operator
+ ,Whitespace
+listEffectiveRewriteMeasures,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+factTable,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+onlyRewriteMeasure,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+realizations,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getRealizationsByTable,Identifier
+(,Punctuation
+project,Identifier
+",",Punctuation
+ ,Whitespace
+factTable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+MeasureDesc,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+IRealization,Identifier
+ ,Whitespace
+r,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+realizations,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+r,Identifier
+.,Punctuation
+getFactTable,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+factTable,Identifier
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+r,Identifier
+.,Punctuation
+isReady,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+MeasureDesc,Identifier
+ ,Whitespace
+m,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+r,Identifier
+.,Punctuation
+getMeasures,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+FunctionDesc,Identifier
+ ,Whitespace
+func,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+m,Identifier
+.,Punctuation
+getFunction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+onlyRewriteMeasure,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+func,Identifier
+.,Punctuation
+needRewrite,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                            ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+m,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+m,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+    ,Whitespace
+// build the cache,Comment
+"
+",Newline
+    ,Whitespace
+// ----------------------------------------------------------------------------,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+getCache,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+projectCaches,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+result,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+loadCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+projectCaches,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+project,Identifier
+",",Punctuation
+ ,Whitespace
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+loadCache,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Loading L2 project cache for """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+projectCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ProjectCache,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ProjectInstance,Identifier
+ ,Whitespace
+pi,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mgr,Identifier
+.,Punctuation
+getProject,Identifier
+(,Punctuation
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+pi,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Project '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+project,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' does not exist;""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+MetadataManager,Identifier
+ ,Whitespace
+metaMgr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mgr,Identifier
+.,Punctuation
+getMetadataManager,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+pi,Identifier
+.,Punctuation
+getTables,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+TableDesc,Identifier
+ ,Whitespace
+tableDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+getTableDesc,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableDesc,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+projectCache,Identifier
+.,Punctuation
+tables,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+tableDesc,Identifier
+.,Punctuation
+getIdentity,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TableCache,Identifier
+(,Punctuation
+tableDesc,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Table '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' defined under project '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+project,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' is not found""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+extFilterName,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+pi,Identifier
+.,Punctuation
+getExtFilters,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ExternalFilterDesc,Identifier
+ ,Whitespace
+filterDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+getExtFilterDesc,Identifier
+(,Punctuation
+extFilterName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filterDesc,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+projectCache,Identifier
+.,Punctuation
+extFilters,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+extFilterName,Identifier
+",",Punctuation
+ ,Whitespace
+filterDesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""External Filter '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+extFilterName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' defined under project '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+project,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' is not found""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+RealizationRegistry,Identifier
+ ,Whitespace
+registry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+RealizationRegistry,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+mgr,Identifier
+.,Punctuation
+getConfig,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+RealizationEntry,Identifier
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+pi,Identifier
+.,Punctuation
+getRealizationEntries,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+IRealization,Identifier
+ ,Whitespace
+realization,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+registry,Identifier
+.,Punctuation
+getRealization,Identifier
+(,Punctuation
+entry,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getRealization,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+realization,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+projectCache,Identifier
+.,Punctuation
+realizations,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+realization,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Realization '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' defined under project '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+project,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' is not found""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+IRealization,Identifier
+ ,Whitespace
+realization,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+projectCache,Identifier
+.,Punctuation
+realizations,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+sanityCheck,Identifier
+(,Punctuation
+projectCache,Identifier
+",",Punctuation
+ ,Whitespace
+realization,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+mapTableToRealization,Identifier
+(,Punctuation
+projectCache,Identifier
+",",Punctuation
+ ,Whitespace
+realization,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+markExposedTablesAndColumns,Identifier
+(,Punctuation
+projectCache,Identifier
+",",Punctuation
+ ,Whitespace
+realization,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+projectCache,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// check all columns reported by realization does exists,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+sanityCheck,Identifier
+(,Punctuation
+ProjectCache,Identifier
+ ,Whitespace
+prjCache,Identifier
+",",Punctuation
+ ,Whitespace
+IRealization,Identifier
+ ,Whitespace
+realization,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+realization,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+MetadataManager,Identifier
+ ,Whitespace
+metaMgr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mgr,Identifier
+.,Punctuation
+getMetadataManager,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+allColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+realization,Identifier
+.,Punctuation
+getAllColumns,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+allColumns,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+allColumns,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Realization '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+realization,Identifier
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' does not report any columns""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TblColRef,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+allColumns,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+TableDesc,Identifier
+ ,Whitespace
+table,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+getTableDesc,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getTable,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+table,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Realization '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+realization,Identifier
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' reports column '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+col,Identifier
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""', but its table is not found by MetadataManager""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+ColumnDesc,Identifier
+ ,Whitespace
+foundCol,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+table,Identifier
+.,Punctuation
+findColumnByName,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+col,Identifier
+.,Punctuation
+getColumnDesc,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+foundCol,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Realization '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+realization,Identifier
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' reports column '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+col,Identifier
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""', but it is not equal to '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+foundCol,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' according to MetadataManager""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// auto-define table required by realization for some legacy test case,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+prjCache,Identifier
+.,Punctuation
+tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getIdentity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+prjCache,Identifier
+.,Punctuation
+tables,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getIdentity,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TableCache,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Realization '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+realization,Identifier
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' reports column '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+col,Identifier
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' whose table is not defined in project '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+prjCache,Identifier
+.,Punctuation
+project,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+mapTableToRealization,Identifier
+(,Punctuation
+ProjectCache,Identifier
+ ,Whitespace
+prjCache,Identifier
+",",Punctuation
+ ,Whitespace
+IRealization,Identifier
+ ,Whitespace
+realization,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TblColRef,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+realization,Identifier
+.,Punctuation
+getAllColumns,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+TableCache,Identifier
+ ,Whitespace
+tableCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prjCache,Identifier
+.,Punctuation
+tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getTable,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+tableCache,Identifier
+.,Punctuation
+realizations,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+realization,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+markExposedTablesAndColumns,Identifier
+(,Punctuation
+ProjectCache,Identifier
+ ,Whitespace
+prjCache,Identifier
+",",Punctuation
+ ,Whitespace
+IRealization,Identifier
+ ,Whitespace
+realization,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+realization,Identifier
+.,Punctuation
+isReady,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TblColRef,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+realization,Identifier
+.,Punctuation
+getAllColumns,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+TableCache,Identifier
+ ,Whitespace
+tableCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prjCache,Identifier
+.,Punctuation
+tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getTable,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+prjCache,Identifier
+.,Punctuation
+exposedTables,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+tableCache,Identifier
+.,Punctuation
+tableDesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+tableCache,Identifier
+.,Punctuation
+exposed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+tableCache,Identifier
+.,Punctuation
+exposedColumns,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getColumnDesc,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ProjectCache,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+project,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+TableCache,Identifier
+>,Operator
+ ,Whitespace
+tables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+TableDesc,Identifier
+>,Operator
+ ,Whitespace
+exposedTables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+realizations,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+ExternalFilterDesc,Identifier
+>,Operator
+ ,Whitespace
+extFilters,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ProjectCache,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+project,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+project,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+project,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TableCache,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+exposed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+TableDesc,Identifier
+ ,Whitespace
+tableDesc,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+ColumnDesc,Identifier
+>,Operator
+ ,Whitespace
+exposedColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newLinkedHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+realizations,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newLinkedHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+TableCache,Identifier
+(,Punctuation
+TableDesc,Identifier
+ ,Whitespace
+tableDesc,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+tableDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tableDesc,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

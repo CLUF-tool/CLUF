@@ -1,0 +1,1257 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DataInput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DataOutput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+InputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+OutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+zip,Identifier
+.,Punctuation
+CRC32,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+zip,Identifier
+.,Punctuation
+Checksum,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+.,Punctuation
+proto,Identifier
+.,Punctuation
+ProtosFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+protobuf,Identifier
+.,Punctuation
+ByteString,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Represents a Put on disk
+ */",Comment
+"
+",Newline
+class,Keyword
+ ,Whitespace
+Put,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+FlumeEvent,Identifier
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+// Should we move this to a higher level to not make multiple instances?,Comment
+"
+",Newline
+  ,Whitespace
+"// Doing that might cause performance issues, since access to this would",Comment
+"
+",Newline
+  ,Whitespace
+// need to be synchronized (the whole reset-update-getValue cycle would,Comment
+"
+",Newline
+  ,Whitespace
+// need to be).,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Checksum,Identifier
+ ,Whitespace
+checksum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CRC32,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+Put,Identifier
+(,Punctuation
+Long,Identifier
+ ,Whitespace
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+ ,Whitespace
+logWriteOrderID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+(,Punctuation
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+logWriteOrderID,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+Put,Identifier
+(,Punctuation
+Long,Identifier
+ ,Whitespace
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+ ,Whitespace
+logWriteOrderID,Identifier
+",",Punctuation
+ ,Whitespace
+FlumeEvent,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+(,Punctuation
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+logWriteOrderID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+FlumeEvent,Identifier
+ ,Whitespace
+getEvent,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+readFields,Identifier
+(,Punctuation
+DataInput,Identifier
+ ,Whitespace
+in,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+readFields,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FlumeEvent,Identifier
+.,Punctuation
+from,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+write,Identifier
+(,Punctuation
+DataOutput,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+write,Identifier
+(,Punctuation
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+event,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+void,Keyword
+ ,Whitespace
+writeProtos,Identifier
+(,Punctuation
+OutputStream,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+Put,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+putBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+Put,Identifier
+.,Punctuation
+newBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+FlumeEvent,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+eventBuilder,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+FlumeEvent,Identifier
+.,Punctuation
+newBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+FlumeEventHeader,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+headerBuilder,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+FlumeEventHeader,Identifier
+.,Punctuation
+newBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+headers,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+(,Punctuation
+String,Identifier
+ ,Whitespace
+key,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+key,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+headerBuilder,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+eventBuilder,Identifier
+.,Punctuation
+addHeaders,Identifier
+(,Punctuation
+headerBuilder,Identifier
+.,Punctuation
+setKey,Identifier
+(,Punctuation
+key,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+.,Punctuation
+setValue,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+eventBuilder,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+ByteString,Identifier
+.,Punctuation
+copyFrom,Identifier
+(,Punctuation
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+FlumeEvent,Identifier
+ ,Whitespace
+protoEvent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+eventBuilder,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+putBuilder,Identifier
+.,Punctuation
+setEvent,Identifier
+(,Punctuation
+protoEvent,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+putBuilder,Identifier
+.,Punctuation
+setChecksum,Identifier
+(,Punctuation
+calculateChecksum,Identifier
+(,Punctuation
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+putBuilder,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+writeDelimitedTo,Identifier
+(,Punctuation
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+void,Keyword
+ ,Whitespace
+readProtos,Identifier
+(,Punctuation
+InputStream,Identifier
+ ,Whitespace
+in,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+CorruptEventException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+Put,Identifier
+ ,Whitespace
+put,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+ProtosFactory,Identifier
+.,Punctuation
+"
+",Newline
+        ,Whitespace
+Put,Identifier
+.,Punctuation
+parseDelimitedFrom,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""Put cannot be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+FlumeEvent,Identifier
+ ,Whitespace
+protosEvent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+put,Identifier
+.,Punctuation
+getEvent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+(,Punctuation
+ProtosFactory,Identifier
+.,Punctuation
+FlumeEventHeader,Identifier
+ ,Whitespace
+header,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+protosEvent,Identifier
+.,Punctuation
+getHeadersList,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+headers,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+header,Identifier
+.,Punctuation
+getKey,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+header,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+eventBody,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+protosEvent,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+put,Identifier
+.,Punctuation
+hasChecksum,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+eventBodyChecksum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+calculateChecksum,Identifier
+(,Punctuation
+eventBody,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+eventBodyChecksum,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+put,Identifier
+.,Punctuation
+getChecksum,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CorruptEventException,Identifier
+(,Punctuation
+"""Expected checksum for event was """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+eventBodyChecksum,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" but the checksum of the event is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+put,Identifier
+.,Punctuation
+getChecksum,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"// TODO when we remove v2, remove FlumeEvent and use EventBuilder here",Comment
+"
+",Newline
+    ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeEvent,Identifier
+(,Punctuation
+headers,Identifier
+",",Punctuation
+ ,Whitespace
+eventBody,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+calculateChecksum,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+body,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+checksum,Identifier
+.,Punctuation
+reset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+checksum,Identifier
+.,Punctuation
+update,Identifier
+(,Punctuation
+body,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+body,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+checksum,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+getRecordType,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+Type,Identifier
+.,Punctuation
+PUT,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""Put [event=""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""", getLogWriteOrderID()=""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""", getTransactionID()=""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""]""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+builder,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

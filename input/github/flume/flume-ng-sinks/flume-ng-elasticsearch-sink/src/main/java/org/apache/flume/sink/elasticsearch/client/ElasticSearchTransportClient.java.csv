@@ -1,0 +1,1736 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+client,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+ElasticSearchEventSerializer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+IndexNameBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+action,Identifier
+.,Punctuation
+bulk,Identifier
+.,Punctuation
+BulkRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+action,Identifier
+.,Punctuation
+bulk,Identifier
+.,Punctuation
+BulkResponse,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+action,Identifier
+.,Punctuation
+index,Identifier
+.,Punctuation
+IndexRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+Client,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+transport,Identifier
+.,Punctuation
+TransportClient,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+settings,Identifier
+.,Punctuation
+ImmutableSettings,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+settings,Identifier
+.,Punctuation
+Settings,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+transport,Identifier
+.,Punctuation
+InetSocketTransportAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+node,Identifier
+.,Punctuation
+Node,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+node,Identifier
+.,Punctuation
+NodeBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+ElasticSearchIndexRequestBuilderFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+ElasticSearchSinkConstants,Identifier
+.,Punctuation
+DEFAULT_PORT,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+ElasticSearchClient,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+ElasticSearchTransportClient,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+InetSocketTransportAddress,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+serverAddresses,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ElasticSearchEventSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ElasticSearchIndexRequestBuilderFactory,Identifier
+ ,Whitespace
+indexRequestBuilderFactory,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+BulkRequestBuilder,Identifier
+ ,Whitespace
+bulkRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Client,Identifier
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+InetSocketTransportAddress,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getServerAddresses,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+serverAddresses,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+void,Keyword
+ ,Whitespace
+setBulkRequestBuilder,Identifier
+(,Punctuation
+BulkRequestBuilder,Identifier
+ ,Whitespace
+bulkRequestBuilder,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+bulkRequestBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bulkRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Transport client for external cluster
+   * 
+   * @param hostNames
+   * @param clusterName
+   * @param serializer
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+hostNames,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+clusterName,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+ElasticSearchEventSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+configureHostnames,Identifier
+(,Punctuation
+hostNames,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+openClient,Identifier
+(,Punctuation
+clusterName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+hostNames,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+clusterName,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+ElasticSearchIndexRequestBuilderFactory,Identifier
+ ,Whitespace
+indexBuilder,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+configureHostnames,Identifier
+(,Punctuation
+hostNames,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+indexRequestBuilderFactory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+indexBuilder,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+openClient,Identifier
+(,Punctuation
+clusterName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+"/**
+   * Local transport client only for testing
+   * 
+   * @param indexBuilderFactory
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+(,Punctuation
+ElasticSearchIndexRequestBuilderFactory,Identifier
+ ,Whitespace
+indexBuilderFactory,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+indexRequestBuilderFactory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+indexBuilderFactory,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+openLocalDiscoveryClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+"/**
+   * Local transport client only for testing
+   *
+   * @param serializer
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+(,Punctuation
+ElasticSearchEventSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+openLocalDiscoveryClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Used for testing
+   *
+   * @param client
+   *    ElasticSearch Client
+   * @param serializer
+   *    Event Serializer
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+(,Punctuation
+Client,Identifier
+ ,Whitespace
+client,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+ElasticSearchEventSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Used for testing
+   *
+   * @param client ElasticSearch Client
+   * @param serializer Event Serializer
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+(,Punctuation
+Client,Identifier
+ ,Whitespace
+client,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+ElasticSearchIndexRequestBuilderFactory,Identifier
+ ,Whitespace
+requestBuilderFactory,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+requestBuilderFactory,Identifier
+.,Punctuation
+createIndexRequest,Identifier
+(,Punctuation
+client,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configureHostnames,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+hostNames,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+Arrays,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+hostNames,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serverAddresses,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+InetSocketTransportAddress,Identifier
+[,Punctuation
+hostNames,Identifier
+.,Punctuation
+length,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+hostNames,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+hostPort,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hostNames,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+split,Identifier
+(,Punctuation
+""":""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+host,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hostPort,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hostPort,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+2,Literal
+ ,Whitespace
+?,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+hostPort,Identifier
+[,Punctuation
+1,Literal
+],Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+              ,Whitespace
+:,Operator
+ ,Whitespace
+DEFAULT_PORT,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+serverAddresses,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+InetSocketTransportAddress,Identifier
+(,Punctuation
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+client,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+client,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addEvent,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+",",Punctuation
+ ,Whitespace
+IndexNameBuilder,Identifier
+ ,Whitespace
+indexNameBuilder,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+indexType,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+ttlMs,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+bulkRequestBuilder,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+bulkRequestBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+client,Identifier
+.,Punctuation
+prepareBulk,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+IndexRequestBuilder,Identifier
+ ,Whitespace
+indexRequestBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+indexRequestBuilderFactory,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+indexRequestBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+client,Identifier
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+prepareIndex,Identifier
+(,Punctuation
+indexNameBuilder,Identifier
+.,Punctuation
+getIndexName,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+indexType,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+setSource,Identifier
+(,Punctuation
+serializer,Identifier
+.,Punctuation
+getContentBuilder,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+.,Punctuation
+bytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+indexRequestBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+indexRequestBuilderFactory,Identifier
+.,Punctuation
+createIndexRequest,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+client,Identifier
+",",Punctuation
+ ,Whitespace
+indexNameBuilder,Identifier
+.,Punctuation
+getIndexPrefix,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+indexType,Identifier
+",",Punctuation
+ ,Whitespace
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ttlMs,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+indexRequestBuilder,Identifier
+.,Punctuation
+setTTL,Identifier
+(,Punctuation
+ttlMs,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+bulkRequestBuilder,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+indexRequestBuilder,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+execute,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+BulkResponse,Identifier
+ ,Whitespace
+bulkResponse,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bulkRequestBuilder,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+actionGet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+bulkResponse,Identifier
+.,Punctuation
+hasFailures,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+(,Punctuation
+bulkResponse,Identifier
+.,Punctuation
+buildFailureMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+bulkRequestBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+client,Identifier
+.,Punctuation
+prepareBulk,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Open client to elaticsearch cluster
+   * 
+   * @param clusterName
+   */",Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+openClient,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+clusterName,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Using ElasticSearch hostnames: {} """,String
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+Arrays,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+serverAddresses,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Settings,Identifier
+ ,Whitespace
+settings,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ImmutableSettings,Identifier
+.,Punctuation
+settingsBuilder,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""cluster.name""",String
+",",Punctuation
+ ,Whitespace
+clusterName,Identifier
+),Punctuation
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+TransportClient,Identifier
+ ,Whitespace
+transportClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TransportClient,Identifier
+(,Punctuation
+settings,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+InetSocketTransportAddress,Identifier
+ ,Whitespace
+host,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+serverAddresses,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transportClient,Identifier
+.,Punctuation
+addTransportAddress,Identifier
+(,Punctuation
+host,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+client,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+client,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+transportClient,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/*
+   * FOR TESTING ONLY...
+   * 
+   * Opens a local discovery node for talking to an elasticsearch server running
+   * in the same JVM
+   */",Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+openLocalDiscoveryClient,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Using ElasticSearch AutoDiscovery mode""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Node,Identifier
+ ,Whitespace
+node,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+NodeBuilder,Identifier
+.,Punctuation
+nodeBuilder,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+client,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+.,Punctuation
+local,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+.,Punctuation
+node,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+client,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+client,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+node,Identifier
+.,Punctuation
+client,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+//To change body of implemented methods use File | Settings | File Templates.,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

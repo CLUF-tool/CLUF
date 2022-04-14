@@ -1,0 +1,656 @@
+"/*
+ *
+ *
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *
+ *  contributor license agreements. See the NOTICE file distributed with
+ *
+ *  this work for additional information regarding copyright ownership.
+ *
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *
+ *  (the ""License""); you may not use this file except in compliance with
+ *
+ *  the License. You may obtain a copy of the License at
+ *
+ *
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *
+ *  distributed under the License is distributed on an ""AS IS"" BASIS,
+ *
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ *  See the License for the specific language governing permissions and
+ *
+ *  limitations under the License.
+ *
+ * /
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+streaming,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+hllc,Identifier
+.,Punctuation
+HyperLogLogPlusCounter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+StreamingBatch,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dimension,Identifier
+.,Punctuation
+Dictionary,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+streaming,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+StreamingUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+IBuildable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+RealizationType,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+OneOffStreamingBuilder,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+IStreamingInput,Identifier
+ ,Whitespace
+streamingInput,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+IStreamingOutput,Identifier
+ ,Whitespace
+streamingOutput,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+StreamingBatchBuilder,Identifier
+ ,Whitespace
+streamingBatchBuilder,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+startTime,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+endTime,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+RealizationType,Identifier
+ ,Whitespace
+realizationType,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+realizationName,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+OneOffStreamingBuilder,Identifier
+(,Punctuation
+RealizationType,Identifier
+ ,Whitespace
+realizationType,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+realizationName,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+endTime,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+startTime,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+endTime,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+startTime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startTime,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+endTime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+endTime,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+realizationType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+realizationType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+realizationName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+realizationName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+streamingInput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+StreamingUtils,Identifier
+.,Punctuation
+getStreamingInput,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+streamingOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+StreamingUtils,Identifier
+.,Punctuation
+getStreamingOutput,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+streamingBatchBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+StreamingUtils,Identifier
+.,Punctuation
+getMicroBatchBuilder,Identifier
+(,Punctuation
+realizationType,Identifier
+",",Punctuation
+ ,Whitespace
+realizationName,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Runnable,Identifier
+ ,Whitespace
+build,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Runnable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+StreamingBatch,Identifier
+ ,Whitespace
+streamingBatch,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+streamingInput,Identifier
+.,Punctuation
+getBatchWithTimeWindow,Identifier
+(,Punctuation
+realizationType,Identifier
+",",Punctuation
+ ,Whitespace
+realizationName,Identifier
+",",Punctuation
+ ,Whitespace
+-,Operator
+1,Literal
+",",Punctuation
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+endTime,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+final,Keyword
+ ,Whitespace
+IBuildable,Identifier
+ ,Whitespace
+buildable,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+streamingBatchBuilder,Identifier
+.,Punctuation
+createBuildable,Identifier
+(,Punctuation
+streamingBatch,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+HyperLogLogPlusCounter,Identifier
+>,Operator
+ ,Whitespace
+samplingResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+streamingBatchBuilder,Identifier
+.,Punctuation
+sampling,Identifier
+(,Punctuation
+streamingBatch,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+TblColRef,Identifier
+",",Punctuation
+ ,Whitespace
+Dictionary,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+dictionaryMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+streamingBatchBuilder,Identifier
+.,Punctuation
+buildDictionary,Identifier
+(,Punctuation
+streamingBatch,Identifier
+",",Punctuation
+ ,Whitespace
+buildable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+streamingBatchBuilder,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+streamingBatch,Identifier
+",",Punctuation
+ ,Whitespace
+dictionaryMap,Identifier
+",",Punctuation
+ ,Whitespace
+streamingOutput,Identifier
+.,Punctuation
+getCuboidWriter,Identifier
+(,Punctuation
+buildable,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+streamingOutput,Identifier
+.,Punctuation
+output,Identifier
+(,Punctuation
+buildable,Identifier
+",",Punctuation
+ ,Whitespace
+samplingResult,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+streamingBatchBuilder,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+buildable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

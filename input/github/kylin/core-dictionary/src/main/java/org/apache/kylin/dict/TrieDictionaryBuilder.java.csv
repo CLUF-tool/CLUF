@@ -1,0 +1,5538 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dict,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+ByteArrayOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DataOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+PrintStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+UnsupportedEncodingException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+IdentityHashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+LinkedList,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+BytesUtil,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Builds a dictionary using Trie structure. All values are taken in byte[] form
+ * and organized in a Trie with ordering. Then numeric IDs are assigned in
+ * sequence.
+ * 
+ * @author yangli9
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TrieDictionaryBuilder,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Node,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+part,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isEndOfValue,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Node,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nValuesBeneath,Identifier
+;,Punctuation
+ ,Whitespace
+// only present after stats(),Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Node,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isEndOfValue,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+reset,Identifier
+(,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+isEndOfValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Node,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isEndOfValue,Identifier
+",",Punctuation
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Node,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+reset,Identifier
+(,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+isEndOfValue,Identifier
+",",Punctuation
+ ,Whitespace
+children,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+void,Keyword
+ ,Whitespace
+reset,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isEndOfValue,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+reset,Identifier
+(,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+isEndOfValue,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Node,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+void,Keyword
+ ,Whitespace
+reset,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isEndOfValue,Identifier
+",",Punctuation
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Node,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+part,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+isEndOfValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+isEndOfValue,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+children,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+children,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+Visitor,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+void,Keyword
+ ,Whitespace
+visit,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+n,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+level,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+Node,Identifier
+ ,Whitespace
+root,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+BytesConverter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+bytesConverter,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+TrieDictionaryBuilder,Identifier
+(,Punctuation
+BytesConverter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+bytesConverter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+root,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Node,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+0,Literal
+],Punctuation
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+bytesConverter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bytesConverter,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addValue,Identifier
+(,Punctuation
+T,Identifier
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+addValue,Identifier
+(,Punctuation
+bytesConverter,Identifier
+.,Punctuation
+convertToBytes,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addValue,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+addValueR,Identifier
+(,Punctuation
+root,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addValueR,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+node,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+start,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// match the value part of current node,Comment
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+start,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+n,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+node,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+nn,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+value,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+comp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+n,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nn,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+",",Punctuation
+ ,Whitespace
+j,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+comp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+compareByteUnsigned,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+",",Punctuation
+ ,Whitespace
+value,Identifier
+[,Punctuation
+j,Identifier
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+comp,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// if value fully matched within the current node,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+j,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+nn,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// if equals to current node, just mark end of value",Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+n,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+node,Identifier
+.,Punctuation
+isEndOfValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+"// otherwise, split the current node into two",Comment
+"
+",Newline
+            ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Node,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Node,Identifier
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+subarray,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+",",Punctuation
+ ,Whitespace
+n,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+node,Identifier
+.,Punctuation
+isEndOfValue,Identifier
+",",Punctuation
+ ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+node,Identifier
+.,Punctuation
+reset,Identifier
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+subarray,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// if partially matched the current, split the current node, add the new",Comment
+"
+",Newline
+        ,Whitespace
+"// value, make a 3-way",Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+n,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Node,Identifier
+ ,Whitespace
+c1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Node,Identifier
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+subarray,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+",",Punctuation
+ ,Whitespace
+n,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+node,Identifier
+.,Punctuation
+isEndOfValue,Identifier
+",",Punctuation
+ ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Node,Identifier
+ ,Whitespace
+c2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Node,Identifier
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+subarray,Identifier
+(,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+j,Identifier
+",",Punctuation
+ ,Whitespace
+nn,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+node,Identifier
+.,Punctuation
+reset,Identifier
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+subarray,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+comp,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+c1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+c2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+c2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+c1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// out matched the current, binary search the next byte for a child node",Comment
+"
+",Newline
+        ,Whitespace
+// to continue,Comment
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+ ,Whitespace
+lookfor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+value,Identifier
+[,Punctuation
+j,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+lo,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+hi,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+mid,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+found,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+comp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+found,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+lo,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+hi,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+mid,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+lo,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+hi,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+lo,Identifier
+),Punctuation
+ ,Whitespace
+/,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+comp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+compareByteUnsigned,Identifier
+(,Punctuation
+lookfor,Identifier
+",",Punctuation
+ ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+mid,Identifier
+),Punctuation
+.,Punctuation
+part,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+comp,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+hi,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mid,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+comp,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+lo,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mid,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+else,Keyword
+"
+",Newline
+                ,Whitespace
+found,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+"// found a child node matching the first byte, continue in that child",Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+found,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+addValueR,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+mid,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+j,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+"// otherwise, make the value a new child",Comment
+"
+",Newline
+        ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Node,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Node,Identifier
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+subarray,Identifier
+(,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+j,Identifier
+",",Punctuation
+ ,Whitespace
+nn,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+comp,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+?,Operator
+ ,Whitespace
+mid,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+mid,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+",",Punctuation
+ ,Whitespace
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+traverse,Identifier
+(,Punctuation
+Visitor,Identifier
+ ,Whitespace
+visitor,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+traverseR,Identifier
+(,Punctuation
+root,Identifier
+",",Punctuation
+ ,Whitespace
+visitor,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+traverseR,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+node,Identifier
+",",Punctuation
+ ,Whitespace
+Visitor,Identifier
+ ,Whitespace
+visitor,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+level,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+visitor,Identifier
+.,Punctuation
+visit,Identifier
+(,Punctuation
+node,Identifier
+",",Punctuation
+ ,Whitespace
+level,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+traverseR,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+visitor,Identifier
+",",Punctuation
+ ,Whitespace
+level,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+traversePostOrder,Identifier
+(,Punctuation
+Visitor,Identifier
+ ,Whitespace
+visitor,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+traversePostOrderR,Identifier
+(,Punctuation
+root,Identifier
+",",Punctuation
+ ,Whitespace
+visitor,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+traversePostOrderR,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+node,Identifier
+",",Punctuation
+ ,Whitespace
+Visitor,Identifier
+ ,Whitespace
+visitor,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+level,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+traversePostOrderR,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+visitor,Identifier
+",",Punctuation
+ ,Whitespace
+level,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+visitor,Identifier
+.,Punctuation
+visit,Identifier
+(,Punctuation
+node,Identifier
+",",Punctuation
+ ,Whitespace
+level,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Stats,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nValues,Identifier
+;,Punctuation
+ ,Whitespace
+// number of values in total,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nValueBytesPlain,Identifier
+;,Punctuation
+ ,Whitespace
+// number of bytes for all values,Comment
+"
+",Newline
+                                     ,Whitespace
+// uncompressed,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nValueBytesCompressed,Identifier
+;,Punctuation
+ ,Whitespace
+// number of values bytes in Trie,Comment
+"
+",Newline
+                                          ,Whitespace
+// (compressed),Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+maxValueLength,Identifier
+;,Punctuation
+ ,Whitespace
+// size of longest value in bytes,Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// the trie is multi-byte-per-node,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_nNodes,Identifier
+;,Punctuation
+ ,Whitespace
+// number of nodes in trie,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_trieDepth,Identifier
+;,Punctuation
+ ,Whitespace
+// depth of trie,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_maxFanOut,Identifier
+;,Punctuation
+ ,Whitespace
+// the maximum no. children,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_nChildLookups,Identifier
+;,Punctuation
+ ,Whitespace
+// number of child lookups during lookup,Comment
+"
+",Newline
+                                       ,Whitespace
+// every value once,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_nTotalFanOut,Identifier
+;,Punctuation
+ ,Whitespace
+// the sum of fan outs during lookup every,Comment
+"
+",Newline
+                                      ,Whitespace
+// value once,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_sizeValueTotal,Identifier
+;,Punctuation
+ ,Whitespace
+// the sum of value space in all nodes,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_sizeNoValueBytes,Identifier
+;,Punctuation
+ ,Whitespace
+// size of field noValueBytes,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_sizeNoValueBeneath,Identifier
+;,Punctuation
+ ,Whitespace
+"// size of field noValuesBeneath,",Comment
+"
+",Newline
+                                            ,Whitespace
+// depends on cardinality,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_sizeChildOffset,Identifier
+;,Punctuation
+ ,Whitespace
+"// size of field childOffset, points to",Comment
+"
+",Newline
+                                         ,Whitespace
+// first child in flattened array,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+mbpn_footprint,Identifier
+;,Punctuation
+ ,Whitespace
+// MBPN footprint in bytes,Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// stats for one-byte-per-node as well, so there's comparison",Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+obpn_sizeValue,Identifier
+;,Punctuation
+ ,Whitespace
+"// size of value per node, always 1",Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+obpn_sizeNoValuesBeneath,Identifier
+;,Punctuation
+ ,Whitespace
+"// size of field noValuesBeneath,",Comment
+"
+",Newline
+                                             ,Whitespace
+// depends on cardinality,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+obpn_sizeChildCount,Identifier
+;,Punctuation
+ ,Whitespace
+"// size of field childCount, enables",Comment
+"
+",Newline
+                                        ,Whitespace
+// binary search among children,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+obpn_sizeChildOffset,Identifier
+;,Punctuation
+ ,Whitespace
+"// size of field childOffset, points to",Comment
+"
+",Newline
+                                         ,Whitespace
+// first child in flattened array,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+obpn_nNodes,Identifier
+;,Punctuation
+ ,Whitespace
+// no. nodes in OBPN trie,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+obpn_footprint,Identifier
+;,Punctuation
+ ,Whitespace
+// OBPN footprint in bytes,Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+print,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+PrintStream,Identifier
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""============================================================================""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""No. values:             """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+nValues,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""No. bytes raw:          """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+nValueBytesPlain,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""No. bytes in trie:      """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+nValueBytesCompressed,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Longest value length:   """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+maxValueLength,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+"// flatten trie footprint calculation, case of One-Byte-Per-Node",Comment
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""----------------------------------------------------------------------------""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""OBPN node size:  """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+obpn_sizeValue,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_sizeNoValuesBeneath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_sizeChildCount,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_sizeChildOffset,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_sizeValue,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" + """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_sizeNoValuesBeneath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" + """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_sizeChildCount,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" + """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_sizeChildOffset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""OBPN no. nodes:  """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_nNodes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""OBPN trie depth: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+maxValueLength,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""OBPN footprint:  """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+obpn_footprint,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in bytes""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+"// flatten trie footprint calculation, case of Multi-Byte-Per-Node",Comment
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""----------------------------------------------------------------------------""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN max fan out:       """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_maxFanOut,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN no. child lookups: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_nChildLookups,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN total fan out:     """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_nTotalFanOut,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN average fan out:   """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+double,Keyword
+),Punctuation
+ ,Whitespace
+mbpn_nTotalFanOut,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+mbpn_nChildLookups,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN values size total: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_sizeValueTotal,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN node size:         """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+mbpn_sizeNoValueBytes,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_sizeNoValueBeneath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_sizeChildOffset,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_sizeNoValueBytes,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" + """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_sizeNoValueBeneath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" + """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_sizeChildOffset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN no. nodes:         """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_nNodes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN trie depth:        """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_trieDepth,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""MBPN footprint:         """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mbpn_footprint,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in bytes""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** out print some statistics of the trie and the dictionary built from it */,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Stats,Identifier
+ ,Whitespace
+stats,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// calculate nEndValueBeneath,Comment
+"
+",Newline
+        ,Whitespace
+traversePostOrder,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Visitor,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+visit,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+n,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+level,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+n,Identifier
+.,Punctuation
+nValuesBeneath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+isEndOfValue,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+1,Literal
+ ,Whitespace
+:,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+children,Identifier
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+n,Identifier
+.,Punctuation
+nValuesBeneath,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+c,Identifier
+.,Punctuation
+nValuesBeneath,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// run stats,Comment
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+Stats,Identifier
+ ,Whitespace
+s,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Stats,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+ ,Whitespace
+lenAtLvl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+traverse,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Visitor,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+visit,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+n,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+level,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+n,Identifier
+.,Punctuation
+isEndOfValue,Identifier
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+s,Identifier
+.,Punctuation
+nValues,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+s,Identifier
+.,Punctuation
+nValueBytesPlain,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+nValuesBeneath,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+s,Identifier
+.,Punctuation
+nValueBytesCompressed,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_nNodes,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+s,Identifier
+.,Punctuation
+mbpn_trieDepth,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+level,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_trieDepth,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+level,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+n,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+s,Identifier
+.,Punctuation
+mbpn_maxFanOut,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_maxFanOut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+int,Keyword
+ ,Whitespace
+childLookups,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+nValuesBeneath,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+(,Punctuation
+n,Identifier
+.,Punctuation
+isEndOfValue,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+1,Literal
+ ,Whitespace
+:,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_nChildLookups,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+childLookups,Identifier
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_nTotalFanOut,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+childLookups,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+level,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+lenAtLvl,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+lenAtLvl,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+level,Identifier
+",",Punctuation
+ ,Whitespace
+n,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+else,Keyword
+"
+",Newline
+                    ,Whitespace
+lenAtLvl,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+n,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+lenSoFar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+level,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+lenSoFar,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+lenAtLvl,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+lenSoFar,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+maxValueLength,Identifier
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+s,Identifier
+.,Punctuation
+maxValueLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+lenSoFar,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// flatten trie footprint calculation, case of One-Byte-Per-Node",Comment
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeNoValuesBeneath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+sizeForValue,Identifier
+(,Punctuation
+s,Identifier
+.,Punctuation
+nValues,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeChildCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeChildOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+4,Literal
+;,Punctuation
+ ,Whitespace
+// MSB used as isEndOfValue flag,Comment
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_nNodes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+nValueBytesCompressed,Identifier
+;,Punctuation
+ ,Whitespace
+// no. nodes is the total,Comment
+"
+",Newline
+                                                 ,Whitespace
+// number of compressed,Comment
+"
+",Newline
+                                                 ,Whitespace
+// bytes in OBPN,Comment
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_footprint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_nNodes,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+s,Identifier
+.,Punctuation
+obpn_sizeValue,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeNoValuesBeneath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeChildCount,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeChildOffset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+// minimize the offset size to match the footprint,Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_nNodes,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+s,Identifier
+.,Punctuation
+obpn_sizeValue,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeNoValuesBeneath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeChildCount,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeChildOffset,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+sizeForValue,Identifier
+(,Punctuation
+t,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+2,Literal
+),Punctuation
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeChildOffset,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+// *2,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// because,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// MSB,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// of,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// offset,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// is,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// used,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// for,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// isEndOfValue,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// flag,Comment
+"
+",Newline
+                ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_sizeChildOffset,Identifier
+--,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+s,Identifier
+.,Punctuation
+obpn_footprint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+t,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// flatten trie footprint calculation, case of Multi-Byte-Per-Node",Comment
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeValueTotal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+nValueBytesCompressed,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeNoValueBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeNoValueBeneath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+sizeForValue,Identifier
+(,Punctuation
+s,Identifier
+.,Punctuation
+nValues,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeChildOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+4,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_footprint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeValueTotal,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_nNodes,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+s,Identifier
+.,Punctuation
+mbpn_sizeNoValueBytes,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeNoValueBeneath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeChildOffset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+// minimize the offset size to match the footprint,Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeValueTotal,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_nNodes,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+s,Identifier
+.,Punctuation
+mbpn_sizeNoValueBytes,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeNoValueBeneath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeChildOffset,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+sizeForValue,Identifier
+(,Punctuation
+t,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+4,Literal
+),Punctuation
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeChildOffset,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+// *4,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// because,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// 2,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// MSB,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// of,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// offset,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// is,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// used,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// for,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// isEndOfValue,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// &,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// isEndChild,Comment
+"
+",Newline
+                                                                               ,Whitespace
+// flag,Comment
+"
+",Newline
+                ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_sizeChildOffset,Identifier
+--,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+s,Identifier
+.,Punctuation
+mbpn_footprint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+t,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+s,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** out print trie for debug */,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+print,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+print,Identifier
+(,Punctuation
+System,Identifier
+.,Punctuation
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+print,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+PrintStream,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+traverse,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Visitor,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+visit,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+n,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+level,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+level,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+out,Identifier
+.,Punctuation
+print,Identifier
+(,Punctuation
+"""  """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+out,Identifier
+.,Punctuation
+print,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+n,Identifier
+.,Punctuation
+part,Identifier
+",",Punctuation
+ ,Whitespace
+"""UTF-8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+out,Identifier
+.,Punctuation
+print,Identifier
+(,Punctuation
+""" - """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+n,Identifier
+.,Punctuation
+nValuesBeneath,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+out,Identifier
+.,Punctuation
+print,Identifier
+(,Punctuation
+n,Identifier
+.,Punctuation
+nValuesBeneath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+n,Identifier
+.,Punctuation
+isEndOfValue,Identifier
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+out,Identifier
+.,Punctuation
+print,Identifier
+(,Punctuation
+"""*""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+out,Identifier
+.,Punctuation
+print,Identifier
+(,Punctuation
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+UnsupportedEncodingException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+e,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+CompleteParts,Identifier
+ ,Whitespace
+completeParts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CompleteParts,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+CompleteParts,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+data,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+4096,Literal
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+current,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+append,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+part,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+current,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+part,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+data,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+"
+",Newline
+                ,Whitespace
+expand,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+part,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+data,Identifier
+",",Punctuation
+ ,Whitespace
+current,Identifier
+",",Punctuation
+ ,Whitespace
+part,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+current,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+part,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+withdraw,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+size,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+current,Identifier
+ ,Whitespace
+-=,Operator
+ ,Whitespace
+size,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+retrieve,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+copyOf,Identifier
+(,Punctuation
+data,Identifier
+",",Punctuation
+ ,Whitespace
+current,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+expand,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+temp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+2,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+data,Identifier
+.,Punctuation
+length,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+data,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+temp,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+data,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+data,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+temp,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// there is a 255 limitation of length for each node's part.,Comment
+"
+",Newline
+    ,Whitespace
+// we interpolate nodes to satisfy this when a node's part becomes,Comment
+"
+",Newline
+    ,Whitespace
+// too long(overflow),Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+checkOverflowParts,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+node,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LinkedList,Identifier
+<,Operator
+Node,Identifier
+>,Operator
+ ,Whitespace
+childrenCopy,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedList,Identifier
+<,Operator
+Node,Identifier
+>,Operator
+(,Punctuation
+node,Identifier
+.,Punctuation
+children,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+child,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+childrenCopy,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+child,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+255,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+first255,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+copyOf,Identifier
+(,Punctuation
+child,Identifier
+.,Punctuation
+part,Identifier
+",",Punctuation
+ ,Whitespace
+255,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+completeParts,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+completeParts,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+first255,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+visited,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+completeParts,Identifier
+.,Punctuation
+retrieve,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+this,Keyword
+.,Punctuation
+addValue,Identifier
+(,Punctuation
+visited,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+completeParts,Identifier
+.,Punctuation
+withdraw,Identifier
+(,Punctuation
+255,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+completeParts,Identifier
+.,Punctuation
+withdraw,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+completeParts,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+),Punctuation
+;,Punctuation
+// by here the node.children may have,Comment
+"
+",Newline
+                                        ,Whitespace
+// been changed,Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+child,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+node,Identifier
+.,Punctuation
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+checkOverflowParts,Identifier
+(,Punctuation
+child,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+completeParts,Identifier
+.,Punctuation
+withdraw,Identifier
+(,Punctuation
+node,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Flatten the trie into a byte array for a minimized memory footprint.
+     * Lookup remains fast. Cost is inflexibility to modify (becomes immutable).
+     * 
+     * Flattened node structure is HEAD + NODEs, for each node: - o byte, offset
+     * to child node, o = stats.mbpn_sizeChildOffset - 1 bit, isLastChild flag,
+     * the 1st MSB of o - 1 bit, isEndOfValue flag, the 2nd MSB of o - c byte,
+     * number of values beneath, c = stats.mbpn_sizeNoValueBeneath - 1 byte,
+     * number of value bytes - n byte, value bytes
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+TrieDictionary,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+build,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+baseId,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+trieBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buildTrieBytes,Identifier
+(,Punctuation
+baseId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+TrieDictionary,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+r,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TrieDictionary,Identifier
+<,Operator
+T,Identifier
+>,Operator
+(,Punctuation
+trieBytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+r,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+buildTrieBytes,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+baseId,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+checkOverflowParts,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+root,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Stats,Identifier
+ ,Whitespace
+stats,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stats,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+sizeNoValuesBeneath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stats,Identifier
+.,Punctuation
+mbpn_sizeNoValueBeneath,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+sizeChildOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stats,Identifier
+.,Punctuation
+mbpn_sizeChildOffset,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// write head,Comment
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+head,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ByteArrayOutputStream,Identifier
+ ,Whitespace
+byteBuf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ByteArrayOutputStream,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+DataOutputStream,Identifier
+ ,Whitespace
+headOut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DataOutputStream,Identifier
+(,Punctuation
+byteBuf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+TrieDictionary,Identifier
+.,Punctuation
+HEAD_MAGIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+writeShort,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+ ,Whitespace
+"// head size, will back fill",Comment
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+writeInt,Identifier
+(,Punctuation
+stats,Identifier
+.,Punctuation
+mbpn_footprint,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// body size,Comment
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+sizeChildOffset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+sizeNoValuesBeneath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+writeShort,Identifier
+(,Punctuation
+baseId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+writeShort,Identifier
+(,Punctuation
+stats,Identifier
+.,Punctuation
+maxValueLength,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+writeUTF,Identifier
+(,Punctuation
+bytesConverter,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+?,Operator
+ ,Whitespace
+"""""",String
+ ,Whitespace
+:,Operator
+ ,Whitespace
+bytesConverter,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+headOut,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+head,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+byteBuf,Identifier
+.,Punctuation
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeUnsigned,Identifier
+(,Punctuation
+head,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+head,Identifier
+",",Punctuation
+ ,Whitespace
+TrieDictionary,Identifier
+.,Punctuation
+HEAD_SIZE_I,Identifier
+",",Punctuation
+ ,Whitespace
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+"// shall not happen, as we are",Comment
+"
+",Newline
+                                           ,Whitespace
+// writing in memory,Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+trieBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+stats,Identifier
+.,Punctuation
+mbpn_footprint,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+head,Identifier
+.,Punctuation
+length,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+head,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+trieBytes,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+head,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+LinkedList,Identifier
+<,Operator
+Node,Identifier
+>,Operator
+ ,Whitespace
+open,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedList,Identifier
+<,Operator
+Node,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+IdentityHashMap,Identifier
+<,Operator
+Node,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>,Operator
+ ,Whitespace
+offsetMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IdentityHashMap,Identifier
+<,Operator
+Node,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// write body,Comment
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+o,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+head,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+offsetMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+root,Identifier
+",",Punctuation
+ ,Whitespace
+o,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+o,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+build_writeNode,Identifier
+(,Punctuation
+root,Identifier
+",",Punctuation
+ ,Whitespace
+o,Identifier
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+sizeNoValuesBeneath,Identifier
+",",Punctuation
+ ,Whitespace
+sizeChildOffset,Identifier
+",",Punctuation
+ ,Whitespace
+trieBytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+root,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+open,Identifier
+.,Punctuation
+addLast,Identifier
+(,Punctuation
+root,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+open,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Node,Identifier
+ ,Whitespace
+parent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+open,Identifier
+.,Punctuation
+removeFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+build_overwriteChildOffset,Identifier
+(,Punctuation
+offsetMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+parent,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+o,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+head,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+sizeChildOffset,Identifier
+",",Punctuation
+ ,Whitespace
+trieBytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+parent,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Node,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+parent,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isLastChild,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+parent,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+offsetMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+o,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+o,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+build_writeNode,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+o,Identifier
+",",Punctuation
+ ,Whitespace
+isLastChild,Identifier
+",",Punctuation
+ ,Whitespace
+sizeNoValuesBeneath,Identifier
+",",Punctuation
+ ,Whitespace
+sizeChildOffset,Identifier
+",",Punctuation
+ ,Whitespace
+trieBytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+.,Punctuation
+children,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+open,Identifier
+.,Punctuation
+addLast,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+o,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+trieBytes,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+trieBytes,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+build_overwriteChildOffset,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+parentOffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+childOffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+sizeChildOffset,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+trieBytes,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+flags,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+trieBytes,Identifier
+[,Punctuation
+parentOffset,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+(,Punctuation
+TrieDictionary,Identifier
+.,Punctuation
+BIT_IS_LAST_CHILD,Identifier
+ ,Whitespace
+|,Operator
+ ,Whitespace
+TrieDictionary,Identifier
+.,Punctuation
+BIT_IS_END_OF_VALUE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeUnsigned,Identifier
+(,Punctuation
+childOffset,Identifier
+",",Punctuation
+ ,Whitespace
+trieBytes,Identifier
+",",Punctuation
+ ,Whitespace
+parentOffset,Identifier
+",",Punctuation
+ ,Whitespace
+sizeChildOffset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+trieBytes,Identifier
+[,Punctuation
+parentOffset,Identifier
+],Punctuation
+ ,Whitespace
+|=,Operator
+ ,Whitespace
+flags,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+build_writeNode,Identifier
+(,Punctuation
+Node,Identifier
+ ,Whitespace
+n,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isLastChild,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+sizeNoValuesBeneath,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+sizeChildOffset,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+trieBytes,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+o,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+offset,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// childOffset,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isLastChild,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+trieBytes,Identifier
+[,Punctuation
+o,Identifier
+],Punctuation
+ ,Whitespace
+|=,Operator
+ ,Whitespace
+TrieDictionary,Identifier
+.,Punctuation
+BIT_IS_LAST_CHILD,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+n,Identifier
+.,Punctuation
+isEndOfValue,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+trieBytes,Identifier
+[,Punctuation
+o,Identifier
+],Punctuation
+ ,Whitespace
+|=,Operator
+ ,Whitespace
+TrieDictionary,Identifier
+.,Punctuation
+BIT_IS_END_OF_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+o,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+sizeChildOffset,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// nValuesBeneath,Comment
+"
+",Newline
+        ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeUnsigned,Identifier
+(,Punctuation
+n,Identifier
+.,Punctuation
+nValuesBeneath,Identifier
+",",Punctuation
+ ,Whitespace
+trieBytes,Identifier
+",",Punctuation
+ ,Whitespace
+o,Identifier
+",",Punctuation
+ ,Whitespace
+sizeNoValuesBeneath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+o,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+sizeNoValuesBeneath,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// nValueBytes,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+n,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+255,Literal
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeUnsigned,Identifier
+(,Punctuation
+n,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+trieBytes,Identifier
+",",Punctuation
+ ,Whitespace
+o,Identifier
+",",Punctuation
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+o,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// valueBytes,Comment
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+n,Identifier
+.,Punctuation
+part,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+trieBytes,Identifier
+",",Punctuation
+ ,Whitespace
+o,Identifier
+",",Punctuation
+ ,Whitespace
+n,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+o,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+n,Identifier
+.,Punctuation
+part,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+o,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,610 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Channel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Transaction,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceAudience,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceStability,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * <p>
+ * An implementation of basic {@link Channel} semantics, including the
+ * implied thread-local semantics of the {@link Transaction} class,
+ * which is required to extend {@link BasicTransactionSemantics}.
+ * </p>
+ */",Comment
+"
+",Newline
+@,Punctuation
+InterfaceAudience,Identifier
+.,Punctuation
+Public,Identifier
+"
+",Newline
+@,Punctuation
+InterfaceStability,Identifier
+.,Punctuation
+Stable,Identifier
+"
+",Newline
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+BasicChannelSemantics,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractChannel,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+BasicTransactionSemantics,Identifier
+>,Operator
+ ,Whitespace
+currentTransaction,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+BasicTransactionSemantics,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+initialized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * Called upon first getTransaction() request, while synchronized on
+   * this {@link Channel} instance.  Use this method to delay the
+   * initializization resources until just before the first
+   * transaction begins.
+   * </p>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initialize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * Called to create new {@link Transaction} objects, which must
+   * extend {@link BasicTransactionSemantics}.  Each object is used
+   * for only one transaction, but is stored in a thread-local and
+   * retrieved by <code>getTransaction</code> for the duration of that
+   * transaction.
+   * </p>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+createTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * Ensures that a transaction exists for this thread and then
+   * delegates the <code>put</code> to the thread's {@link
+   * BasicTransactionSemantics} instance.
+   * </p>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+put,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+ChannelException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+transaction,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+currentTransaction,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+transaction,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""No transaction exists for this thread""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+transaction,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * Ensures that a transaction exists for this thread and then
+   * delegates the <code>take</code> to the thread's {@link
+   * BasicTransactionSemantics} instance.
+   * </p>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+take,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+ChannelException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+transaction,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+currentTransaction,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+transaction,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""No transaction exists for this thread""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+transaction,Identifier
+.,Punctuation
+take,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * <p>
+   * Initializes the channel if it is not already, then checks to see
+   * if there is an open transaction for this thread, creating a new
+   * one via <code>createTransaction</code> if not.
+   * @return the current <code>Transaction</code> object for the
+   *     calling thread
+   * </p>
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+initialized,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+initialized,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+initialize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+initialized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+transaction,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+currentTransaction,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+transaction,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+transaction,Identifier
+.,Punctuation
+getState,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+BasicTransactionSemantics,Identifier
+.,Punctuation
+State,Identifier
+.,Punctuation
+CLOSED,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transaction,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+createTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+currentTransaction,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+transaction,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+transaction,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

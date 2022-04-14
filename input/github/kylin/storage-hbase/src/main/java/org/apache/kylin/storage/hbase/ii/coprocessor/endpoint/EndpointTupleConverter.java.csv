@@ -1,0 +1,942 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+ii,Identifier
+.,Punctuation
+coprocessor,Identifier
+.,Punctuation
+endpoint,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+index,Identifier
+.,Punctuation
+TableRecord,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+FunctionDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+tuple,Identifier
+.,Punctuation
+ITuple,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+tuple,Identifier
+.,Punctuation
+Tuple,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+tuple,Identifier
+.,Punctuation
+TupleInfo,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+EndpointTupleConverter,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+TupleInfo,Identifier
+ ,Whitespace
+tupleInfo,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+columns,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+columnTupleIdx,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+aggrTupleIdx,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+EndpointTupleConverter,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+columns,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+FunctionDesc,Identifier
+>,Operator
+ ,Whitespace
+aggrMeasures,Identifier
+",",Punctuation
+ ,Whitespace
+TupleInfo,Identifier
+ ,Whitespace
+returnTupleInfo,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+tupleInfo,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+returnTupleInfo,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columns,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+columnTupleIdx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+int,Keyword
+[,Punctuation
+columns,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+aggrTupleIdx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+int,Keyword
+[,Punctuation
+aggrMeasures,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+columns,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+TblColRef,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columns,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+columnTupleIdx,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tupleInfo,Identifier
+.,Punctuation
+hasColumn,Identifier
+(,Punctuation
+col,Identifier
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+tupleInfo,Identifier
+.,Punctuation
+getColumnIndex,Identifier
+(,Punctuation
+col,Identifier
+),Punctuation
+ ,Whitespace
+:,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+aggrMeasures,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+FunctionDesc,Identifier
+ ,Whitespace
+measure,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggrMeasures,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+tupleIdx,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+"// for dimension playing as metrics, the measure is just a placeholder, the real value comes from columns",Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+measure,Identifier
+.,Punctuation
+isDimensionAsMetric,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+tupleIdx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+// a rewrite metrics is identified by its rewrite field name,Comment
+"
+",Newline
+            ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+measure,Identifier
+.,Punctuation
+needRewrite,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+String,Identifier
+ ,Whitespace
+rewriteFieldName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+measure,Identifier
+.,Punctuation
+getRewriteFieldName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tupleIdx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tupleInfo,Identifier
+.,Punctuation
+hasField,Identifier
+(,Punctuation
+rewriteFieldName,Identifier
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+tupleInfo,Identifier
+.,Punctuation
+getFieldIndex,Identifier
+(,Punctuation
+rewriteFieldName,Identifier
+),Punctuation
+ ,Whitespace
+:,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+// a non-rewrite metrics (i.e. sum) is like a dimension column,Comment
+"
+",Newline
+            ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+TblColRef,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+measure,Identifier
+.,Punctuation
+getParameter,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getColRefs,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+get,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tupleIdx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tupleInfo,Identifier
+.,Punctuation
+hasColumn,Identifier
+(,Punctuation
+col,Identifier
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+tupleInfo,Identifier
+.,Punctuation
+getColumnIndex,Identifier
+(,Punctuation
+col,Identifier
+),Punctuation
+ ,Whitespace
+:,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+aggrTupleIdx,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tupleIdx,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ITuple,Identifier
+ ,Whitespace
+makeTuple,Identifier
+(,Punctuation
+TableRecord,Identifier
+ ,Whitespace
+tableRecord,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+Object,Identifier
+>,Operator
+ ,Whitespace
+measureValues,Identifier
+",",Punctuation
+ ,Whitespace
+Tuple,Identifier
+ ,Whitespace
+tuple,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// dimensions and metrics from II table record ,Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+columnTupleIdx,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+tupleIdx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columnTupleIdx,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tupleIdx,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tableRecord,Identifier
+.,Punctuation
+getValueString,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tuple,Identifier
+.,Punctuation
+setDimensionValue,Identifier
+(,Punctuation
+tupleIdx,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// additional aggregations calculated inside end point (like cube measures),Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+measureValues,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+aggrTupleIdx,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+++,Operator
+i,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+tupleIdx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggrTupleIdx,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tupleIdx,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+Object,Identifier
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+measureValues,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+String,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+String,Identifier
+ ,Whitespace
+dataType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tuple,Identifier
+.,Punctuation
+getDataTypeName,Identifier
+(,Punctuation
+tupleIdx,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Tuple,Identifier
+.,Punctuation
+convertOptiqCellValue,Identifier
+(,Punctuation
+(,Punctuation
+String,Identifier
+),Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+dataType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+tuple,Identifier
+.,Punctuation
+setMeasureValue,Identifier
+(,Punctuation
+tupleIdx,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+tuple,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

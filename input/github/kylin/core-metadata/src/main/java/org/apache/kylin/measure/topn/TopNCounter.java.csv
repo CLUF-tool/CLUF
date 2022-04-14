@@ -1,0 +1,2863 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+topn,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Pair,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Modified from the StreamSummary.java in https://github.com/addthis/stream-lib
+ * 
+ * Based on the <i>Space-Saving</i> algorithm and the <i>Stream-Summary</i>
+ * data structure as described in:
+ * <i>Efficient Computation of Frequent and Top-k Elements in Data Streams</i>
+ * by Metwally, Agrawal, and Abbadi
+ *
+ * @param <T> type of data in the stream to be summarized
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TopNCounter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Iterable,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+EXTRA_SPACE_RATE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+50,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+capacity,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+T,Identifier
+",",Punctuation
+ ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>>,Operator
+ ,Whitespace
+counterMap,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+DoublyLinkedList,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+counterList,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param capacity maximum size (larger capacities improve accuracy)
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+TopNCounter,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+capacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+capacity,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+counterMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+T,Identifier
+",",Punctuation
+ ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+counterList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DoublyLinkedList,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+capacity,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Algorithm: <i>Space-Saving</i>
+     *
+     * @param item stream element (<i>e</i>)
+     * @return false if item was already in the stream summary, true otherwise
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+offer,Identifier
+(,Punctuation
+T,Identifier
+ ,Whitespace
+item,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offer,Identifier
+(,Punctuation
+item,Identifier
+",",Punctuation
+ ,Whitespace
+1.0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Algorithm: <i>Space-Saving</i>
+     *
+     * @param item stream element (<i>e</i>)
+     * @return false if item was already in the stream summary, true otherwise
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+offer,Identifier
+(,Punctuation
+T,Identifier
+ ,Whitespace
+item,Identifier
+",",Punctuation
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+incrementCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offerReturnAll,Identifier
+(,Punctuation
+item,Identifier
+",",Punctuation
+ ,Whitespace
+incrementCount,Identifier
+),Punctuation
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param item stream element (<i>e</i>)
+     * @return item dropped from summary if an item was dropped, null otherwise
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+T,Identifier
+ ,Whitespace
+offerReturnDropped,Identifier
+(,Punctuation
+T,Identifier
+ ,Whitespace
+item,Identifier
+",",Punctuation
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+incrementCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offerReturnAll,Identifier
+(,Punctuation
+item,Identifier
+",",Punctuation
+ ,Whitespace
+incrementCount,Identifier
+),Punctuation
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param item stream element (<i>e</i>)
+     * @return Pair<isNewItem, itemDropped> where isNewItem is the return value of offer() and itemDropped is null if no item was dropped
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Pair,Identifier
+<,Operator
+Boolean,Identifier
+",",Punctuation
+ ,Whitespace
+T,Identifier
+>,Operator
+ ,Whitespace
+offerReturnAll,Identifier
+(,Punctuation
+T,Identifier
+ ,Whitespace
+item,Identifier
+",",Punctuation
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+incrementCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+counterNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+item,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isNewItem,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+counterNode,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+T,Identifier
+ ,Whitespace
+droppedItem,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isNewItem,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+counterNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+enqueue,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+(,Punctuation
+item,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+counterNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+tail,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+counter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterNode,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+droppedItem,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counter,Identifier
+.,Punctuation
+item,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+counterMap,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+droppedItem,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+counter,Identifier
+.,Punctuation
+item,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+item,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+counter,Identifier
+.,Punctuation
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0.0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+counterMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+item,Identifier
+",",Punctuation
+ ,Whitespace
+counterNode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+incrementCounter,Identifier
+(,Punctuation
+counterNode,Identifier
+",",Punctuation
+ ,Whitespace
+incrementCount,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Pair,Identifier
+.,Punctuation
+newPair,Identifier
+(,Punctuation
+isNewItem,Identifier
+",",Punctuation
+ ,Whitespace
+droppedItem,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+incrementCounter,Identifier
+(,Punctuation
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+counterNode,Identifier
+",",Punctuation
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+incrementCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+counter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterNode,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+counter,Identifier
+.,Punctuation
+count,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+incrementCount,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+nodeNext,Identifier
+;,Punctuation
+ ,Whitespace
+"
+",Newline
+                ,Whitespace
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+incrementCount,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+nodeNext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterNode,Identifier
+.,Punctuation
+getNext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+nodeNext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterNode,Identifier
+.,Punctuation
+getPrev,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+counterList,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+counterNode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+counterNode,Identifier
+.,Punctuation
+prev,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+counterNode,Identifier
+.,Punctuation
+next,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+incrementCount,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+nodeNext,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+counter,Identifier
+.,Punctuation
+count,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+nodeNext,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+count,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+nodeNext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+nodeNext,Identifier
+.,Punctuation
+getNext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nodeNext,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+counterList,Identifier
+.,Punctuation
+addBefore,Identifier
+(,Punctuation
+nodeNext,Identifier
+",",Punctuation
+ ,Whitespace
+counterNode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+counterList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+counterNode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+nodeNext,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+counter,Identifier
+.,Punctuation
+count,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nodeNext,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+count,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+nodeNext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+nodeNext,Identifier
+.,Punctuation
+getPrev,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nodeNext,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+counterList,Identifier
+.,Punctuation
+addAfter,Identifier
+(,Punctuation
+nodeNext,Identifier
+",",Punctuation
+ ,Whitespace
+counterNode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+counterList,Identifier
+.,Punctuation
+enqueue,Identifier
+(,Punctuation
+counterNode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+       ,Whitespace
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+peek,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+k,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+topK,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+T,Identifier
+>,Operator
+(,Punctuation
+k,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+head,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bNode,Identifier
+.,Punctuation
+getPrev,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+b,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bNode,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+topK,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+k,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+topK,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+topK,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+b,Identifier
+.,Punctuation
+item,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+topK,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+topK,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+k,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+topK,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+(,Punctuation
+k,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+head,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bNode,Identifier
+.,Punctuation
+getPrev,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+b,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bNode,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+topK,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+k,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+topK,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+topK,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+b,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+topK,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @return number of items stored
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+counterMap,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+sb,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'[',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+head,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bNode,Identifier
+.,Punctuation
+getPrev,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+b,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bNode,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+b,Identifier
+.,Punctuation
+item,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+':',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+b,Identifier
+.,Punctuation
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+']',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+sb,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Put element to the head position;
+     * The consumer should call this method with count in ascending way; the item will be directly put to the head of the list, without comparison for best performance;
+     * @param item
+     * @param count
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+offerToHead,Identifier
+(,Punctuation
+T,Identifier
+ ,Whitespace
+item,Identifier
+",",Punctuation
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+count,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+(,Punctuation
+item,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+c,Identifier
+.,Punctuation
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+count,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+node,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+counterMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+c,Identifier
+.,Punctuation
+item,Identifier
+",",Punctuation
+ ,Whitespace
+node,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Merge another counter into this counter;
+     * @param another
+     * @return
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+TopNCounter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+merge,Identifier
+(,Punctuation
+TopNCounter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+another,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+double,Keyword
+ ,Whitespace
+m1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0.0,Literal
+",",Punctuation
+ ,Whitespace
+m2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0.0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+m1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+counterList,Identifier
+.,Punctuation
+tail,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+count,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+another,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+another,Identifier
+.,Punctuation
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+m2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+another,Identifier
+.,Punctuation
+counterList,Identifier
+.,Punctuation
+tail,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+count,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+duplicateItems,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+notDuplicateItems,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Map,Identifier
+.,Punctuation
+Entry,Identifier
+<,Operator
+T,Identifier
+",",Punctuation
+ ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>>,Operator
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+counterMap,Identifier
+.,Punctuation
+entrySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+T,Identifier
+ ,Whitespace
+item,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getKey,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+existing,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+another,Identifier
+.,Punctuation
+counterMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+item,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+existing,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+duplicateItems,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+item,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+notDuplicateItems,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+item,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+(,Punctuation
+T,Identifier
+ ,Whitespace
+item,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+duplicateItems,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+offer,Identifier
+(,Punctuation
+item,Identifier
+",",Punctuation
+ ,Whitespace
+another,Identifier
+.,Punctuation
+counterMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+item,Identifier
+),Punctuation
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+for,Keyword
+(,Punctuation
+T,Identifier
+ ,Whitespace
+item,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+notDuplicateItems,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+offer,Identifier
+(,Punctuation
+item,Identifier
+",",Punctuation
+ ,Whitespace
+m2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Map,Identifier
+.,Punctuation
+Entry,Identifier
+<,Operator
+T,Identifier
+",",Punctuation
+ ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>>,Operator
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+another,Identifier
+.,Punctuation
+counterMap,Identifier
+.,Punctuation
+entrySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+T,Identifier
+ ,Whitespace
+item,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getKey,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+duplicateItems,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+item,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+double,Keyword
+ ,Whitespace
+counter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+count,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+this,Keyword
+.,Punctuation
+offer,Identifier
+(,Punctuation
+item,Identifier
+",",Punctuation
+ ,Whitespace
+counter,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+m1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Retain the capacity to the given number; The extra counters will be cut off
+     * @param newCapacity
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+retain,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+newCapacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+assert,Identifier
+ ,Whitespace
+newCapacity,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+capacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newCapacity,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+newCapacity,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+tail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+tail,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+tail,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+newCapacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+bucket,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tail,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+this,Keyword
+.,Punctuation
+counterMap,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+bucket,Identifier
+.,Punctuation
+getItem,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+this,Keyword
+.,Punctuation
+counterList,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+tail,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+counterList,Identifier
+.,Punctuation
+tail,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Get the counter values in ascending order
+     * @return
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+double,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getCounters,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+double,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+counters,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+double,Keyword
+[,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+tail,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+ ,Whitespace
+bNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bNode,Identifier
+.,Punctuation
+getNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+b,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bNode,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+counters,Identifier
+[,Punctuation
+index,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+b,Identifier
+.,Punctuation
+count,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+index,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+assert,Identifier
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+counters,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Iterator,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+iterator,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TopNCounterIterator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/**
+     * Iterator from the tail (smallest) to head (biggest);
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TopNCounterIterator,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Iterator,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+ListNode2,Identifier
+<,Operator
+Counter,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+currentBNode,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+TopNCounterIterator,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+currentBNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counterList,Identifier
+.,Punctuation
+tail,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+currentBNode,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+next,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Counter,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+counter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+currentBNode,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+currentBNode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+currentBNode,Identifier
+.,Punctuation
+getNext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+counter,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+remove,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UnsupportedOperationException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+},Punctuation
+"
+",Newline

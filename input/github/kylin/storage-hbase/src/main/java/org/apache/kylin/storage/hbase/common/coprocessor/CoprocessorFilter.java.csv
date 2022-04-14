@@ -1,0 +1,657 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+coprocessor,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+BytesUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dict,Identifier
+.,Punctuation
+DictCodeSystem,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dimension,Identifier
+.,Punctuation
+IDimensionEncodingMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+TupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+TupleFilterSerializer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+tuple,Identifier
+.,Punctuation
+IEvaluatableTuple,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+CoprocessorFilter,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+CoprocessorFilter,Identifier
+ ,Whitespace
+fromFilter,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+IDimensionEncodingMap,Identifier
+ ,Whitespace
+dimEncMap,Identifier
+",",Punctuation
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+rootFilter,Identifier
+",",Punctuation
+ ,Whitespace
+FilterDecorator,Identifier
+.,Punctuation
+FilterConstantsTreatment,Identifier
+ ,Whitespace
+filterConstantsTreatment,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// translate constants into dictionary IDs via a serialize copy,Comment
+"
+",Newline
+        ,Whitespace
+FilterDecorator,Identifier
+ ,Whitespace
+filterDecorator,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FilterDecorator,Identifier
+(,Punctuation
+dimEncMap,Identifier
+",",Punctuation
+ ,Whitespace
+filterConstantsTreatment,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TupleFilterSerializer,Identifier
+.,Punctuation
+serialize,Identifier
+(,Punctuation
+rootFilter,Identifier
+",",Punctuation
+ ,Whitespace
+filterDecorator,Identifier
+",",Punctuation
+ ,Whitespace
+DictCodeSystem,Identifier
+.,Punctuation
+INSTANCE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+copy,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TupleFilterSerializer,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+DictCodeSystem,Identifier
+.,Punctuation
+INSTANCE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CoprocessorFilter,Identifier
+(,Punctuation
+copy,Identifier
+",",Punctuation
+ ,Whitespace
+filterDecorator,Identifier
+.,Punctuation
+getInevaluableColumns,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+serialize,Identifier
+(,Punctuation
+CoprocessorFilter,Identifier
+ ,Whitespace
+o,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+o,Identifier
+.,Punctuation
+filter,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+EMPTY_BYTE_ARRAY,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+TupleFilterSerializer,Identifier
+.,Punctuation
+serialize,Identifier
+(,Punctuation
+o,Identifier
+.,Punctuation
+filter,Identifier
+",",Punctuation
+ ,Whitespace
+DictCodeSystem,Identifier
+.,Punctuation
+INSTANCE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+CoprocessorFilter,Identifier
+ ,Whitespace
+deserialize,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+filterBytes,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+filterBytes,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+filterBytes,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+:,Operator
+ ,Whitespace
+TupleFilterSerializer,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+filterBytes,Identifier
+",",Punctuation
+ ,Whitespace
+DictCodeSystem,Identifier
+.,Punctuation
+INSTANCE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CoprocessorFilter,Identifier
+(,Punctuation
+filter,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+inevaluableColumns,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+CoprocessorFilter,Identifier
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+",",Punctuation
+ ,Whitespace
+Set,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+inevaluableColumns,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+filter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+filter,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+inevaluableColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+inevaluableColumns,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+getFilter,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+filter,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+getInevaluableColumns,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+inevaluableColumns,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+evaluate,Identifier
+(,Punctuation
+IEvaluatableTuple,Identifier
+ ,Whitespace
+tuple,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+else,Keyword
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+evaluate,Identifier
+(,Punctuation
+tuple,Identifier
+",",Punctuation
+ ,Whitespace
+DictCodeSystem,Identifier
+.,Punctuation
+INSTANCE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

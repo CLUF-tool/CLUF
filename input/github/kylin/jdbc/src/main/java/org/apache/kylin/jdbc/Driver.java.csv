@@ -1,0 +1,655 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+jdbc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+DriverManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+SQLException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+AvaticaConnection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+DriverVersion,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+Meta,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+UnregisteredDriver,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+jdbc,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Log4jConfigurer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * <p>
+ * Kylin JDBC Driver based on Calcite Avatica and Kylin restful API.<br>
+ * Supported versions:
+ * </p>
+ * <ul>
+ * <li>jdbc 4.0</li>
+ * <li>jdbc 4.1</li>
+ * </ul>
+ * 
+ * <p>
+ * Supported Statements:
+ * </p>
+ * <ul>
+ * <li>{@link KylinStatementImpl}</li>
+ * <li>{@link KylinPrepareStatementImpl}</li>
+ * </ul>
+ * 
+ * <p>
+ * Supported properties:
+ * <ul>
+ * <li>user: username</li>
+ * <li>password: password</li>
+ * <li>ssl: true/false</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>
+ * Driver init code sample:<br>
+ * 
+ * <pre>
+ * Driver driver = (Driver) Class.forName(&quot;org.apache.kylin.kylin.jdbc.Driver&quot;).newInstance();
+ * Properties info = new Properties();
+ * info.put(&quot;user&quot;, &quot;user&quot;);
+ * info.put(&quot;password&quot;, &quot;password&quot;);
+ * info.put(&quot;ssl&quot;, true);
+ * Connection conn = driver.connect(&quot;jdbc:kylin://{domain}/{project}&quot;, info);
+ * </pre>
+ * 
+ * </p>
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Driver,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+UnregisteredDriver,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CONNECT_STRING_PREFIX,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""jdbc:kylin:""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Log4jConfigurer,Identifier
+.,Punctuation
+initLogger,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+DriverManager,Identifier
+.,Punctuation
+registerDriver,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Driver,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+SQLException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""Error occurred while registering JDBC driver """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Driver,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""": """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getConnectStringPrefix,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+CONNECT_STRING_PREFIX,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+DriverVersion,Identifier
+ ,Whitespace
+createDriverVersion,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+DriverVersion,Identifier
+.,Punctuation
+load,Identifier
+(,Punctuation
+Driver,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+"""kylin-jdbc.properties""",String
+",",Punctuation
+ ,Whitespace
+"""Kylin JDBC Driver""",String
+",",Punctuation
+ ,Whitespace
+"""unknown version""",String
+",",Punctuation
+ ,Whitespace
+"""Kylin""",String
+",",Punctuation
+ ,Whitespace
+"""unknown version""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getFactoryClassName,Identifier
+(,Punctuation
+JdbcVersion,Identifier
+ ,Whitespace
+jdbcVersion,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+jdbcVersion,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+case,Keyword
+ ,Whitespace
+JDBC_30,Identifier
+:,Operator
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UnsupportedOperationException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+case,Keyword
+ ,Whitespace
+JDBC_40,Identifier
+:,Operator
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+KylinJdbcFactory,Identifier
+.,Punctuation
+Version40,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+case,Keyword
+ ,Whitespace
+JDBC_41,Identifier
+:,Operator
+"
+",Newline
+        ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+KylinJdbcFactory,Identifier
+.,Punctuation
+Version41,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Meta,Identifier
+ ,Whitespace
+createMeta,Identifier
+(,Punctuation
+AvaticaConnection,Identifier
+ ,Whitespace
+connection,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KylinMeta,Identifier
+(,Punctuation
+(,Punctuation
+KylinConnection,Identifier
+),Punctuation
+ ,Whitespace
+connection,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+//    @Override,Comment
+"
+",Newline
+    ,Whitespace
+//    protected Handler createHandler() {,Comment
+"
+",Newline
+    ,Whitespace
+//        return new HandlerImpl() {,Comment
+"
+",Newline
+    ,Whitespace
+//            @Override,Comment
+"
+",Newline
+    ,Whitespace
+//            public void onConnectionInit(AvaticaConnection connection) throws SQLException {,Comment
+"
+",Newline
+    ,Whitespace
+//                KylinConnection conn = (KylinConnection) connection;,Comment
+"
+",Newline
+    ,Whitespace
+//                RemoteClient runner = ((KylinJdbcFactory) factory).newRemoteClient(conn);,Comment
+"
+",Newline
+    ,Whitespace
+//                try {,Comment
+"
+",Newline
+    ,Whitespace
+//                    runner.connect();,Comment
+"
+",Newline
+    ,Whitespace
+//                    conn.setMetaProject(runner.getMetadata(conn.getProject()));,Comment
+"
+",Newline
+    ,Whitespace
+"//                    logger.debug(""Connection inited."");",Comment
+"
+",Newline
+    ,Whitespace
+//                } catch (ConnectionException e) {,Comment
+"
+",Newline
+    ,Whitespace
+"//                    logger.error(e.getLocalizedMessage(), e);",Comment
+"
+",Newline
+    ,Whitespace
+//                    throw new SQLException(e.getLocalizedMessage());,Comment
+"
+",Newline
+    ,Whitespace
+//                },Comment
+"
+",Newline
+    ,Whitespace
+//            },Comment
+"
+",Newline
+    ,Whitespace
+//,Comment
+"
+",Newline
+    ,Whitespace
+//            public void onConnectionClose(AvaticaConnection connection) {,Comment
+"
+",Newline
+    ,Whitespace
+"//                logger.debug(""Connection closed."");",Comment
+"
+",Newline
+    ,Whitespace
+//            },Comment
+"
+",Newline
+    ,Whitespace
+//,Comment
+"
+",Newline
+    ,Whitespace
+"//            public void onStatementExecute(AvaticaStatement statement, ResultSink resultSink) {",Comment
+"
+",Newline
+    ,Whitespace
+"//                logger.debug(""statement executed."");",Comment
+"
+",Newline
+    ,Whitespace
+//            },Comment
+"
+",Newline
+    ,Whitespace
+//,Comment
+"
+",Newline
+    ,Whitespace
+//            public void onStatementClose(AvaticaStatement statement) {,Comment
+"
+",Newline
+    ,Whitespace
+"//                logger.debug(""statement closed."");",Comment
+"
+",Newline
+    ,Whitespace
+//            },Comment
+"
+",Newline
+    ,Whitespace
+//        };,Comment
+"
+",Newline
+    ,Whitespace
+//    },Comment
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

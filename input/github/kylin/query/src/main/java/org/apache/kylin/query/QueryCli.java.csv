@@ -1,0 +1,833 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+query,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+Connection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+DriverManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+ResultSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+ResultSetMetaData,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+Statement,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+jdbc,Identifier
+.,Punctuation
+Driver,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+CommandLine,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+CommandLineParser,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+GnuParser,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Option,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+OptionBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Options,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+query,Identifier
+.,Punctuation
+schema,Identifier
+.,Punctuation
+OLAPSchemaFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+QueryCli,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""static-access""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_METADATA,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""metadata url""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""Metadata URL""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""metadata""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""static-access""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_SQL,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""input sql""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""SQL""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""sql""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+main,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Options,Identifier
+ ,Whitespace
+options,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Options,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_METADATA,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_SQL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+CommandLineParser,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GnuParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+CommandLine,Identifier
+ ,Whitespace
+commandLine,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+parser,Identifier
+.,Punctuation
+parse,Identifier
+(,Punctuation
+options,Identifier
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+createInstanceFromUri,Identifier
+(,Punctuation
+commandLine,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+OPTION_METADATA,Identifier
+.,Punctuation
+getOpt,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+commandLine,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+OPTION_SQL,Identifier
+.,Punctuation
+getOpt,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Class,Identifier
+.,Punctuation
+forName,Identifier
+(,Punctuation
+Driver,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+File,Identifier
+ ,Whitespace
+olapTmp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OLAPSchemaFactory,Identifier
+.,Punctuation
+createTempOLAPJson,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Connection,Identifier
+ ,Whitespace
+conn,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Statement,Identifier
+ ,Whitespace
+stmt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ResultSet,Identifier
+ ,Whitespace
+rs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+conn,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DriverManager,Identifier
+.,Punctuation
+getConnection,Identifier
+(,Punctuation
+"""jdbc:calcite:model=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+olapTmp,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+stmt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+conn,Identifier
+.,Punctuation
+createStatement,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+rs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stmt,Identifier
+.,Punctuation
+executeQuery,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+n,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ResultSetMetaData,Identifier
+ ,Whitespace
+meta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+rs,Identifier
+.,Punctuation
+getMetaData,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+rs,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+n,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+meta,Identifier
+.,Punctuation
+getColumnCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+n,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" - """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+meta,Identifier
+.,Punctuation
+getColumnLabel,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""":\t""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+rs,Identifier
+.,Punctuation
+getObject,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+rs,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+rs,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+stmt,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+stmt,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+conn,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+conn,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

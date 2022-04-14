@@ -1,0 +1,798 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+query,Identifier
+.,Punctuation
+routing,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang3,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+FunctionDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+project,Identifier
+.,Punctuation
+ProjectManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+CapabilityResult,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+CapabilityResult,Identifier
+.,Punctuation
+CapabilityInfluence,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+CapabilityResult,Identifier
+.,Punctuation
+DimensionAsMeasure,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+IRealization,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+SQLDigest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+query,Identifier
+.,Punctuation
+relnode,Identifier
+.,Punctuation
+OLAPContext,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author xjiang
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+QueryRouter,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+QueryRouter,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+IRealization,Identifier
+ ,Whitespace
+selectRealization,Identifier
+(,Punctuation
+OLAPContext,Identifier
+ ,Whitespace
+olapContext,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+NoRealizationFoundException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ProjectManager,Identifier
+ ,Whitespace
+prjMgr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ProjectManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+olapContext,Identifier
+.,Punctuation
+olapSchema,Identifier
+.,Punctuation
+getConfig,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""The project manager's reference is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+prjMgr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+factTableName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+olapContext,Identifier
+.,Punctuation
+firstTableScan,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+projectName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+olapContext,Identifier
+.,Punctuation
+olapSchema,Identifier
+.,Punctuation
+getProjectName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+IRealization,Identifier
+>,Operator
+ ,Whitespace
+realizations,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prjMgr,Identifier
+.,Punctuation
+getRealizationsByTable,Identifier
+(,Punctuation
+projectName,Identifier
+",",Punctuation
+ ,Whitespace
+factTableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+SQLDigest,Identifier
+ ,Whitespace
+sqlDigest,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+olapContext,Identifier
+.,Punctuation
+getSQLDigest,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+Candidate,Identifier
+>,Operator
+ ,Whitespace
+candidates,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayListWithCapacity,Identifier
+(,Punctuation
+realizations,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+IRealization,Identifier
+ ,Whitespace
+real,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+realizations,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+real,Identifier
+.,Punctuation
+isReady,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+candidates,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Candidate,Identifier
+(,Punctuation
+real,Identifier
+",",Punctuation
+ ,Whitespace
+sqlDigest,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Find candidates by table """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+factTableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" and project=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+projectName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" : """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+StringUtils,Identifier
+.,Punctuation
+join,Identifier
+(,Punctuation
+candidates,Identifier
+",",Punctuation
+ ,Whitespace
+""",""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// rule based realization selection, rules might reorder realizations or remove specific realization",Comment
+"
+",Newline
+        ,Whitespace
+RoutingRule,Identifier
+.,Punctuation
+applyRules,Identifier
+(,Punctuation
+candidates,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+candidates,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NoRealizationFoundException,Identifier
+(,Punctuation
+"""Can't find any realization. Please confirm with providers. SQL digest: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sqlDigest,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Candidate,Identifier
+ ,Whitespace
+chosen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+candidates,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+adjustForDimensionAsMeasure,Identifier
+(,Punctuation
+chosen,Identifier
+",",Punctuation
+ ,Whitespace
+olapContext,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""The realizations remaining: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+RoutingRule,Identifier
+.,Punctuation
+getPrintableText,Identifier
+(,Punctuation
+candidates,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" And the final chosen one is the first one""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+chosen,Identifier
+.,Punctuation
+realization,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+adjustForDimensionAsMeasure,Identifier
+(,Punctuation
+Candidate,Identifier
+ ,Whitespace
+chosen,Identifier
+",",Punctuation
+ ,Whitespace
+OLAPContext,Identifier
+ ,Whitespace
+olapContext,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+CapabilityResult,Identifier
+ ,Whitespace
+capability,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+chosen,Identifier
+.,Punctuation
+getCapability,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+CapabilityInfluence,Identifier
+ ,Whitespace
+inf,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+capability,Identifier
+.,Punctuation
+influences,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// convert the metric to dimension,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+inf,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+DimensionAsMeasure,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+FunctionDesc,Identifier
+ ,Whitespace
+functionDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+DimensionAsMeasure,Identifier
+),Punctuation
+ ,Whitespace
+inf,Identifier
+),Punctuation
+.,Punctuation
+getMeasureFunction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+functionDesc,Identifier
+.,Punctuation
+setDimensionAsMetric,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Adjust DimensionAsMeasure for """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+functionDesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

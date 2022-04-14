@@ -1,0 +1,343 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+hllc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+MeasureAggregator,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""serial""",String
+),Punctuation
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HLLCAggregator,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+MeasureAggregator,Identifier
+<,Operator
+HyperLogLogPlusCounter,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+precision,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+HyperLogLogPlusCounter,Identifier
+ ,Whitespace
+sum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+HLLCAggregator,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+precision,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+precision,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+precision,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+reset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+sum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+aggregate,Identifier
+(,Punctuation
+HyperLogLogPlusCounter,Identifier
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+sum,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+sum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HyperLogLogPlusCounter,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+else,Keyword
+"
+",Newline
+            ,Whitespace
+sum,Identifier
+.,Punctuation
+merge,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+HyperLogLogPlusCounter,Identifier
+ ,Whitespace
+getState,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+sum,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getMemBytesEstimate,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// 1024 + 60 returned by AggregationCacheMemSizeTest,Comment
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+8,Literal
+ ,Whitespace
+// aggregator obj shell,Comment
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+4,Literal
+ ,Whitespace
+// precision,Comment
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+8,Literal
+ ,Whitespace
+// ref to HLLC,Comment
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+8,Literal
+ ,Whitespace
+// HLLC obj shell,Comment
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+32,Literal
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+1,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+precision,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// HLLC internal,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

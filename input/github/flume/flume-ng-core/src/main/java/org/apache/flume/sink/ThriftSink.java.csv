@@ -1,0 +1,352 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+RpcClient,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+RpcClientConfigurationConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+RpcClientFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+SecureRpcClientFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * <p>
+ * A {@link org.apache.flume.Sink} implementation that can send events to an RPC server (such as
+ * Flume's {@link org.apache.flume.source.ThriftSource}).
+ * </p>
+ * <p>
+ * This sink forms one half of Flume's tiered collection support. Events sent to
+ * this sink are transported over the network to the hostname / port pair using
+ * the RPC implementation encapsulated in {@link RpcClient}.
+ * The destination is an instance of Flume's
+ * {@link org.apache.flume.source.ThriftSource}, which
+ * allows Flume agents to forward to other Flume agents, forming a tiered
+ * collection infrastructure. Of course, nothing prevents one from using this
+ * sink to speak to other custom built infrastructure that implements the same
+ * RPC protocol.
+ * </p>
+ * <p>
+ * Events are taken from the configured {@link org.apache.flume.Channel} in batches of the
+ * configured <tt>batch-size</tt>. The batch size has no theoretical limits
+ * although all events in the batch <b>must</b> fit in memory. Generally, larger
+ * batches are far more efficient, but introduce a slight delay (measured in
+ * millis) in delivery. The batch behavior is such that underruns (i.e. batches
+ * smaller than the configured batch size) are possible. This is a compromise
+ * made to maintain low latency of event delivery. If the channel returns a null
+ * event, meaning it is empty, the batch is immediately sent, regardless of
+ * size. Batch underruns are tracked in the metrics. Empty batches do not incur
+ * an RPC roundtrip.
+ * </p>
+ * <p>
+ * <b>Configuration options</b>
+ * </p>
+ * <table>
+ * <tr>
+ * <th>Parameter</th>
+ * <th>Description</th>
+ * <th>Unit (data type)</th>
+ * <th>Default</th>
+ * </tr>
+ * <tr>
+ * <td><tt>hostname</tt></td>
+ * <td>The hostname to which events should be sent.</td>
+ * <td>Hostname or IP (String)</td>
+ * <td>none (required)</td>
+ * </tr>
+ * <tr>
+ * <td><tt>port</tt></td>
+ * <td>The port to which events should be sent on <tt>hostname</tt>.</td>
+ * <td>TCP port (int)</td>
+ * <td>none (required)</td>
+ * </tr>
+ * <tr>
+ * <td><tt>batch-size</tt></td>
+ * <td>The maximum number of events to send per RPC.</td>
+ * <td>events (int)</td>
+ * <td>100</td>
+ * </tr>
+ * <tr>
+ * <td><tt>connect-timeout</tt></td>
+ * <td>Maximum time to wait for the first Avro handshake and RPC request</td>
+ * <td>milliseconds (long)</td>
+ * <td>20000</td>
+ * </tr>
+ * <tr>
+ * <td><tt>request-timeout</tt></td>
+ * <td>Maximum time to wait RPC requests after the first</td>
+ * <td>milliseconds (long)</td>
+ * <td>20000</td>
+ * </tr>
+ * </table>
+ * <p>
+ * <b>Metrics</b>
+ * </p>
+ * <p>
+ * TODO
+ * </p>
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ThriftSink,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractRpcSink,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+initializeRpcClient,Identifier
+(,Punctuation
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+"// Only one thread is enough, since only one sink thread processes",Comment
+"
+",Newline
+    ,Whitespace
+// transactions at any given time. Each sink owns its own Rpc client.,Comment
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+CONFIG_CONNECTION_POOL_SIZE,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+enableKerberos,Identifier
+ ,Whitespace
+=,Operator
+  ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+props,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+KERBEROS_KEY,Identifier
+",",Punctuation
+ ,Whitespace
+"""false""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+enableKerberos,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+SecureRpcClientFactory,Identifier
+.,Punctuation
+getThriftInstance,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_CLIENT_TYPE,Identifier
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+RpcClientFactory,Identifier
+.,Punctuation
+ClientType,Identifier
+.,Punctuation
+THRIFT,Identifier
+.,Punctuation
+name,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+RpcClientFactory,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

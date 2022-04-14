@@ -1,0 +1,1273 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+kafka,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+databind,Identifier
+.,Punctuation
+ObjectMapper,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+javaapi,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+Producer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+KeyedMessage,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+ProducerConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Option,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+OptionBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Options,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+OptionsHelper,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A sample producer which will create sample data to kafka topic
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KafkaSampleProducer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+KafkaSampleProducer,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""static-access""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_TOPIC,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""topic""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""Kafka topic""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""topic""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_BROKER,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""broker""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""Kafka broker""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""broker""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_DELAY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""delay""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""Simulated message delay""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""delay""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ObjectMapper,Identifier
+ ,Whitespace
+mapper,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ObjectMapper,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+main,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""args: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+args,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+OptionsHelper,Identifier
+ ,Whitespace
+optionsHelper,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+OptionsHelper,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Options,Identifier
+ ,Whitespace
+options,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Options,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+broker,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_TOPIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_BROKER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_DELAY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+optionsHelper,Identifier
+.,Punctuation
+parseOptions,Identifier
+(,Punctuation
+options,Identifier
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""options: '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+optionsHelper,Identifier
+.,Punctuation
+getOptionsAsString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+topic,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+optionsHelper,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+OPTION_TOPIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+broker,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+optionsHelper,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+OPTION_BROKER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+delay,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+delayString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+optionsHelper,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+OPTION_DELAY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+delayString,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+delay,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+parseLong,Identifier
+(,Punctuation
+optionsHelper,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+OPTION_DELAY,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+countries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+countries,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""AUSTRALIA""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+countries,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""CANADA""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+countries,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""CHINA""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+countries,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""INDIA""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+countries,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""JAPAN""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+countries,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""KOREA""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+countries,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""US""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+countries,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""Other""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+category,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+category,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""BOOK""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+category,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""TOY""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+category,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""CLOTH""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+category,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""ELECTRONIC""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+category,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""Other""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+devices,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+devices,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""iOS""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+devices,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""Windows""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+devices,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""Andriod""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+devices,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""Other""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""metadata.broker.list""",String
+",",Punctuation
+ ,Whitespace
+broker,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.class""",String
+",",Punctuation
+ ,Whitespace
+"""kafka.serializer.StringEncoder""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""request.required.acks""",String
+",",Punctuation
+ ,Whitespace
+"""1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ProducerConfig,Identifier
+ ,Whitespace
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ProducerConfig,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Producer,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+producer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Producer,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+alive,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Random,Identifier
+ ,Whitespace
+rnd,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Random,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+>,Operator
+ ,Whitespace
+record,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+alive,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""order_time""",String
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Date,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getTime,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+delay,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+"
+",Newline
+            ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""country""",String
+",",Punctuation
+ ,Whitespace
+countries,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+rnd,Identifier
+.,Punctuation
+nextInt,Identifier
+(,Punctuation
+countries,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""category""",String
+",",Punctuation
+ ,Whitespace
+category,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+rnd,Identifier
+.,Punctuation
+nextInt,Identifier
+(,Punctuation
+category,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""device""",String
+",",Punctuation
+ ,Whitespace
+devices,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+rnd,Identifier
+.,Punctuation
+nextInt,Identifier
+(,Punctuation
+devices,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""qty""",String
+",",Punctuation
+ ,Whitespace
+rnd,Identifier
+.,Punctuation
+nextInt,Identifier
+(,Punctuation
+10,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""currency""",String
+",",Punctuation
+ ,Whitespace
+"""USD""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""amount""",String
+",",Punctuation
+ ,Whitespace
+rnd,Identifier
+.,Punctuation
+nextDouble,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+100,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+KeyedMessage,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+data,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KeyedMessage,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""""",String
+",",Punctuation
+ ,Whitespace
+mapper,Identifier
+.,Punctuation
+writeValueAsString,Identifier
+(,Punctuation
+record,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Sending 1 message""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+producer,Identifier
+.,Punctuation
+send,Identifier
+(,Punctuation
+data,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+2000,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+producer,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

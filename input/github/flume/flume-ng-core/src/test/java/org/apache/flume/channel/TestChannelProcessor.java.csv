@@ -1,0 +1,607 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Charsets,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Channel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelSelector,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+EventBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Assert,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Test,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mockito,Identifier
+.,Punctuation
+Mockito,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestChannelProcessor,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Ensure that we bubble up any specific exception thrown from getTransaction
+   * instead of another exception masking it such as an NPE
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+(,Punctuation
+expected,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ChannelException,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testExceptionFromGetTransaction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// create a channel which unexpectedly throws a ChEx on getTransaction(),Comment
+"
+",Newline
+    ,Whitespace
+Channel,Identifier
+ ,Whitespace
+ch,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mock,Identifier
+(,Punctuation
+Channel,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+ch,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenThrow,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+"""doh!""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ChannelSelector,Identifier
+ ,Whitespace
+sel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ReplicatingChannelSelector,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+sel,Identifier
+.,Punctuation
+setChannels,Identifier
+(,Punctuation
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+ch,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ChannelProcessor,Identifier
+ ,Whitespace
+proc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelProcessor,Identifier
+(,Punctuation
+sel,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+events,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+events,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+"""event 1""",String
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+proc,Identifier
+.,Punctuation
+processEventBatch,Identifier
+(,Punctuation
+events,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Ensure that we see the original NPE from the PreConditions check instead
+   * of an auto-generated NPE, which could be masking something else.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testNullFromGetTransaction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// channel which returns null from getTransaction(),Comment
+"
+",Newline
+    ,Whitespace
+Channel,Identifier
+ ,Whitespace
+ch,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mock,Identifier
+(,Punctuation
+Channel,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+ch,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ChannelSelector,Identifier
+ ,Whitespace
+sel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ReplicatingChannelSelector,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+sel,Identifier
+.,Punctuation
+setChannels,Identifier
+(,Punctuation
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+ch,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ChannelProcessor,Identifier
+ ,Whitespace
+proc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelProcessor,Identifier
+(,Punctuation
+sel,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+events,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+events,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+"""event 1""",String
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+threw,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+proc,Identifier
+.,Punctuation
+processEventBatch,Identifier
+(,Punctuation
+events,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NullPointerException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+threw,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertNotNull,Identifier
+(,Punctuation
+"""NPE must be manually thrown""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertTrue,Identifier
+(,Punctuation
+"""Must throw NPE""",String
+",",Punctuation
+ ,Whitespace
+threw,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

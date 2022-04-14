@@ -1,0 +1,393 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+steps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+UnsupportedEncodingException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+IMRInput,Identifier
+.,Punctuation
+IMRTableInputFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+MRUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+BatchConstants,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author George Song (ysong1)
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HiveToBaseCuboidMapper,Identifier
+<,Operator
+KEYIN,Identifier
+>,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+BaseCuboidMapperBase,Identifier
+<,Operator
+KEYIN,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+IMRTableInputFormat,Identifier
+ ,Whitespace
+flatTableInputFormat,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setup,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+.,Punctuation
+setup,Identifier
+(,Punctuation
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+flatTableInputFormat,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MRUtil,Identifier
+.,Punctuation
+getBatchCubingInputSide,Identifier
+(,Punctuation
+cubeSegment,Identifier
+),Punctuation
+.,Punctuation
+getFlatTableInputFormat,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+map,Identifier
+(,Punctuation
+KEYIN,Identifier
+ ,Whitespace
+key,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+counter,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+counter,Identifier
+ ,Whitespace
+%,Operator
+ ,Whitespace
+BatchConstants,Identifier
+.,Punctuation
+NORMAL_RECORD_LOG_THRESHOLD,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Handled """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+counter,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" records!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+//put a record into the shared bytesSplitter,Comment
+"
+",Newline
+            ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+flatTableInputFormat,Identifier
+.,Punctuation
+parseMapperInput,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+bytesSplitter,Identifier
+.,Punctuation
+setBuffers,Identifier
+(,Punctuation
+convertUTF8Bytes,Identifier
+(,Punctuation
+row,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+//take care of the data in bytesSplitter,Comment
+"
+",Newline
+            ,Whitespace
+outputKV,Identifier
+(,Punctuation
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+handleErrorRecord,Identifier
+(,Punctuation
+bytesSplitter,Identifier
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

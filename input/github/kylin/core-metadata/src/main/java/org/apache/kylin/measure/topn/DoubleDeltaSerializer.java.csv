@@ -1,0 +1,1975 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+topn,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Given an array of double in ascending order, serialize them into very compact bytes.
+ * 
+ * http://bitcharmer.blogspot.co.uk/2013/12/how-to-serialise-array-of-doubles-with.html
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+DoubleDeltaSerializer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// first 32 bits stores meta info,Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+PRECISION_BITS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+3,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DELTA_SIZE_BITS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+6,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+LENGTH_BITS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+23,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+MASKS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+long,Keyword
+[,Punctuation
+64,Literal
+],Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+MASKS,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+MASKS,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+1L,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+i,Identifier
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+precision,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+multiplier,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+transient,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+long,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+deltasThreadLocal,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+DoubleDeltaSerializer,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+(,Punctuation
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param precision round to specified number of digits after decimal point
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+DoubleDeltaSerializer,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+precision,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+checkFitInBits,Identifier
+(,Punctuation
+precision,Identifier
+",",Punctuation
+ ,Whitespace
+PRECISION_BITS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+precision,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+precision,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+multiplier,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+pow,Identifier
+(,Punctuation
+10,Literal
+",",Punctuation
+ ,Whitespace
+precision,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+deltasThreadLocal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+long,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+serialize,Identifier
+(,Punctuation
+double,Keyword
+ ,Whitespace
+values,Identifier
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+deltas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+calculateDeltas,Identifier
+(,Punctuation
+values,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+deltaSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+maxDeltaSize,Identifier
+(,Punctuation
+deltas,Identifier
+",",Punctuation
+ ,Whitespace
+values,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+checkFitInBits,Identifier
+(,Punctuation
+deltaSize,Identifier
+",",Punctuation
+ ,Whitespace
+DELTA_SIZE_BITS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+checkFitInBits,Identifier
+(,Punctuation
+values,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+LENGTH_BITS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+meta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+precision,Identifier
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+(,Punctuation
+LENGTH_BITS,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+DELTA_SIZE_BITS,Identifier
+),Punctuation
+ ,Whitespace
+|,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+deltaSize,Identifier
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+LENGTH_BITS,Identifier
+ ,Whitespace
+|,Operator
+ ,Whitespace
+values,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+buf,Identifier
+.,Punctuation
+putInt,Identifier
+(,Punctuation
+meta,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+values,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+buf,Identifier
+.,Punctuation
+putLong,Identifier
+(,Punctuation
+roundAndPromote,Identifier
+(,Punctuation
+values,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+putDeltas,Identifier
+(,Punctuation
+deltas,Identifier
+",",Punctuation
+ ,Whitespace
+values,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+",",Punctuation
+ ,Whitespace
+deltaSize,Identifier
+",",Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+putDeltas,Identifier
+(,Punctuation
+long,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+deltas,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+deltaSize,Identifier
+",",Punctuation
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+bits,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+free,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+SIZE,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+free,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+deltaSize,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+bits,Identifier
+ ,Whitespace
+|=,Operator
+ ,Whitespace
+deltas,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+(,Punctuation
+free,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+deltaSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+free,Identifier
+ ,Whitespace
+-=,Operator
+ ,Whitespace
+deltaSize,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+free,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+putLong,Identifier
+(,Punctuation
+bits,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+bits,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+free,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+SIZE,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+bits,Identifier
+ ,Whitespace
+|=,Operator
+ ,Whitespace
+deltas,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+(,Punctuation
+deltaSize,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+free,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+.,Punctuation
+putLong,Identifier
+(,Punctuation
+bits,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+free,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+Long,Identifier
+.,Punctuation
+SIZE,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+(,Punctuation
+deltaSize,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+free,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+bits,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+deltas,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+free,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+free,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+SIZE,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+buf,Identifier
+.,Punctuation
+putLong,Identifier
+(,Punctuation
+bits,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+maxDeltaSize,Identifier
+(,Punctuation
+long,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+deltas,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+maxDelta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+maxDelta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+maxDelta,Identifier
+",",Punctuation
+ ,Whitespace
+deltas,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+SIZE,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+numberOfLeadingZeros,Identifier
+(,Punctuation
+maxDelta,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+calculateDeltas,Identifier
+(,Punctuation
+double,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+values,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+values,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+len,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+long,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+deltas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+deltasThreadLocal,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+deltas,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+deltas,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+len,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+deltas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+long,Keyword
+[,Punctuation
+len,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+deltasThreadLocal,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+deltas,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+len,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+deltas,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+current,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+roundAndPromote,Identifier
+(,Punctuation
+values,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+next,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+roundAndPromote,Identifier
+(,Punctuation
+values,Identifier
+[,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+deltas,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+next,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+current,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+assert,Identifier
+ ,Whitespace
+deltas,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+current,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+next,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+deltas,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+roundAndPromote,Identifier
+(,Punctuation
+double,Keyword
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+long,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+multiplier,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+.5d,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+checkFitInBits,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+num,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+bits,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+num,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+(,Punctuation
+1,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+bits,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+double,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+deserialize,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+meta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+meta,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+1,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+LENGTH_BITS,Identifier
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+double,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+double,Keyword
+[,Punctuation
+len,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+deserialize,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+meta,Identifier
+",",Punctuation
+ ,Whitespace
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+deserialize,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+double,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+result,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+deserialize,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+deserialize,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+meta,Identifier
+",",Punctuation
+ ,Whitespace
+double,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+result,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+precision,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+meta,Identifier
+ ,Whitespace
+>>>,Operator
+ ,Whitespace
+(,Punctuation
+DELTA_SIZE_BITS,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+LENGTH_BITS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+assert,Identifier
+ ,Whitespace
+precision,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+precision,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+deltaSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+meta,Identifier
+ ,Whitespace
+>>>,Operator
+ ,Whitespace
+LENGTH_BITS,Identifier
+),Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+1,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+DELTA_SIZE_BITS,Identifier
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+meta,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+1,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+LENGTH_BITS,Identifier
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+len,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+assert,Identifier
+ ,Whitespace
+result,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+current,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+result,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+double,Keyword
+),Punctuation
+ ,Whitespace
+current,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+multiplier,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+bits,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+left,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+delta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+left,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+deltaSize,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+delta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+bits,Identifier
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+(,Punctuation
+left,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+deltaSize,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+MASKS,Identifier
+[,Punctuation
+deltaSize,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+left,Identifier
+ ,Whitespace
+-=,Operator
+ ,Whitespace
+deltaSize,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+more,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+deltaSize,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+left,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+delta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+bits,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+MASKS,Identifier
+[,Punctuation
+left,Identifier
+],Punctuation
+),Punctuation
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+more,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+bits,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+left,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+SIZE,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+delta,Identifier
+ ,Whitespace
+|=,Operator
+ ,Whitespace
+(,Punctuation
+bits,Identifier
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+(,Punctuation
+left,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+more,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+MASKS,Identifier
+[,Punctuation
+more,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+left,Identifier
+ ,Whitespace
+-=,Operator
+ ,Whitespace
+more,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+"
+",Newline
+            ,Whitespace
+current,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+delta,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+result,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+double,Keyword
+),Punctuation
+ ,Whitespace
+current,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+multiplier,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+len,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

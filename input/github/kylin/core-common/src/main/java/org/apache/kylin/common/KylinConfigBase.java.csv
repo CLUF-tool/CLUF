@@ -1,0 +1,5708 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+InputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Serializable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+SortedSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Matcher,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Pattern,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+CliCommandExecutor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""serial""",String
+),Punctuation
+"
+",Newline
+"/**
+ * An abstract class to encapsulate access to a set of 'properties'.
+ * Subclass can override methods in this class to extend the content of the 'properties',
+ * with some override values for example.
+ */",Comment
+"
+",Newline
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KylinConfigBase,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Serializable,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+KylinConfigBase,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/*
+     * DON'T DEFINE CONSTANTS FOR PROPERTY KEYS!
+     * 
+     * For 1), no external need to access property keys, all accesses are by public methods.
+     * For 2), it's cumbersome to maintain constants at top and code at bottom.
+     * For 3), key literals usually appear only once.
+     */",Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getKylinHome,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+kylinHome,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+getenv,Identifier
+(,Punctuation
+"""KYLIN_HOME""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+kylinHome,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""KYLIN_HOME was not set""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+kylinHome,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+Properties,Identifier
+ ,Whitespace
+properties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+KylinConfigBase,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+KylinConfigBase,Identifier
+(,Punctuation
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+properties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+props,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+prop,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+prop,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+prop,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+dft,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+property,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+prop,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+property,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+?,Operator
+ ,Whitespace
+property,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+properties,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+prop,Identifier
+",",Punctuation
+ ,Whitespace
+dft,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+Properties,Identifier
+ ,Whitespace
+getAllProperties,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+properties,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getOptionalStringArray,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+prop,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+dft,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+property,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+prop,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+property,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+property,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+"""\\s*,\\s*""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+dft,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getRequired,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+prop,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+r,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+prop,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+r,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""missing '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+prop,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' in conf/kylin.properties""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+r,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Use with care, properties should be read-only. This is for testing mostly.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setProperty,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+key,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Kylin Config was updated with """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+key,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" : """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+properties,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+key,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+reloadKylinConfig,Identifier
+(,Punctuation
+InputStream,Identifier
+ ,Whitespace
+is,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Properties,Identifier
+ ,Whitespace
+newProperties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+newProperties,Identifier
+.,Punctuation
+load,Identifier
+(,Punctuation
+is,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""Cannot load kylin config.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+IOUtils,Identifier
+.,Punctuation
+closeQuietly,Identifier
+(,Punctuation
+is,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+properties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newProperties,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isDevEnv,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+"""DEV""",String
+.,Punctuation
+equals,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""deploy.env""",String
+",",Punctuation
+ ,Whitespace
+"""DEV""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMetadataUrl,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.metadata.url""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setMetadataUrl,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+metadataUrl,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setProperty,Identifier
+(,Punctuation
+"""kylin.metadata.url""",String
+",",Punctuation
+ ,Whitespace
+metadataUrl,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMetadataUrlPrefix,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+hbaseMetadataUrl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getMetadataUrl,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+defaultPrefix,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""kylin_metadata""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang3,Identifier
+.,Punctuation
+StringUtils,Identifier
+.,Punctuation
+containsIgnoreCase,Identifier
+(,Punctuation
+hbaseMetadataUrl,Identifier
+",",Punctuation
+ ,Whitespace
+"""@hbase""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+cut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hbaseMetadataUrl,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+'@',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+tmp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cut,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+?,Operator
+ ,Whitespace
+defaultPrefix,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+hbaseMetadataUrl,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+cut,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+tmp,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+defaultPrefix,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getServerMode,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.server.mode""",String
+",",Punctuation
+ ,Whitespace
+"""all""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getStorageUrl,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.storage.url""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setStorageUrl,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+storageUrl,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setProperty,Identifier
+(,Punctuation
+"""kylin.storage.url""",String
+",",Punctuation
+ ,Whitespace
+storageUrl,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/** was for route to hive, not used any more */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHiveUrl,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""hive.url""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/** was for route to hive, not used any more */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHiveUser,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""hive.user""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/** was for route to hive, not used any more */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHivePassword,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""hive.password""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHdfsWorkingDirectory,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+root,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getRequired,Identifier
+(,Punctuation
+"""kylin.hdfs.working.dir""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+root,Identifier
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+"""/""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+root,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+"""/""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuffer,Identifier
+(,Punctuation
+root,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+replaceChars,Identifier
+(,Punctuation
+getMetadataUrlPrefix,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+':',String
+",",Punctuation
+ ,Whitespace
+'-',String
+),Punctuation
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""/""",String
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+CliCommandExecutor,Identifier
+ ,Whitespace
+getCliCommandExecutor,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+CliCommandExecutor,Identifier
+ ,Whitespace
+exec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CliCommandExecutor,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+getRunAsRemoteCommand,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+exec,Identifier
+.,Punctuation
+setRunAtRemote,Identifier
+(,Punctuation
+getRemoteHadoopCliHostname,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+getRemoteHadoopCliPort,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+getRemoteHadoopCliUsername,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+getRemoteHadoopCliPassword,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+exec,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHBaseClusterFs,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.cluster.fs""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getKylinJobLogDir,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.log.dir""",String
+",",Punctuation
+ ,Whitespace
+"""/tmp/kylin/logs""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getKylinJobJarPath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+jobJar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.jar""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isNotEmpty,Identifier
+(,Punctuation
+jobJar,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+jobJar,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+kylinHome,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getKylinHome,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+kylinHome,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getFileName,Identifier
+(,Punctuation
+kylinHome,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+File,Identifier
+.,Punctuation
+separator,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""lib""",String
+",",Punctuation
+ ,Whitespace
+JOB_JAR_NAME_PATTERN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+overrideMRJobJarPath,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+path,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""override """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""kylin.job.jar""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" to """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+"""kylin.job.jar""",String
+",",Punctuation
+ ,Whitespace
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getKylinJobMRLibDir,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.mr.lib.dir""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getKylinSparkJobJarPath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+jobJar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.jar.spark""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isNotEmpty,Identifier
+(,Punctuation
+jobJar,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+jobJar,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+kylinHome,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getKylinHome,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+kylinHome,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getFileName,Identifier
+(,Punctuation
+kylinHome,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+File,Identifier
+.,Punctuation
+separator,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""lib""",String
+",",Punctuation
+ ,Whitespace
+SPARK_JOB_JAR_NAME_PATTERN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+overrideSparkJobJarPath,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+path,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""override """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""kylin.job.jar.spark""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" to """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+"""kylin.job.jar.spark""",String
+",",Punctuation
+ ,Whitespace
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+COPROCESSOR_JAR_NAME_PATTERN,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+"""kylin-coprocessor-(.+)\\.jar""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+JOB_JAR_NAME_PATTERN,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+"""kylin-job-(.+)\\.jar""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+SPARK_JOB_JAR_NAME_PATTERN,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+"""kylin-engine-spark-(.+)\\.jar""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getCoprocessorLocalJar,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+coprocessorJar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.coprocessor.local.jar""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isNotEmpty,Identifier
+(,Punctuation
+coprocessorJar,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+coprocessorJar,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+kylinHome,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getKylinHome,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+kylinHome,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""getCoprocessorLocalJar needs KYLIN_HOME""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getFileName,Identifier
+(,Punctuation
+kylinHome,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+File,Identifier
+.,Punctuation
+separator,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""lib""",String
+",",Punctuation
+ ,Whitespace
+COPROCESSOR_JAR_NAME_PATTERN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+overrideCoprocessorLocalJar,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+path,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""override """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""kylin.coprocessor.local.jar""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" to """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+"""kylin.coprocessor.local.jar""",String
+",",Punctuation
+ ,Whitespace
+path,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getFileName,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+homePath,Identifier
+",",Punctuation
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+pattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+File,Identifier
+ ,Whitespace
+home,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+homePath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+SortedSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+files,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newTreeSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+home,Identifier
+.,Punctuation
+exists,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+home,Identifier
+.,Punctuation
+isDirectory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+File,Identifier
+ ,Whitespace
+file,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+home,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+final,Keyword
+ ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+matcher,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pattern,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+file,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+matches,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+files,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+file,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+files,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""cannot find """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+pattern,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+homePath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+files,Identifier
+.,Punctuation
+last,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+getDefaultHadoopJobReducerInputMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Double,Identifier
+.,Punctuation
+parseDouble,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.mapreduce.default.reduce.input.mb""",String
+",",Punctuation
+ ,Whitespace
+"""500""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+getDefaultHadoopJobReducerCountRatio,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Double,Identifier
+.,Punctuation
+parseDouble,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.mapreduce.default.reduce.count.ratio""",String
+",",Punctuation
+ ,Whitespace
+"""1.0""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getHadoopJobMaxReducerNumber,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.mapreduce.max.reducer.number""",String
+",",Punctuation
+ ,Whitespace
+"""500""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+getRunAsRemoteCommand,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.run.as.remote.cmd""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setRunAsRemoteCommand,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+v,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setProperty,Identifier
+(,Punctuation
+"""kylin.job.run.as.remote.cmd""",String
+",",Punctuation
+ ,Whitespace
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getRemoteHadoopCliPort,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.remote.cli.port""",String
+",",Punctuation
+ ,Whitespace
+"""22""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getRemoteHadoopCliHostname,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.remote.cli.hostname""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setRemoteHadoopCliHostname,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+v,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setProperty,Identifier
+(,Punctuation
+"""kylin.job.remote.cli.hostname""",String
+",",Punctuation
+ ,Whitespace
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getRemoteHadoopCliUsername,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.remote.cli.username""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setRemoteHadoopCliUsername,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+v,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setProperty,Identifier
+(,Punctuation
+"""kylin.job.remote.cli.username""",String
+",",Punctuation
+ ,Whitespace
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getRemoteHadoopCliPassword,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.remote.cli.password""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setRemoteHadoopCliPassword,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+v,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setProperty,Identifier
+(,Punctuation
+"""kylin.job.remote.cli.password""",String
+",",Punctuation
+ ,Whitespace
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getCliWorkingDir,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.remote.cli.working.dir""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMapReduceCmdExtraArgs,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.cmd.extra.args""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getOverrideHiveTableLocation,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+table,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""hive.table.location.""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+table,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getYarnStatusCheckUrl,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.yarn.app.rest.check.status.url""",String
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getYarnStatusCheckIntervalSeconds,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.yarn.app.rest.check.interval.seconds""",String
+",",Punctuation
+ ,Whitespace
+"""60""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getMaxConcurrentJobLimit,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.concurrent.max.limit""",String
+",",Punctuation
+ ,Whitespace
+"""10""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getTimeZone,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.rest.timezone""",String
+",",Punctuation
+ ,Whitespace
+"""PST""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getRestServers,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptionalStringArray,Identifier
+(,Punctuation
+"""kylin.rest.servers""",String
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getAdminDls,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.admin.dls""",String
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getJobStepTimeout,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+parseLong,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.step.timeout""",String
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+2,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+60,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+60,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getCubeAlgorithm,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.cube.algorithm""",String
+",",Punctuation
+ ,Whitespace
+"""auto""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+getCubeAlgorithmAutoThreshold,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Double,Identifier
+.,Punctuation
+parseDouble,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.cube.algorithm.auto.threshold""",String
+",",Punctuation
+ ,Whitespace
+"""8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getCubeAggrGroupMaxSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.cube.aggrgroup.max.size""",String
+",",Punctuation
+ ,Whitespace
+"""12""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getCubeAggrGroupMaxCombination,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.cube.aggrgroup.max.combination""",String
+",",Punctuation
+ ,Whitespace
+"""4096""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getCubeDimensionCustomEncodingFactories,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptionalStringArray,Identifier
+(,Punctuation
+"""kylin.cube.dimension.customEncodingFactories""",String
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getDictionaryMaxCardinality,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.dictionary.max.cardinality""",String
+",",Punctuation
+ ,Whitespace
+"""5000000""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getTableSnapshotMaxMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.table.snapshot.max_mb""",String
+",",Punctuation
+ ,Whitespace
+"""300""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getHBaseRegionCut,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+cut,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+case,Keyword
+ ,Whitespace
+"""SMALL""",String
+:,Operator
+"
+",Newline
+            ,Whitespace
+cut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.region.cut.small""",String
+",",Punctuation
+ ,Whitespace
+"""10""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+case,Keyword
+ ,Whitespace
+"""MEDIUM""",String
+:,Operator
+"
+",Newline
+            ,Whitespace
+cut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.region.cut.medium""",String
+",",Punctuation
+ ,Whitespace
+"""20""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+case,Keyword
+ ,Whitespace
+"""LARGE""",String
+:,Operator
+"
+",Newline
+            ,Whitespace
+cut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.region.cut.large""",String
+",",Punctuation
+ ,Whitespace
+"""100""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Capacity not recognized: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+capacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+cut,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getHBaseRegionCountMin,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.region.count.min""",String
+",",Punctuation
+ ,Whitespace
+"""1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getHBaseRegionCountMax,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.region.count.max""",String
+",",Punctuation
+ ,Whitespace
+"""500""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setHBaseHFileSizeGB,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+size,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setProperty,Identifier
+(,Punctuation
+"""kylin.hbase.hfile.size.gb""",String
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+size,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getHBaseHFileSizeGB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.hfile.size.gb""",String
+",",Punctuation
+ ,Whitespace
+"""5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getScanThreshold,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.scan.threshold""",String
+",",Punctuation
+ ,Whitespace
+"""10000000""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getCubeVisitTimeoutTimes,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.cube.visit.timeout.times""",String
+",",Punctuation
+ ,Whitespace
+"""1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getBadQueryStackTraceDepth,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.badquery.stacktrace.depth""",String
+",",Punctuation
+ ,Whitespace
+"""10""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getBadQueryHistoryNum,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.badquery.history.num""",String
+",",Punctuation
+ ,Whitespace
+"""10""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getBadQueryDefaultAlertingSeconds,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.badquery.alerting.seconds""",String
+",",Punctuation
+ ,Whitespace
+"""90""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getBadQueryDefaultDetectIntervalSeconds,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.badquery.detect.interval.seconds""",String
+",",Punctuation
+ ,Whitespace
+"""60""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+getBadQueryPersistentEnabled,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.badquery.persistent.enable""",String
+",",Punctuation
+ ,Whitespace
+"""true""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getCachedDictMaxEntrySize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.dict.cache.max.entry""",String
+",",Punctuation
+ ,Whitespace
+"""3000""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+getQueryRunLocalCoprocessor,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.run.local.coprocessor""",String
+",",Punctuation
+ ,Whitespace
+"""false""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Long,Identifier
+ ,Whitespace
+getQueryDurationCacheThreshold,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+parseLong,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.cache.threshold.duration""",String
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+2000,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Long,Identifier
+ ,Whitespace
+getQueryScanCountCacheThreshold,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+parseLong,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.cache.threshold.scancount""",String
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+10,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getQueryMemBudget,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+parseLong,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.mem.budget""",String
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+3L,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+getQueryCoprocessorMemGB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Double,Identifier
+.,Punctuation
+parseDouble,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.coprocessor.mem.gb""",String
+",",Punctuation
+ ,Whitespace
+"""3.0""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isQuerySecureEnabled,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.security.enabled""",String
+",",Punctuation
+ ,Whitespace
+"""true""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isQueryCacheEnabled,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.cache.enabled""",String
+",",Punctuation
+ ,Whitespace
+"""true""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isQueryIgnoreUnknownFunction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.query.ignore_unknown_function""",String
+",",Punctuation
+ ,Whitespace
+"""false""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getHBaseKeyValueSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.client.keyvalue.maxsize""",String
+",",Punctuation
+ ,Whitespace
+"""10485760""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getHBaseScanCacheRows,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.scan.cache_rows""",String
+",",Punctuation
+ ,Whitespace
+"""1024""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isGrowingDictEnabled,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.dict.growing.enabled""",String
+",",Punctuation
+ ,Whitespace
+"""false""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getHBaseScanMaxResultSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.scan.max_result_size""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+5,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// 5 MB,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getCubingInMemSamplingPercent,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+percent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.cubing.inmem.sampling.percent""",String
+",",Punctuation
+ ,Whitespace
+"""100""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+percent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+percent,Identifier
+",",Punctuation
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+percent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+min,Identifier
+(,Punctuation
+percent,Identifier
+",",Punctuation
+ ,Whitespace
+100,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+percent,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+getCubingInMemMRJobConfOverride,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+"// in-mem cubing requires big memory, however dev env (sandbox) may not have that much",Comment
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+defaultOverride,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+isDevEnv,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+"""""",String
+ ,Whitespace
+:,Operator
+ ,Whitespace
+"""mapreduce.map.java.opts=-Xmx2700m;  mapreduce.map.memory.mb=3072;  mapreduce.task.io.sort.mb=200""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+override,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.cubing.inmem.mrjob_conf_override""",String
+",",Punctuation
+ ,Whitespace
+defaultOverride,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+pair,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+override,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+""";""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+cut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pair,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+'=',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+cut,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+k,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pair,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+cut,Identifier
+),Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+v,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pair,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+cut,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+k,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+v,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+result,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+k,Identifier
+",",Punctuation
+ ,Whitespace
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHbaseDefaultCompressionCodec,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.default.compression.codec""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHbaseDefaultEncoding,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.default.encoding""",String
+",",Punctuation
+ ,Whitespace
+"""FAST_DIFF""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHbaseDefaultBlockSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hbase.default.block.size""",String
+",",Punctuation
+ ,Whitespace
+"""4194304""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isHiveKeepFlatTable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.hive.keep.flat.table""",String
+",",Punctuation
+ ,Whitespace
+"""false""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHiveDatabaseForIntermediateTable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.hive.database.for.intermediatetable""",String
+",",Punctuation
+ ,Whitespace
+"""default""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isGetJobStatusWithKerberos,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.status.with.kerberos""",String
+",",Punctuation
+ ,Whitespace
+"""false""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getKylinOwner,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.owner""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getSparkHome,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getRequired,Identifier
+(,Punctuation
+"""kylin.spark.home""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getSparkMaster,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getRequired,Identifier
+(,Punctuation
+"""kylin.spark.master""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isMailEnabled,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""mail.enabled""",String
+",",Punctuation
+ ,Whitespace
+"""false""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setMailEnabled,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+enable,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setProperty,Identifier
+(,Punctuation
+"""mail.enabled""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+enable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMailHost,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""mail.host""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMailUsername,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""mail.username""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMailPassword,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""mail.password""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMailSender,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""mail.sender""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isWebCrossDomainEnabled,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""crossdomain.enable""",String
+",",Punctuation
+ ,Whitespace
+"""true""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getJobRetry,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getOptional,Identifier
+(,Punctuation
+"""kylin.job.retry""",String
+",",Punctuation
+ ,Whitespace
+"""0""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getMetadataUrl,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHiveClientMode,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hive.client""",String
+",",Punctuation
+ ,Whitespace
+"""cli""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHiveBeelineParams,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.hive.beeline.params""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getDeployEnv,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""deploy.env""",String
+",",Punctuation
+ ,Whitespace
+"""DEV""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getInitTasks,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.init.tasks""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMRBatchEngineV1Class,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.cube.mr.engine.v1.class""",String
+",",Punctuation
+ ,Whitespace
+"""org.apache.kylin.engine.mr.MRBatchCubingEngine""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMRBatchEngineV2Class,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getOptional,Identifier
+(,Punctuation
+"""kylin.cube.mr.engine.v2.class""",String
+",",Punctuation
+ ,Whitespace
+"""org.apache.kylin.engine.mr.MRBatchCubingEngine2""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

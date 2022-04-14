@@ -1,0 +1,828 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+BufferedWriter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileWriter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Created by dongli on 2/29/16.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HiveCmdBuilder,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+HiveCmdBuilder,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+enum,Identifier
+ ,Whitespace
+HiveClientMode,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+CLI,Identifier
+",",Punctuation
+ ,Whitespace
+BEELINE,Identifier
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+HiveClientMode,Identifier
+ ,Whitespace
+clientMode,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+kylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+private,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+statements,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+HiveCmdBuilder,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+kylinConfig,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+clientMode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HiveClientMode,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+kylinConfig,Identifier
+.,Punctuation
+getHiveClientMode,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+build,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+StringBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+clientMode,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+CLI,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""hive -e \""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+statement,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+statements,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+statement,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+BEELINE,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+BufferedWriter,Identifier
+ ,Whitespace
+bw,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+File,Identifier
+ ,Whitespace
+tmpHql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+File,Identifier
+.,Punctuation
+createTempFile,Identifier
+(,Punctuation
+"""beeline_""",String
+",",Punctuation
+ ,Whitespace
+""".hql""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+StringBuffer,Identifier
+ ,Whitespace
+hqlBuf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+bw,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+BufferedWriter,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+FileWriter,Identifier
+(,Punctuation
+tmpHql,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+statement,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+statements,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+bw,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+statement,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+bw,Identifier
+.,Punctuation
+newLine,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                        ,Whitespace
+hqlBuf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+statement,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""beeline """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+kylinConfig,Identifier
+.,Punctuation
+getHiveBeelineParams,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" -f """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+tmpHql,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""";rm -f """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+tmpHql,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""The statements to execute in beeline: \n""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+hqlBuf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+IOUtils,Identifier
+.,Punctuation
+closeQuietly,Identifier
+(,Punctuation
+bw,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""Hive client cannot be recognized: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+clientMode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+reset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+statements,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addStatement,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+statement,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+statements,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+statement,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+build,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

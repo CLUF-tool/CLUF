@@ -1,0 +1,5279 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+RandomAccessFile,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+BufferUnderflowException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+LongBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+MessageDigest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+SortedSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TreeSet,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+ArrayUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mapdb,Identifier
+.,Punctuation
+DB,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mapdb,Identifier
+.,Punctuation
+DBMaker,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+HashMultimap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+SetMultimap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Queue of events in the channel. This queue stores only
+ * {@link FlumeEventPointer} objects which are represented
+ * as 8 byte longs internally. Additionally the queue itself
+ * of longs is stored as a memory mapped file with a fixed
+ * header and circular queue semantics. The header of the queue
+ * contains the timestamp of last sync, the queue size and
+ * the head position.
+ */",Comment
+"
+",Newline
+final,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+FlumeEventQueue,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+  ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+FlumeEventQueue,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+EMPTY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+EventQueueBackingStore,Identifier
+ ,Whitespace
+backingStore,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+channelNameDescriptor,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+InflightEventWrapper,Identifier
+ ,Whitespace
+inflightTakes,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+InflightEventWrapper,Identifier
+ ,Whitespace
+inflightPuts,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+searchTime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+searchCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+copyTime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+copyCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+DB,Identifier
+ ,Whitespace
+db,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+queueSet,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * @param capacity max event capacity of queue
+   * @throws IOException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+FlumeEventQueue,Identifier
+(,Punctuation
+EventQueueBackingStore,Identifier
+ ,Whitespace
+backingStore,Identifier
+",",Punctuation
+ ,Whitespace
+File,Identifier
+ ,Whitespace
+inflightTakesFile,Identifier
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+File,Identifier
+ ,Whitespace
+inflightPutsFile,Identifier
+",",Punctuation
+ ,Whitespace
+File,Identifier
+ ,Whitespace
+queueSetDBDir,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""Capacity must be greater than zero""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+backingStore,Identifier
+",",Punctuation
+ ,Whitespace
+"""backingStore""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+channelNameDescriptor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""[channel=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""]""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+inflightTakesFile,Identifier
+",",Punctuation
+ ,Whitespace
+"""inflightTakesFile""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+inflightPutsFile,Identifier
+",",Punctuation
+ ,Whitespace
+"""inflightPutsFile""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+queueSetDBDir,Identifier
+",",Punctuation
+ ,Whitespace
+"""queueSetDBDir""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+backingStore,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+backingStore,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightPuts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+InflightEventWrapper,Identifier
+(,Punctuation
+inflightPutsFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightTakes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+InflightEventWrapper,Identifier
+(,Punctuation
+inflightTakesFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Could not read checkpoint.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+e,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+queueSetDBDir,Identifier
+.,Punctuation
+isDirectory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+FileUtils,Identifier
+.,Punctuation
+deleteDirectory,Identifier
+(,Punctuation
+queueSetDBDir,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+(,Punctuation
+queueSetDBDir,Identifier
+.,Punctuation
+isFile,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+queueSetDBDir,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""QueueSetDir """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+queueSetDBDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" is a file and""",String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+""" could not be deleted""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+queueSetDBDir,Identifier
+.,Punctuation
+mkdirs,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""Could not create QueueSet Dir """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+queueSetDBDir,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+dbFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+queueSetDBDir,Identifier
+",",Punctuation
+ ,Whitespace
+"""db""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+db,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DBMaker,Identifier
+.,Punctuation
+newFileDB,Identifier
+(,Punctuation
+dbFile,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+closeOnJvmShutdown,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+transactionDisable,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+syncOnCommitDisable,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+deleteFilesAfterClose,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+cacheDisable,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+mmapFileEnableIfSupported,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+make,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+queueSet,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+db,Identifier
+.,Punctuation
+createHashSet,Identifier
+(,Punctuation
+"""QueueSet """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" - """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+make,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+start,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+queueSet,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""QueueSet population inserting """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+""" took """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+start,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+SetMultimap,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+deserializeInflightPuts,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+          ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+BadCheckpointException,Identifier
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+inflightPuts,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+SetMultimap,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+deserializeInflightTakes,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+          ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+BadCheckpointException,Identifier
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+inflightTakes,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+checkpoint,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+force,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+backingStore,Identifier
+.,Punctuation
+syncRequired,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+inflightTakes,Identifier
+.,Punctuation
+syncRequired,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+force,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+"//No need to check inflight puts, since that would",Comment
+"
+",Newline
+                         ,Whitespace
+//cause elements.syncRequired() to return true.,Comment
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Checkpoint not required""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+backingStore,Identifier
+.,Punctuation
+beginCheckpoint,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+inflightPuts,Identifier
+.,Punctuation
+serializeAndWrite,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+inflightTakes,Identifier
+.,Punctuation
+serializeAndWrite,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+backingStore,Identifier
+.,Punctuation
+checkpoint,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Retrieve and remove the head of the queue.
+   *
+   * @return FlumeEventPointer or null if queue is empty
+   */",Comment
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+FlumeEventPointer,Identifier
+ ,Whitespace
+removeHead,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+  ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+remove,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+transactionID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+EMPTY,Identifier
+",",Punctuation
+ ,Whitespace
+"""Empty value """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+channelNameDescriptor,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+FlumeEventPointer,Identifier
+ ,Whitespace
+ptr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FlumeEventPointer,Identifier
+.,Punctuation
+fromLong,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+backingStore,Identifier
+.,Punctuation
+decrementFileID,Identifier
+(,Punctuation
+ptr,Identifier
+.,Punctuation
+getFileID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+ptr,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Add a FlumeEventPointer to the head of the queue.
+   * Called during rollbacks.
+   * @param FlumeEventPointer to be added
+   * @return true if space was available and pointer was
+   * added to the queue
+   */",Comment
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+addHead,Identifier
+(,Punctuation
+FlumeEventPointer,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+"//Called only during rollback, so should not consider inflight takes' size,",Comment
+"
+",Newline
+    ,Whitespace
+//because normal puts through addTail method already account for these,Comment
+"
+",Newline
+    ,Whitespace
+//events since they are in the inflight takes. So puts will not happen,Comment
+"
+",Newline
+    ,Whitespace
+"//in such a way that these takes cannot go back in. If this if returns true,",Comment
+"
+",Newline
+    ,Whitespace
+//there is a buuuuuuuug!,Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Could not reinsert to queue, events which were taken but """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""not committed. Please report this issue.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+toLong,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+EMPTY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+backingStore,Identifier
+.,Punctuation
+incrementFileID,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getFileID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+add,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Add a FlumeEventPointer to the tail of the queue.
+   * @param FlumeEventPointer to be added
+   * @return true if space was available and pointer
+   * was added to the queue
+   */",Comment
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+addTail,Identifier
+(,Punctuation
+FlumeEventPointer,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+toLong,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+EMPTY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+backingStore,Identifier
+.,Punctuation
+incrementFileID,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getFileID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+add,Identifier
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Must be called when a put happens to the log. This ensures that put commits
+   * after checkpoints will retrieve all events committed in that txn.
+   * @param e
+   * @param transactionID
+   */",Comment
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addWithoutCommit,Identifier
+(,Punctuation
+FlumeEventPointer,Identifier
+ ,Whitespace
+e,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+inflightPuts,Identifier
+.,Punctuation
+addEvent,Identifier
+(,Punctuation
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+.,Punctuation
+toLong,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Remove FlumeEventPointer from queue, will
+   * only be used when recovering from a crash. It is not
+   * legal to call this method after replayComplete has been
+   * called.
+   * @param FlumeEventPointer to be removed
+   * @return true if the FlumeEventPointer was found
+   * and removed
+   */",Comment
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+remove,Identifier
+(,Punctuation
+FlumeEventPointer,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+toLong,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+EMPTY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+queueSet,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+     ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""QueueSet is null, thus replayComplete""",String
+"
+",Newline
+         ,Whitespace
++,Operator
+ ,Whitespace
+""" has been called which is illegal""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+queueSet,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+searchCount,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+start,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+remove,Identifier
+(,Punctuation
+i,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+FlumeEventPointer,Identifier
+ ,Whitespace
+ptr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FlumeEventPointer,Identifier
+.,Punctuation
+fromLong,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+backingStore,Identifier
+.,Punctuation
+decrementFileID,Identifier
+(,Punctuation
+ptr,Identifier
+.,Punctuation
+getFileID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+searchTime,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+start,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+searchTime,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+start,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+"/**
+   * @return a copy of the set of fileIDs which are currently on the queue
+   * will be normally be used when deciding which data files can
+   * be deleted
+   */",Comment
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+SortedSet,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+ ,Whitespace
+getFileIDs,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+//Java implements clone pretty well. The main place this is used,Comment
+"
+",Newline
+    ,Whitespace
+"//in checkpointing and deleting old files, so best",Comment
+"
+",Newline
+    ,Whitespace
+//to use a sorted set implementation.,Comment
+"
+",Newline
+    ,Whitespace
+SortedSet,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+ ,Whitespace
+fileIDs,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getReferenceCounts,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+fileIDs,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+inflightPuts,Identifier
+.,Punctuation
+getFileIDs,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+fileIDs,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+inflightTakes,Identifier
+.,Punctuation
+getFileIDs,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fileIDs,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+get,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+index,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+index,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+||,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IndexOutOfBoundsException,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+index,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+channelNameDescriptor,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+index,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+set,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+index,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+index,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+||,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IndexOutOfBoundsException,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+index,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+channelNameDescriptor,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+backingStore,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+index,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+add,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+index,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+index,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+||,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IndexOutOfBoundsException,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+index,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+channelNameDescriptor,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+backingStore,Identifier
+.,Punctuation
+setSize,Identifier
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+index,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+/,Operator
+2,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// Shift left,Comment
+"
+",Newline
+      ,Whitespace
+backingStore,Identifier
+.,Punctuation
+setHead,Identifier
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getHead,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getHead,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+backingStore,Identifier
+.,Punctuation
+setHead,Identifier
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+index,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+set,Identifier
+(,Punctuation
+i,Identifier
+",",Punctuation
+ ,Whitespace
+get,Identifier
+(,Punctuation
+i,Identifier
++,Operator
+1,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// Sift right,Comment
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+index,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+--,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+set,Identifier
+(,Punctuation
+i,Identifier
+",",Punctuation
+ ,Whitespace
+get,Identifier
+(,Punctuation
+i,Identifier
+-,Operator
+1,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+set,Identifier
+(,Punctuation
+index,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+queueSet,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+queueSet,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Must be called when a transaction is being committed or rolled back.
+   * @param transactionID
+   */",Comment
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+completeTransaction,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+inflightPuts,Identifier
+.,Punctuation
+completeTransaction,Identifier
+(,Punctuation
+transactionID,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightTakes,Identifier
+.,Punctuation
+completeTransaction,Identifier
+(,Punctuation
+transactionID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+remove,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+index,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+index,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+||,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IndexOutOfBoundsException,Identifier
+(,Punctuation
+"""index = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+""", queueSize """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+""" """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+channelNameDescriptor,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+copyCount,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+start,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+get,Identifier
+(,Punctuation
+index,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+queueSet,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+queueSet,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"//if txn id = 0, we are recovering from a crash.",Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+transactionID,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightTakes,Identifier
+.,Punctuation
+addEvent,Identifier
+(,Punctuation
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+index,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+/,Operator
+2,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// Move tail part to left,Comment
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+index,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+rightValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+get,Identifier
+(,Punctuation
+i,Identifier
++,Operator
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+set,Identifier
+(,Punctuation
+i,Identifier
+",",Punctuation
+ ,Whitespace
+rightValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+set,Identifier
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+",",Punctuation
+ ,Whitespace
+EMPTY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// Move head part to right,Comment
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+--,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+leftValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+set,Identifier
+(,Punctuation
+i,Identifier
++,Operator
+1,Literal
+",",Punctuation
+ ,Whitespace
+leftValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+set,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+EMPTY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+backingStore,Identifier
+.,Punctuation
+setHead,Identifier
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getHead,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getHead,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+backingStore,Identifier
+.,Punctuation
+setHead,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+backingStore,Identifier
+.,Punctuation
+setSize,Identifier
+(,Punctuation
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+copyTime,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+start,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+inflightTakes,Identifier
+.,Punctuation
+getSize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * @return max capacity of the queue
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+backingStore,Identifier
+.,Punctuation
+getCapacity,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+db,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+db,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error closing db""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+backingStore,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightPuts,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightTakes,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error closing backing store""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Called when ReplayHandler has completed and thus remove(FlumeEventPointer)
+   * will no longer be called.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+replayComplete,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""Search Count = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+searchCount,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", Search Time = """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+searchTime,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", Copy Count = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+copyCount,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", Copy Time = """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+copyTime,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+db,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+db,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+queueSet,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+db,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+long,Keyword
+ ,Whitespace
+getSearchCount,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+searchCount,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+long,Keyword
+ ,Whitespace
+getCopyCount,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+copyCount,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * A representation of in flight events which have not yet been committed.
+   * None of the methods are thread safe, and should be called from thread
+   * safe methods only.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+class,Keyword
+ ,Whitespace
+InflightEventWrapper,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+SetMultimap,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+inflightEvents,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HashMultimap,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"// Both these are volatile for safe publication, they are never accessed by",Comment
+"
+",Newline
+    ,Whitespace
+// more than 1 thread at a time.,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+RandomAccessFile,Identifier
+ ,Whitespace
+file,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+channels,Identifier
+.,Punctuation
+FileChannel,Identifier
+ ,Whitespace
+fileChannel,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+MessageDigest,Identifier
+ ,Whitespace
+digest,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+File,Identifier
+ ,Whitespace
+inflightEventsFile,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+syncRequired,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+SetMultimap,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>,Operator
+ ,Whitespace
+inflightFileIDs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HashMultimap,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+InflightEventWrapper,Identifier
+(,Punctuation
+File,Identifier
+ ,Whitespace
+inflightEventsFile,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+inflightEventsFile,Identifier
+.,Punctuation
+exists,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+inflightEventsFile,Identifier
+.,Punctuation
+createNewFile,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"""Could not""",String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+"""create inflight events file: """,String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+inflightEventsFile,Identifier
+.,Punctuation
+getCanonicalPath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+inflightEventsFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+inflightEventsFile,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+file,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RandomAccessFile,Identifier
+(,Punctuation
+inflightEventsFile,Identifier
+",",Punctuation
+ ,Whitespace
+"""rw""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+fileChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+file,Identifier
+.,Punctuation
+getChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+digest,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MessageDigest,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+"""MD5""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Complete the transaction, and remove all events from inflight list.
+     * @param transactionID
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+completeTransaction,Identifier
+(,Punctuation
+Long,Identifier
+ ,Whitespace
+transactionID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+inflightEvents,Identifier
+.,Punctuation
+containsKey,Identifier
+(,Punctuation
+transactionID,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+inflightEvents,Identifier
+.,Punctuation
+removeAll,Identifier
+(,Punctuation
+transactionID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightFileIDs,Identifier
+.,Punctuation
+removeAll,Identifier
+(,Punctuation
+transactionID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+syncRequired,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Add an event pointer to the inflights list.
+     * @param transactionID
+     * @param pointer
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addEvent,Identifier
+(,Punctuation
+Long,Identifier
+ ,Whitespace
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+ ,Whitespace
+pointer,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightEvents,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+pointer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+inflightFileIDs,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+transactionID,Identifier
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+FlumeEventPointer,Identifier
+.,Punctuation
+fromLong,Identifier
+(,Punctuation
+pointer,Identifier
+),Punctuation
+.,Punctuation
+getFileID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+syncRequired,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Serialize the set of in flights into a byte longBuffer.
+     * @return Returns the checksum of the buffer that is being
+     * asynchronously written to disk.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+serializeAndWrite,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Collection,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+values,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+inflightEvents,Identifier
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+fileChannel,Identifier
+.,Punctuation
+isOpen,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+file,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RandomAccessFile,Identifier
+(,Punctuation
+inflightEventsFile,Identifier
+",",Punctuation
+ ,Whitespace
+"""rw""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+fileChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+file,Identifier
+.,Punctuation
+getChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+values,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+file,Identifier
+.,Punctuation
+setLength,Identifier
+(,Punctuation
+0L,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+//What is written out?,Comment
+"
+",Newline
+      ,Whitespace
+//Checksum - 16 bytes,Comment
+"
+",Newline
+      ,Whitespace
+//and then each key-value pair from the map:,Comment
+"
+",Newline
+      ,Whitespace
+//transactionid numberofeventsforthistxn listofeventpointers,Comment
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+expectedFileSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+(,Punctuation
+inflightEvents,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+2,Literal
+),Punctuation
+ ,Whitespace
+//For transactionIDs and events per txn ID,Comment
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+values,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+8,Literal
+),Punctuation
+ ,Whitespace
+//Event pointers,Comment
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+16,Literal
+;,Punctuation
+ ,Whitespace
+//Checksum,Comment
+"
+",Newline
+        ,Whitespace
+"//There is no real need of filling the channel with 0s, since we",Comment
+"
+",Newline
+        ,Whitespace
+//will write the exact nummber of bytes as expected file size.,Comment
+"
+",Newline
+        ,Whitespace
+file,Identifier
+.,Punctuation
+setLength,Identifier
+(,Punctuation
+expectedFileSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+file,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+expectedFileSize,Identifier
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+"""Expected File size of inflight events file does not match the """,String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+"""current file size. Checkpoint is incomplete.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+file,Identifier
+.,Punctuation
+seek,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+buffer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+allocate,Identifier
+(,Punctuation
+expectedFileSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+LongBuffer,Identifier
+ ,Whitespace
+longBuffer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buffer,Identifier
+.,Punctuation
+asLongBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Long,Identifier
+ ,Whitespace
+txnID,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+inflightEvents,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+Set,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+pointers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+inflightEvents,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+txnID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+longBuffer,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+txnID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+longBuffer,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+(,Punctuation
+long,Keyword
+),Punctuation
+ ,Whitespace
+pointers,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+LOG,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Number of events inserted into """,String
+"
+",Newline
+                  ,Whitespace
++,Operator
+ ,Whitespace
+"""inflights file: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+pointers,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                  ,Whitespace
++,Operator
+ ,Whitespace
+""" file: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+inflightEventsFile,Identifier
+.,Punctuation
+getCanonicalPath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+long,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+written,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ArrayUtils,Identifier
+.,Punctuation
+toPrimitive,Identifier
+(,Punctuation
+"
+",Newline
+                  ,Whitespace
+pointers,Identifier
+.,Punctuation
+toArray,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Long,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+longBuffer,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+written,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+checksum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+digest,Identifier
+.,Punctuation
+digest,Identifier
+(,Punctuation
+buffer,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+file,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+checksum,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+buffer,Identifier
+.,Punctuation
+position,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+fileChannel,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+buffer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+fileChannel,Identifier
+.,Punctuation
+force,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+syncRequired,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error while writing checkpoint to disk.""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+ex,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Read the inflights file and return a
+     * {@link com.google.common.collect.SetMultimap}
+     * of transactionIDs to events that were inflight.
+     *
+     * @return - map of inflight events per txnID.
+     *
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SetMultimap,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+deserialize,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+BadCheckpointException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+SetMultimap,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+inflights,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HashMultimap,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+fileChannel,Identifier
+.,Punctuation
+isOpen,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+file,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RandomAccessFile,Identifier
+(,Punctuation
+inflightEventsFile,Identifier
+",",Punctuation
+ ,Whitespace
+"""rw""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+fileChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+file,Identifier
+.,Punctuation
+getChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+file,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+inflights,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+file,Identifier
+.,Punctuation
+seek,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+checksum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+16,Literal
+],Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+file,Identifier
+.,Punctuation
+read,Identifier
+(,Punctuation
+checksum,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+buffer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+allocate,Identifier
+(,Punctuation
+"
+",Newline
+              ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+(,Punctuation
+file,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+file,Identifier
+.,Punctuation
+getFilePointer,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+fileChannel,Identifier
+.,Punctuation
+read,Identifier
+(,Punctuation
+buffer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fileChecksum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+digest,Identifier
+.,Punctuation
+digest,Identifier
+(,Punctuation
+buffer,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+Arrays,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+checksum,Identifier
+",",Punctuation
+ ,Whitespace
+fileChecksum,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+BadCheckpointException,Identifier
+(,Punctuation
+"""Checksum of inflights file differs""",String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+""" from the checksum expected.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+buffer,Identifier
+.,Punctuation
+position,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+LongBuffer,Identifier
+ ,Whitespace
+longBuffer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buffer,Identifier
+.,Punctuation
+asLongBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+long,Keyword
+ ,Whitespace
+txnID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+longBuffer,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+int,Keyword
+ ,Whitespace
+numEvents,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+(,Punctuation
+longBuffer,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+for,Keyword
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+numEvents,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+val,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+longBuffer,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+inflights,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+txnID,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+BufferUnderflowException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOG,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Reached end of inflights buffer. Long buffer position =""",String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+longBuffer,Identifier
+.,Punctuation
+position,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+  ,Whitespace
+inflights,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+inflightEvents,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+syncRequired,Identifier
+(,Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+syncRequired,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Collection,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+ ,Whitespace
+getFileIDs,Identifier
+(,Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+inflightFileIDs,Identifier
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+//Needed for testing.,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Collection,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+getInFlightPointers,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+inflightEvents,Identifier
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+file,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

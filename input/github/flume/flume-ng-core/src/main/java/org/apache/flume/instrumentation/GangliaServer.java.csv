@@ -1,0 +1,2936 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+instrumentation,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+DatagramPacket,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+DatagramSocket,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+InetAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+InetSocketAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+SocketAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+SocketException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+Executors,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ScheduledExecutorService,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+TimeUnit,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+HostInfo,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+ConfigurationException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+instrumentation,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+JMXPollUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A Ganglia server that polls JMX based at a configured frequency (defaults to
+ * once every 60 seconds). This implementation can send data to ganglia 3 and
+ * ganglia 3.1. <p>
+ *
+ * <b>Mandatory Parameters:</b><p> <tt>hosts: </tt> List of comma separated
+ * hostname:ports of ganglia servers to report metrics to. <p> <b>Optional
+ * Parameters: </b><p> <tt>pollFrequency:</tt>Interval in seconds between
+ * consecutive reports to ganglia servers. Default = 60 seconds.<p>
+ * <tt>isGanglia3:</tt> Report to ganglia 3 ? Default = false - reports to
+ * ganglia 3.1.
+ *
+ *
+ *
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+GangliaServer,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+MonitorService,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+"/*
+   * The Ganglia protocol specific stuff: the xdr_* methods
+   * and the sendToGanglia* methods have been shamelessly ripped off
+   * from Hadoop. All hail the yellow elephant!
+   */",Comment
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+GangliaServer,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+BUFFER_SIZE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1500,Literal
+;,Punctuation
+ ,Whitespace
+// as per libgmond.c,Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+buffer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+BUFFER_SIZE,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+SocketAddress,Identifier
+>,Operator
+ ,Whitespace
+addresses,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+SocketAddress,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+DatagramSocket,Identifier
+ ,Whitespace
+socket,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ScheduledExecutorService,Identifier
+ ,Whitespace
+service,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+Executors,Identifier
+.,Punctuation
+newSingleThreadScheduledExecutor,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+HostInfo,Identifier
+>,Operator
+ ,Whitespace
+hosts,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+GangliaCollector,Identifier
+ ,Whitespace
+collectorRunnable,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+pollFrequency,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+60,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+DEFAULT_UNITS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_TMAX,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+60,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_DMAX,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_SLOPE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+3,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+GANGLIA_DOUBLE_TYPE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""double""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isGanglia3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CONF_POLL_FREQUENCY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""pollFrequency""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_POLL_FREQUENCY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+60,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CONF_HOSTS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""hosts""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CONF_ISGANGLIA3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""isGanglia3""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+GANGLIA_CONTEXT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""flume.""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   *
+   * @param hosts List of hosts to send the metrics to. All of them have to be
+   * running the version of ganglia specified by the configuration.
+   * @throws FlumeException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+GangliaServer,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+collectorRunnable,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GangliaCollector,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Puts a string into the buffer by first writing the size of the string as an
+   * int, followed by the bytes of the string, padded if necessary to a multiple
+   * of 4.
+   *
+   * @param s the string to be written to buffer at offset location
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bytes,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+len,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+buffer,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+len,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+offset,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+pad,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Pads the buffer with zero bytes up to the nearest multiple of 4.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+pad,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+newOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+3,Literal
+),Punctuation
+ ,Whitespace
+/,Operator
+ ,Whitespace
+4,Literal
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+4,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+offset,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+newOffset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+buffer,Identifier
+[,Punctuation
+offset,Identifier
+++,Operator
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Puts an integer into the buffer as 4 bytes, big-endian.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+buffer,Identifier
+[,Punctuation
+offset,Identifier
+++,Operator
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+i,Identifier
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+24,Literal
+),Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xff,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+buffer,Identifier
+[,Punctuation
+offset,Identifier
+++,Operator
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+i,Identifier
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+16,Literal
+),Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xff,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+buffer,Identifier
+[,Punctuation
+offset,Identifier
+++,Operator
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+i,Identifier
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+8,Literal
+),Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xff,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+buffer,Identifier
+[,Punctuation
+offset,Identifier
+++,Operator
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xff,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+sendToGangliaNodes,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+DatagramPacket,Identifier
+ ,Whitespace
+packet,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+SocketAddress,Identifier
+ ,Whitespace
+addr,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+addresses,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+packet,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DatagramPacket,Identifier
+(,Punctuation
+buffer,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+addr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+socket,Identifier
+.,Punctuation
+send,Identifier
+(,Punctuation
+packet,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Could not send metrics to metrics server: """,String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+addr,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+offset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Start this server, causing it to poll JMX at the configured frequency.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+start,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+socket,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DatagramSocket,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+hostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+InetAddress,Identifier
+.,Punctuation
+getLocalHost,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getHostName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+SocketException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Could not create socket for metrics collection.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"
+",Newline
+              ,Whitespace
+"""Could not create socket for metrics collection.""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex2,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Unknown error occured""",String
+",",Punctuation
+ ,Whitespace
+ex2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+HostInfo,Identifier
+ ,Whitespace
+host,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+hosts,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+addresses,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+InetSocketAddress,Identifier
+(,Punctuation
+"
+",Newline
+              ,Whitespace
+host,Identifier
+.,Punctuation
+getHostName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+host,Identifier
+.,Punctuation
+getPortNumber,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+collectorRunnable,Identifier
+.,Punctuation
+server,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+service,Identifier
+.,Punctuation
+isShutdown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+service,Identifier
+.,Punctuation
+isTerminated,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+service,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Executors,Identifier
+.,Punctuation
+newSingleThreadScheduledExecutor,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+service,Identifier
+.,Punctuation
+scheduleWithFixedDelay,Identifier
+(,Punctuation
+collectorRunnable,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+pollFrequency,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Stop this server.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+service,Identifier
+.,Punctuation
+shutdown,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+service,Identifier
+.,Punctuation
+isTerminated,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Waiting for ganglia service to stop""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+service,Identifier
+.,Punctuation
+awaitTermination,Identifier
+(,Punctuation
+500,Literal
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+MILLISECONDS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Interrupted while waiting""",String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+""" for ganglia monitor to shutdown""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+service,Identifier
+.,Punctuation
+shutdownNow,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+addresses,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   *
+   * @param pollFrequency Seconds between consecutive JMX polls.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setPollFrequency,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+pollFrequency,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+pollFrequency,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pollFrequency,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   *
+   * @return Seconds between consecutive JMX polls
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getPollFrequency,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+pollFrequency,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   *
+   * @param isGanglia3 When true, ganglia 3 messages will be sent, else Ganglia
+   * 3.1 formatted messages are sent.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setIsGanglia3,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+isGanglia3,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+isGanglia3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+isGanglia3,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   *
+   * @return True if the server is currently sending ganglia 3 formatted msgs.
+   * False if the server returns Ganglia 3.1
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isGanglia3,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+.,Punctuation
+isGanglia3,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+createGangliaMessage,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+name,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Sending ganglia3 formatted message.""",String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+name,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""": """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+name,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hostname,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+name,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""string""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Float,Identifier
+.,Punctuation
+parseFloat,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""float""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+"// The param is a string, and so leave the type as is.",Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// metric type,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+DEFAULT_UNITS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+DEFAULT_SLOPE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+DEFAULT_TMAX,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+DEFAULT_DMAX,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+createGangliaMessage31,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+name,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Sending ganglia 3.1 formatted message: """,String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+name,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""": """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+128,Literal
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// metric_id = metadata_msg,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+hostname,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// hostname,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// metric name,Comment
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// spoof = False,Comment
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""string""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Float,Identifier
+.,Punctuation
+parseFloat,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""float""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+"// The param is a string, and so leave the type as is.",Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// metric type,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// metric name,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+DEFAULT_UNITS,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// units,Comment
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+DEFAULT_SLOPE,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// slope,Comment
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+DEFAULT_TMAX,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+"// tmax, the maximum time between metrics",Comment
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+DEFAULT_DMAX,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+"// dmax, the maximum data value",Comment
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+ ,Whitespace
+/*Num of the entries in extra_value field for Ganglia 3.1.x*/,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+"""GROUP""",String
+),Punctuation
+;,Punctuation
+ ,Whitespace
+/*Group attribute*/,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+"""flume""",String
+),Punctuation
+;,Punctuation
+ ,Whitespace
+/*Group value*/,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+sendToGangliaNodes,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Now we send out a message with the actual value.,Comment
+"
+",Newline
+    ,Whitespace
+"// Technically, we only need to send out the metadata message once for",Comment
+"
+",Newline
+    ,Whitespace
+"// each metric, but I don't want to have to record which metrics we did and",Comment
+"
+",Newline
+    ,Whitespace
+// did not send.,Comment
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+133,Literal
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// we are sending a string value,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+hostname,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// hostName,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// metric name,Comment
+"
+",Newline
+    ,Whitespace
+xdr_int,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// spoof = False,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+"""%s""",String
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// format field,Comment
+"
+",Newline
+    ,Whitespace
+xdr_string,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// metric value,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+pollFrequency,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+CONF_POLL_FREQUENCY,Identifier
+",",Punctuation
+ ,Whitespace
+60,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+localHosts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+CONF_HOSTS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+localHosts,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+localHosts,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConfigurationException,Identifier
+(,Punctuation
+"""Hosts list cannot be empty.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+hosts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+getHostsFromString,Identifier
+(,Punctuation
+localHosts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+isGanglia3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getBoolean,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+CONF_ISGANGLIA3,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+HostInfo,Identifier
+>,Operator
+ ,Whitespace
+getHostsFromString,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hosts,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+HostInfo,Identifier
+>,Operator
+ ,Whitespace
+hostInfoList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+HostInfo,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+hostsAndPorts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hosts,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+host,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+hostsAndPorts,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+hostAndPort,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+host,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+""":""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hostAndPort,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Invalid ganglia host: """,String
+",",Punctuation
+ ,Whitespace
+host,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+hostInfoList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+HostInfo,Identifier
+(,Punctuation
+"""ganglia_host-""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+hostAndPort,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+hostAndPort,Identifier
+[,Punctuation
+1,Literal
+],Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Invalid ganglia host: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+host,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hostInfoList,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""No valid ganglia hosts defined!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+hostInfoList,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Worker which polls JMX for all mbeans with
+   * {@link javax.management.ObjectName} within the flume namespace:
+   * org.apache.flume. All attributes of such beans are sent to the all hosts
+   * specified by the server that owns it's instance.
+   *
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+GangliaCollector,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Runnable,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+GangliaServer,Identifier
+ ,Whitespace
+server,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>>,Operator
+ ,Whitespace
+metricsMap,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+                ,Whitespace
+JMXPollUtil,Identifier
+.,Punctuation
+getAllMBeans,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+component,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+metricsMap,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+attributeMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metricsMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+component,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+attribute,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+attributeMap,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isGanglia3,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+server,Identifier
+.,Punctuation
+createGangliaMessage,Identifier
+(,Punctuation
+GANGLIA_CONTEXT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+component,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".""",String
+"
+",Newline
+                      ,Whitespace
++,Operator
+ ,Whitespace
+attribute,Identifier
+",",Punctuation
+"
+",Newline
+                      ,Whitespace
+attributeMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+attribute,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+server,Identifier
+.,Punctuation
+createGangliaMessage31,Identifier
+(,Punctuation
+GANGLIA_CONTEXT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+component,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".""",String
+"
+",Newline
+                      ,Whitespace
++,Operator
+ ,Whitespace
+attribute,Identifier
+",",Punctuation
+"
+",Newline
+                      ,Whitespace
+attributeMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+attribute,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+server,Identifier
+.,Punctuation
+sendToGangliaNodes,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Throwable,Identifier
+ ,Whitespace
+t,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Unexpected error""",String
+",",Punctuation
+ ,Whitespace
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

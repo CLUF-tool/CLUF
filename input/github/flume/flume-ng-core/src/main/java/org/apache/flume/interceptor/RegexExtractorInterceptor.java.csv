@@ -1,0 +1,1674 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+interceptor,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Matcher,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Pattern,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Charsets,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Throwables,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Interceptor that extracts matches using a specified regular expression and
+ * appends the matches to the event headers using the specified serializers</p>
+ * Note that all regular expression matching occurs through Java's built in
+ * java.util.regex package</p>. Properties:
+ * <p>
+ * regex: The regex to use
+ * <p>
+ * serializers: Specifies the group the serializer will be applied to, and the
+ * name of the header that will be added. If no serializer is specified for a
+ * group the default {@link RegexExtractorInterceptorPassThroughSerializer} will
+ * be used
+ * <p>
+ * Sample config:
+ * <p>
+ * agent.sources.r1.channels = c1
+ * <p>
+ * agent.sources.r1.type = SEQ
+ * <p>
+ * agent.sources.r1.interceptors = i1
+ * <p>
+ * agent.sources.r1.interceptors.i1.type = REGEX_EXTRACTOR
+ * <p>
+ * agent.sources.r1.interceptors.i1.regex = (WARNING)|(ERROR)|(FATAL)
+ * <p>
+ * agent.sources.r1.interceptors.i1.serializers = s1 s2
+ * agent.sources.r1.interceptors.i1.serializers.s1.type = com.blah.SomeSerializer
+ * agent.sources.r1.interceptors.i1.serializers.s1.name = warning
+ * agent.sources.r1.interceptors.i1.serializers.s2.type = org.apache.flume.interceptor.RegexExtractorInterceptorTimestampSerializer
+ * agent.sources.r1.interceptors.i1.serializers.s2.name = error
+ * agent.sources.r1.interceptors.i1.serializers.s2.dateFormat = yyyy-MM-dd
+ * </code>
+ * </p>
+ * <pre>
+ * Example 1:
+ * </p>
+ * EventBody: 1:2:3.4foobar5</p> Configuration:
+ * agent.sources.r1.interceptors.i1.regex = (\\d):(\\d):(\\d)
+ * </p>
+ * agent.sources.r1.interceptors.i1.serializers = s1 s2 s3
+ * agent.sources.r1.interceptors.i1.serializers.s1.name = one
+ * agent.sources.r1.interceptors.i1.serializers.s2.name = two
+ * agent.sources.r1.interceptors.i1.serializers.s3.name = three
+ * </p>
+ * results in an event with the the following
+ *
+ * body: 1:2:3.4foobar5 headers: one=>1, two=>2, three=3
+ *
+ * Example 2:
+ *
+ * EventBody: 1:2:3.4foobar5
+ *
+ * Configuration: agent.sources.r1.interceptors.i1.regex = (\\d):(\\d):(\\d)
+ * <p>
+ * agent.sources.r1.interceptors.i1.serializers = s1 s2
+ * agent.sources.r1.interceptors.i1.serializers.s1.name = one
+ * agent.sources.r1.interceptors.i1.serializers.s2.name = two
+ * <p>
+ *
+ * results in an event with the the following
+ *
+ * body: 1:2:3.4foobar5 headers: one=>1, two=>2
+ * </pre>
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+RegexExtractorInterceptor,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Interceptor,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+REGEX,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""regex""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+SERIALIZERS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""serializers""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+RegexExtractorInterceptor,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+regex,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+NameAndSerializer,Identifier
+>,Operator
+ ,Whitespace
+serializers,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+RegexExtractorInterceptor,Identifier
+(,Punctuation
+Pattern,Identifier
+ ,Whitespace
+regex,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+List,Identifier
+<,Operator
+NameAndSerializer,Identifier
+>,Operator
+ ,Whitespace
+serializers,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+regex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+regex,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+serializers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializers,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initialize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// NO-OP...,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// NO-OP...,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+intercept,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+matcher,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+regex,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+group,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+matcher,Identifier
+.,Punctuation
+groupCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+group,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+count,Identifier
+;,Punctuation
+ ,Whitespace
+group,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+groupIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+group,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+groupIndex,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+serializers,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+logger,Identifier
+.,Punctuation
+isDebugEnabled,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Skipping group {} to {} due to missing serializer""",String
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+group,Identifier
+",",Punctuation
+ ,Whitespace
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+NameAndSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+group,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+logger,Identifier
+.,Punctuation
+isDebugEnabled,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Serializing {} using {}""",String
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+.,Punctuation
+headerName,Identifier
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+serializer,Identifier
+.,Punctuation
+serializer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+headers,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+serializer,Identifier
+.,Punctuation
+headerName,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+serializer,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+serialize,Identifier
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+groupIndex,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+intercept,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+events,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+intercepted,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayListWithCapacity,Identifier
+(,Punctuation
+events,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+events,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Event,Identifier
+ ,Whitespace
+interceptedEvent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+intercept,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+interceptedEvent,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+intercepted,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+interceptedEvent,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+intercepted,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Builder,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Interceptor,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+regex,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+NameAndSerializer,Identifier
+>,Operator
+ ,Whitespace
+serializerList,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+RegexExtractorInterceptorSerializer,Identifier
+ ,Whitespace
+defaultSerializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RegexExtractorInterceptorPassThroughSerializer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+regexString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+REGEX,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+regexString,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+"""Must supply a valid regex string""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+regex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+regexString,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+regex,Identifier
+.,Punctuation
+pattern,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+regex,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+"""""",String
+),Punctuation
+.,Punctuation
+groupCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+configureSerializers,Identifier
+(,Punctuation
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configureSerializers,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+serializerListStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+SERIALIZERS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+serializerListStr,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+"""Must supply at least one name and serializer""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+serializerNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializerListStr,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+"""\\s+""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+Context,Identifier
+ ,Whitespace
+serializerContexts,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+context,Identifier
+.,Punctuation
+getSubProperties,Identifier
+(,Punctuation
+SERIALIZERS,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+serializerList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayListWithCapacity,Identifier
+(,Punctuation
+serializerNames,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+(,Punctuation
+String,Identifier
+ ,Whitespace
+serializerName,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+serializerNames,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Context,Identifier
+ ,Whitespace
+serializerContext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+serializerContexts,Identifier
+.,Punctuation
+getSubProperties,Identifier
+(,Punctuation
+serializerName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializerContext,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""type""",String
+",",Punctuation
+ ,Whitespace
+"""DEFAULT""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+name,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializerContext,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""name""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Supplied name cannot be empty.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+(,Punctuation
+"""DEFAULT""",String
+.,Punctuation
+equals,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+serializerList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+NameAndSerializer,Identifier
+(,Punctuation
+name,Identifier
+",",Punctuation
+ ,Whitespace
+defaultSerializer,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+serializerList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+NameAndSerializer,Identifier
+(,Punctuation
+name,Identifier
+",",Punctuation
+ ,Whitespace
+getCustomSerializer,Identifier
+(,Punctuation
+"
+",Newline
+              ,Whitespace
+type,Identifier
+",",Punctuation
+ ,Whitespace
+serializerContext,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+RegexExtractorInterceptorSerializer,Identifier
+ ,Whitespace
+getCustomSerializer,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+clazzName,Identifier
+",",Punctuation
+ ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+RegexExtractorInterceptorSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+RegexExtractorInterceptorSerializer,Identifier
+),Punctuation
+ ,Whitespace
+Class,Identifier
+"
+",Newline
+            ,Whitespace
+.,Punctuation
+forName,Identifier
+(,Punctuation
+clazzName,Identifier
+),Punctuation
+.,Punctuation
+newInstance,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+serializer,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Could not instantiate event serializer.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Throwables,Identifier
+.,Punctuation
+propagate,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+defaultSerializer,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Interceptor,Identifier
+ ,Whitespace
+build,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+regex,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+"""Regex pattern was misconfigured""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+serializerList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+"""Must supply a valid group match id list""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RegexExtractorInterceptor,Identifier
+(,Punctuation
+regex,Identifier
+",",Punctuation
+ ,Whitespace
+serializerList,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+NameAndSerializer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+headerName,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+RegexExtractorInterceptorSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+NameAndSerializer,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+headerName,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+RegexExtractorInterceptorSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+headerName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headerName,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

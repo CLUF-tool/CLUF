@@ -1,0 +1,1536 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileInputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configuration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FSDataOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FileStatus,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FileSystem,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+Path,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HTableDescriptor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+HadoopUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * THIS IS A TAILORED DUPLICATE OF org.apache.kylin.storage.hbase.util.DeployCoprocessorCLI TO AVOID CYCLIC
+ * DEPENDENCY. INVERTED-INDEX CODE NOW SPLITTED ACROSS kylin-invertedindex AND kylin-storage-hbase.
+ * DEFENITELY NEED FURTHER REFACTOR.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+IIDeployCoprocessorCLI,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+IIDeployCoprocessorCLI,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CubeObserverClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""org.apache.kylin.storage.hbase.cube.v1.coprocessor.observer.AggregateRegionObserver""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CubeEndpointClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""org.apache.kylin.storage.hbase.cube.v2.coprocessor.endpoint.CubeVisitService""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+IIEndpointClass,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""org.apache.kylin.storage.hbase.ii.coprocessor.endpoint.IIEndpoint""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+deployCoprocessor,Identifier
+(,Punctuation
+HTableDescriptor,Identifier
+ ,Whitespace
+tableDesc,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+initHTableCoprocessor,Identifier
+(,Punctuation
+tableDesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""hbase table """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" deployed with coprocessor.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error deploying coprocessor on """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Will try creating the table without coprocessor.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initHTableCoprocessor,Identifier
+(,Punctuation
+HTableDescriptor,Identifier
+ ,Whitespace
+desc,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+kylinConfig,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+hconf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HadoopUtil,Identifier
+.,Punctuation
+getCurrentConfiguration,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+FileSystem,Identifier
+ ,Whitespace
+fileSystem,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FileSystem,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+hconf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+localCoprocessorJar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kylinConfig,Identifier
+.,Punctuation
+getCoprocessorLocalJar,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Path,Identifier
+ ,Whitespace
+hdfsCoprocessorJar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+uploadCoprocessorJar,Identifier
+(,Punctuation
+localCoprocessorJar,Identifier
+",",Punctuation
+ ,Whitespace
+fileSystem,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+addCoprocessorOnHTable,Identifier
+(,Punctuation
+desc,Identifier
+",",Punctuation
+ ,Whitespace
+hdfsCoprocessorJar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addCoprocessorOnHTable,Identifier
+(,Punctuation
+HTableDescriptor,Identifier
+ ,Whitespace
+desc,Identifier
+",",Punctuation
+ ,Whitespace
+Path,Identifier
+ ,Whitespace
+hdfsCoprocessorJar,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Add coprocessor on """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getNameAsString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+desc,Identifier
+.,Punctuation
+addCoprocessor,Identifier
+(,Punctuation
+IIEndpointClass,Identifier
+",",Punctuation
+ ,Whitespace
+hdfsCoprocessorJar,Identifier
+",",Punctuation
+ ,Whitespace
+1000,Literal
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+desc,Identifier
+.,Punctuation
+addCoprocessor,Identifier
+(,Punctuation
+CubeEndpointClass,Identifier
+",",Punctuation
+ ,Whitespace
+hdfsCoprocessorJar,Identifier
+",",Punctuation
+ ,Whitespace
+1001,Literal
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+desc,Identifier
+.,Punctuation
+addCoprocessor,Identifier
+(,Punctuation
+CubeObserverClass,Identifier
+",",Punctuation
+ ,Whitespace
+hdfsCoprocessorJar,Identifier
+",",Punctuation
+ ,Whitespace
+1002,Literal
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Path,Identifier
+ ,Whitespace
+uploadCoprocessorJar,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+localCoprocessorJar,Identifier
+",",Punctuation
+ ,Whitespace
+FileSystem,Identifier
+ ,Whitespace
+fileSystem,Identifier
+",",Punctuation
+ ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+oldJarPaths,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Path,Identifier
+ ,Whitespace
+uploadPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+File,Identifier
+ ,Whitespace
+localCoprocessorFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+localCoprocessorJar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// check existing jars,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+oldJarPaths,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+oldJarPaths,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+Path,Identifier
+ ,Whitespace
+coprocessorDir,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCoprocessorHDFSDir,Identifier
+(,Punctuation
+fileSystem,Identifier
+",",Punctuation
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+FileStatus,Identifier
+ ,Whitespace
+fileStatus,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+fileSystem,Identifier
+.,Punctuation
+listStatus,Identifier
+(,Punctuation
+coprocessorDir,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isSame,Identifier
+(,Punctuation
+localCoprocessorFile,Identifier
+",",Punctuation
+ ,Whitespace
+fileStatus,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+uploadPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fileStatus,Identifier
+.,Punctuation
+getPath,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+filename,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fileStatus,Identifier
+.,Punctuation
+getPath,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filename,Identifier
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+""".jar""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+oldJarPaths,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+filename,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// upload if not existing,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+uploadPath,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// figure out a unique new jar file name,Comment
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+oldJarNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+path,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+oldJarPaths,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+oldJarNames,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Path,Identifier
+(,Punctuation
+path,Identifier
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+baseName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getBaseFileName,Identifier
+(,Punctuation
+localCoprocessorJar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+newName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+newName,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+newName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+baseName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""-""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".jar""",String
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+oldJarNames,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+newName,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+newName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// upload,Comment
+"
+",Newline
+            ,Whitespace
+uploadPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Path,Identifier
+(,Punctuation
+coprocessorDir,Identifier
+",",Punctuation
+ ,Whitespace
+newName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+FileInputStream,Identifier
+ ,Whitespace
+in,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+FSDataOutputStream,Identifier
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+in,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FileInputStream,Identifier
+(,Punctuation
+localCoprocessorFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fileSystem,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+uploadPath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+IOUtils,Identifier
+.,Punctuation
+copy,Identifier
+(,Punctuation
+in,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+IOUtils,Identifier
+.,Punctuation
+closeQuietly,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+IOUtils,Identifier
+.,Punctuation
+closeQuietly,Identifier
+(,Punctuation
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+fileSystem,Identifier
+.,Punctuation
+setTimes,Identifier
+(,Punctuation
+uploadPath,Identifier
+",",Punctuation
+ ,Whitespace
+localCoprocessorFile,Identifier
+.,Punctuation
+lastModified,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+uploadPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+uploadPath,Identifier
+.,Punctuation
+makeQualified,Identifier
+(,Punctuation
+fileSystem,Identifier
+.,Punctuation
+getUri,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+uploadPath,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isSame,Identifier
+(,Punctuation
+File,Identifier
+ ,Whitespace
+localCoprocessorFile,Identifier
+",",Punctuation
+ ,Whitespace
+FileStatus,Identifier
+ ,Whitespace
+fileStatus,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+fileStatus,Identifier
+.,Punctuation
+getLen,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+localCoprocessorFile,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+fileStatus,Identifier
+.,Punctuation
+getModificationTime,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+localCoprocessorFile,Identifier
+.,Punctuation
+lastModified,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getBaseFileName,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+localCoprocessorJar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+File,Identifier
+ ,Whitespace
+localJar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+localCoprocessorJar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+baseName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+localJar,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+baseName,Identifier
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+""".jar""",String
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+baseName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+baseName,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+baseName,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+""".jar""",String
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+baseName,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Path,Identifier
+ ,Whitespace
+getCoprocessorHDFSDir,Identifier
+(,Punctuation
+FileSystem,Identifier
+ ,Whitespace
+fileSystem,Identifier
+",",Punctuation
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+hdfsWorkingDirectory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+config,Identifier
+.,Punctuation
+getHdfsWorkingDirectory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Path,Identifier
+ ,Whitespace
+coprocessorDir,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Path,Identifier
+(,Punctuation
+hdfsWorkingDirectory,Identifier
+",",Punctuation
+ ,Whitespace
+"""coprocessor""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+fileSystem,Identifier
+.,Punctuation
+mkdirs,Identifier
+(,Punctuation
+coprocessorDir,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+coprocessorDir,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

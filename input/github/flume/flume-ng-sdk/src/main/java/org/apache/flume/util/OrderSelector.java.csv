@@ -1,0 +1,1020 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Iterator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+LinkedHashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+TimeUnit,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A basic implementation of an order selector that implements a simple
+ * exponential backoff algorithm. Subclasses can use the same algorithm for
+ * backoff by simply overriding <tt>createIterator</tt> method to order the
+ * list of active sinks returned by <tt>getIndexList</tt> method. Classes
+ * instantiating subclasses of this class are expected to call <tt>informFailure</tt>
+ * method when an object passed to this class should be marked as failed and backed off.
+ *
+ * When implementing a different backoff algorithm, a subclass should
+ * minimally override <tt>informFailure</tt> and <tt>getIndexList</tt> methods.
+ *
+ * @param <T> - The class on which ordering is to be done
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+OrderSelector,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+EXP_BACKOFF_COUNTER_LIMIT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+16,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+CONSIDER_SEQUENTIAL_RANGE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+HOURS,Identifier
+"
+",Newline
+    ,Whitespace
+.,Punctuation
+toMillis,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+MAX_TIMEOUT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+30000l,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+T,Identifier
+",",Punctuation
+ ,Whitespace
+FailureState,Identifier
+>,Operator
+ ,Whitespace
+stateMap,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedHashMap,Identifier
+<,Operator
+T,Identifier
+",",Punctuation
+ ,Whitespace
+FailureState,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+maxTimeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MAX_TIMEOUT,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+shouldBackOff,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+OrderSelector,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+shouldBackOff,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+shouldBackOff,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+shouldBackOff,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Set the list of objects which this class should return in order.
+   * @param objects
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setObjects,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+objects,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+//Order is the same as the original order.,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+T,Identifier
+ ,Whitespace
+sink,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+objects,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+FailureState,Identifier
+ ,Whitespace
+state,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FailureState,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+stateMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+sink,Identifier
+",",Punctuation
+ ,Whitespace
+state,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Get the list of objects to be ordered. This list is in the same order
+   * as originally passed in, not in the algorithmically reordered order.
+   * @return - list of objects to be ordered.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+getObjects,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+T,Identifier
+>,Operator
+(,Punctuation
+stateMap,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   *
+   * @return - list of algorithmically ordered active sinks
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+Iterator,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+createIterator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Inform this class of the failure of an object so it can be backed off.
+   * @param failedObject
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+informFailure,Identifier
+(,Punctuation
+T,Identifier
+ ,Whitespace
+failedObject,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+//If there is no backoff this method is a no-op.,Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+shouldBackOff,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+FailureState,Identifier
+ ,Whitespace
+state,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stateMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+failedObject,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+now,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+delta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+now,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+state,Identifier
+.,Punctuation
+lastFail,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/*
+     * When do we increase the backoff period?
+     * We basically calculate the time difference between the last failure
+     * and the current one. If this failure happened within one hour of the
+     * last backoff period getting over, then we increase the timeout,
+     * since the object did not recover yet. Else we assume this is a fresh
+     * failure and reset the count.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+lastBackoffLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+min,Identifier
+(,Punctuation
+maxTimeout,Identifier
+",",Punctuation
+ ,Whitespace
+1000,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+1,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+state,Identifier
+.,Punctuation
+sequentialFails,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+allowableDiff,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+lastBackoffLength,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+CONSIDER_SEQUENTIAL_RANGE,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+allowableDiff,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+delta,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+state,Identifier
+.,Punctuation
+sequentialFails,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+EXP_BACKOFF_COUNTER_LIMIT,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+state,Identifier
+.,Punctuation
+sequentialFails,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+state,Identifier
+.,Punctuation
+sequentialFails,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+state,Identifier
+.,Punctuation
+lastFail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+now,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"//Depending on the number of sequential failures this component had, delay",Comment
+"
+",Newline
+    ,Whitespace
+"//its restore time. Each time it fails, delay the restore by 1000 ms,",Comment
+"
+",Newline
+    ,Whitespace
+//until the maxTimeOut is reached.,Comment
+"
+",Newline
+    ,Whitespace
+state,Identifier
+.,Punctuation
+restoreTime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+now,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+min,Identifier
+(,Punctuation
+maxTimeout,Identifier
+",",Punctuation
+ ,Whitespace
+1000,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+1,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+state,Identifier
+.,Punctuation
+sequentialFails,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   *
+   * @return - List of indices currently active objects
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+ ,Whitespace
+getIndexList,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+now,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+ ,Whitespace
+indexList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+T,Identifier
+ ,Whitespace
+obj,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+stateMap,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+isShouldBackOff,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+stateMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+obj,Identifier
+),Punctuation
+.,Punctuation
+restoreTime,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+now,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+indexList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+i,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+indexList,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isShouldBackOff,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+shouldBackOff,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setMaxTimeOut,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+timeout,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+maxTimeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+timeout,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getMaxTimeOut,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+.,Punctuation
+maxTimeout,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+FailureState,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+lastFail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+restoreTime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+sequentialFails,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

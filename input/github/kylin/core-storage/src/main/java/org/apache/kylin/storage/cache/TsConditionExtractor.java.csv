@@ -1,0 +1,875 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+cache,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+DateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+CompareTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+LogicalTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+TupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Range,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Ranges,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TsConditionExtractor,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     *
+     * @return null if the ts range conflicts with each other
+     *         Ranges.all() if no ts condition is defined(in surfaced ANDs)
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Range,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+extractTsCondition,Identifier
+(,Punctuation
+TblColRef,Identifier
+ ,Whitespace
+tsColRef,Identifier
+",",Punctuation
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+rootFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+extractTsConditionInternal,Identifier
+(,Punctuation
+rootFilter,Identifier
+",",Punctuation
+ ,Whitespace
+tsColRef,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Range,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+extractTsConditionInternal,Identifier
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+filter,Identifier
+",",Punctuation
+ ,Whitespace
+TblColRef,Identifier
+ ,Whitespace
+colRef,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+LogicalTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+.,Punctuation
+getOperator,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+TupleFilter,Identifier
+.,Punctuation
+FilterOperatorEnum,Identifier
+.,Punctuation
+AND,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Range,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+ret,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+child,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+filter,Identifier
+.,Punctuation
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+Range,Identifier
+ ,Whitespace
+childRange,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+extractTsConditionInternal,Identifier
+(,Punctuation
+child,Identifier
+",",Punctuation
+ ,Whitespace
+colRef,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+childRange,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ret,Identifier
+.,Punctuation
+isConnected,Identifier
+(,Punctuation
+childRange,Identifier
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+ret,Identifier
+.,Punctuation
+intersection,Identifier
+(,Punctuation
+childRange,Identifier
+),Punctuation
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                            ,Whitespace
+ret,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ret,Identifier
+.,Punctuation
+intersection,Identifier
+(,Punctuation
+childRange,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+ret,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+:,Operator
+ ,Whitespace
+ret,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+//for conditions like date > DATE'2000-11-11' OR date < DATE '1999-01-01',Comment
+"
+",Newline
+                ,Whitespace
+//we will use Ranges.all() rather than two ranges to represent them,Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+filter,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+CompareTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+CompareTupleFilter,Identifier
+ ,Whitespace
+compareTupleFilter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+CompareTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+filter,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+compareTupleFilter,Identifier
+.,Punctuation
+getColumn,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"// column will be null at filters like "" 1<>1""",Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+compareTupleFilter,Identifier
+.,Punctuation
+getColumn,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+colRef,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Object,Identifier
+ ,Whitespace
+firstValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+compareTupleFilter,Identifier
+.,Punctuation
+getFirstValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+long,Keyword
+ ,Whitespace
+t,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+compareTupleFilter,Identifier
+.,Punctuation
+getOperator,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+EQ,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DateFormat,Identifier
+.,Punctuation
+stringToMillis,Identifier
+(,Punctuation
+(,Punctuation
+String,Identifier
+),Punctuation
+ ,Whitespace
+firstValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+closed,Identifier
+(,Punctuation
+t,Identifier
+",",Punctuation
+ ,Whitespace
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+LT,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DateFormat,Identifier
+.,Punctuation
+stringToMillis,Identifier
+(,Punctuation
+(,Punctuation
+String,Identifier
+),Punctuation
+ ,Whitespace
+firstValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+lessThan,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+LTE,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DateFormat,Identifier
+.,Punctuation
+stringToMillis,Identifier
+(,Punctuation
+(,Punctuation
+String,Identifier
+),Punctuation
+ ,Whitespace
+firstValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+atMost,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+GT,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DateFormat,Identifier
+.,Punctuation
+stringToMillis,Identifier
+(,Punctuation
+(,Punctuation
+String,Identifier
+),Punctuation
+ ,Whitespace
+firstValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+greaterThan,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+GTE,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+t,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DateFormat,Identifier
+.,Punctuation
+stringToMillis,Identifier
+(,Punctuation
+(,Punctuation
+String,Identifier
+),Punctuation
+ ,Whitespace
+firstValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+atLeast,Identifier
+(,Punctuation
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+NEQ,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+IN,Identifier
+:,Operator
+//not handled for now,Comment
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Ranges,Identifier
+.,Punctuation
+all,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

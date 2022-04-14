@@ -1,0 +1,350 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+steps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+///*,Comment
+"
+",Newline
+// * Copyright 2013-2014 eBay Software Foundation,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+"// * Licensed under the Apache License, Version 2.0 (the ""License"");",Comment
+"
+",Newline
+// * you may not use this file except in compliance with the License.,Comment
+"
+",Newline
+// * You may obtain a copy of the License at,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+// *   http://www.apache.org/licenses/LICENSE-2.0,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+"// * Unless required by applicable law or agreed to in writing, software",Comment
+"
+",Newline
+"// * distributed under the License is distributed on an ""AS IS"" BASIS,",Comment
+"
+",Newline
+"// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.",Comment
+"
+",Newline
+// * See the License for the specific language governing permissions and,Comment
+"
+",Newline
+// * limitations under the License.,Comment
+"
+",Newline
+// */,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//package org.apache.kylin.index.cube;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import java.io.IOException;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import org.apache.hadoop.io.LongWritable;,Comment
+"
+",Newline
+//import org.apache.hadoop.io.Text;,Comment
+"
+",Newline
+//import org.apache.hadoop.mapreduce.Mapper;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+///**,Comment
+"
+",Newline
+// * @author xjiang,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+// */,Comment
+"
+",Newline
+"//public class KeyDistributionMapper extends KylinMapper<Text, Text, Text, LongWritable> {",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private int headerLength;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private Text currentKey;,Comment
+"
+",Newline
+//    private long outputLong;,Comment
+"
+",Newline
+//    private Text outputKey;,Comment
+"
+",Newline
+//    private LongWritable outputValue;,Comment
+"
+",Newline
+//    private int columnPercentage;,Comment
+"
+",Newline
+//    private int allRowCount;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+//    protected void setup(Context context) throws IOException {,Comment
+"
+",Newline
+//super.publishConfiguration(context.getConfiguration());,Comment
+"
+",Newline
+"
+",Newline
+//        String percentStr = context.getConfiguration().get(KeyDistributionJob.KEY_COLUMN_PERCENTAGE);,Comment
+"
+",Newline
+//        this.columnPercentage = Integer.valueOf(percentStr).intValue();,Comment
+"
+",Newline
+//        if (this.columnPercentage <= 0 || this.columnPercentage >= 100) {,Comment
+"
+",Newline
+//            this.columnPercentage = 20;,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        String headerLenStr = context.getConfiguration().get(KeyDistributionJob.KEY_HEADER_LENGTH);,Comment
+"
+",Newline
+//        this.headerLength = Integer.valueOf(headerLenStr).intValue();,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        currentKey = new Text();,Comment
+"
+",Newline
+//        outputLong = 0;,Comment
+"
+",Newline
+//        outputKey = new Text();,Comment
+"
+",Newline
+//        outputValue = new LongWritable(1);,Comment
+"
+",Newline
+//        allRowCount = 0;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+"//    protected void cleanup(Context context) throws IOException, InterruptedException {",Comment
+"
+",Newline
+//        emit(context); // emit the last holding record,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        byte[] zerokey = new byte[] { 0 };,Comment
+"
+",Newline
+//        outputKey.set(zerokey);,Comment
+"
+",Newline
+//        outputValue.set(allRowCount);,Comment
+"
+",Newline
+"//        context.write(outputKey, outputValue);",Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+"//    public void map(Text key, Text value, Context context) throws IOException, InterruptedException {",Comment
+"
+",Newline
+//        byte[] bytes = key.getBytes();,Comment
+"
+",Newline
+//        int columnLength = bytes.length - this.headerLength;,Comment
+"
+",Newline
+//        int columnPrefixLen = columnLength * this.columnPercentage / 100;,Comment
+"
+",Newline
+//        if (columnPrefixLen == 0 && columnLength > 0) {,Comment
+"
+",Newline
+//            columnPrefixLen = 1;,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        if (columnPrefixLen > 0) {,Comment
+"
+",Newline
+"//            currentKey.set(bytes, 0, this.headerLength + columnPrefixLen);",Comment
+"
+",Newline
+//        } else {,Comment
+"
+",Newline
+//            currentKey.set(bytes);,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        allRowCount++;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        if (outputKey.getLength() == 0) { // first record,Comment
+"
+",Newline
+//            outputKey.set(currentKey);,Comment
+"
+",Newline
+//            outputLong = 1;,Comment
+"
+",Newline
+"//        } else if (outputKey.equals(currentKey)) { // same key, note input is sorted",Comment
+"
+",Newline
+//            outputLong++;,Comment
+"
+",Newline
+//        } else { // the next key,Comment
+"
+",Newline
+//            emit(context);,Comment
+"
+",Newline
+//            outputKey.set(currentKey);,Comment
+"
+",Newline
+//            outputLong = 1;,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+"//    private void emit(Context context) throws IOException, InterruptedException {",Comment
+"
+",Newline
+//        if (outputLong == 0),Comment
+"
+",Newline
+//            return;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        outputValue.set(outputLong);,Comment
+"
+",Newline
+"//        context.write(outputKey, outputValue);",Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+// },Comment
+"
+",Newline

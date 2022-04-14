@@ -1,0 +1,3251 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+v1,Identifier
+.,Punctuation
+filter,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+Field,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteOrder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+AccessController,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+PrivilegedAction,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+logging,Identifier
+.,Punctuation
+Log,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+logging,Identifier
+.,Punctuation
+LogFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+classification,Identifier
+.,Punctuation
+InterfaceAudience,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+classification,Identifier
+.,Punctuation
+InterfaceStability,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+sun,Identifier
+.,Punctuation
+misc,Identifier
+.,Punctuation
+Unsafe,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+sun,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ch,Identifier
+.,Punctuation
+DirectBuffer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+@,Punctuation
+InterfaceAudience,Identifier
+.,Punctuation
+Private,Identifier
+"
+",Newline
+@,Punctuation
+InterfaceStability,Identifier
+.,Punctuation
+Evolving,Identifier
+"
+",Newline
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+UnsafeAccess,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Log,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LogFactory,Identifier
+.,Punctuation
+getLog,Identifier
+(,Punctuation
+UnsafeAccess,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Unsafe,Identifier
+ ,Whitespace
+theUnsafe,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** The offset to the first element in a byte array. */,Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+littleEndian,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteOrder,Identifier
+.,Punctuation
+nativeOrder,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+ByteOrder,Identifier
+.,Punctuation
+LITTLE_ENDIAN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+theUnsafe,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+Unsafe,Identifier
+),Punctuation
+ ,Whitespace
+AccessController,Identifier
+.,Punctuation
+doPrivileged,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+PrivilegedAction,Identifier
+<,Operator
+Object,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+run,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+Field,Identifier
+ ,Whitespace
+f,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Unsafe,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getDeclaredField,Identifier
+(,Punctuation
+"""theUnsafe""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+f,Identifier
+.,Punctuation
+setAccessible,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+f,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Throwable,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""sun.misc.Unsafe is not accessible""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+theUnsafe,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+arrayBaseOffset,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+UnsafeAccess,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @return true when the running JVM is having sun's Unsafe package available in it.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isAvailable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// APIs to read primitive data from a byte[] using Unsafe way,Comment
+"
+",Newline
+    ,Whitespace
+"/**
+     * Converts a byte array to a short value considering it was written in big-endian format.
+     * @param bytes byte array
+     * @param offset offset into array
+     * @return the short value
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+toShort,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Short,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+theUnsafe,Identifier
+.,Punctuation
+getShort,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getShort,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Converts a byte array to an int value considering it was written in big-endian format.
+     * @param bytes byte array
+     * @param offset offset into array
+     * @return the int value
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+toInt,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+theUnsafe,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Converts a byte array to a long value considering it was written in big-endian format.
+     * @param bytes byte array
+     * @param offset offset into array
+     * @return the long value
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+toLong,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+theUnsafe,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// APIs to write primitive data to a byte[] using Unsafe way,Comment
+"
+",Newline
+    ,Whitespace
+"/**
+     * Put a short value out to the specified byte array position in big-endian format.
+     * @param bytes the byte array
+     * @param offset position in the array
+     * @param val short to write out
+     * @return incremented offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putShort,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+val,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Short,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putShort,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_SHORT,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Put an int value out to the specified byte array position in big-endian format.
+     * @param bytes the byte array
+     * @param offset position in the array
+     * @param val int to write out
+     * @return incremented offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putInt,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+val,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putInt,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_INT,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Put a long value out to the specified byte array position in big-endian format.
+     * @param bytes the byte array
+     * @param offset position in the array
+     * @param val long to write out
+     * @return incremented offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putLong,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+val,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putLong,Identifier
+(,Punctuation
+bytes,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_LONG,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// APIs to read primitive data from a ByteBuffer using Unsafe way,Comment
+"
+",Newline
+    ,Whitespace
+"/**
+     * Reads a short value at the given buffer's offset considering it was written in big-endian
+     * format.
+     *
+     * @param buf
+     * @param offset
+     * @return short value at offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+toShort,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Short,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+getAsShort,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getAsShort,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Reads bytes at the given offset as a short value.
+     * @param buf
+     * @param offset
+     * @return short value at offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+getAsShort,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getShort,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getShort,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Reads an int value at the given buffer's offset considering it was written in big-endian
+     * format.
+     *
+     * @param buf
+     * @param offset
+     * @return int value at offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+toInt,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+getAsInt,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getAsInt,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Reads bytes at the given offset as an int value.
+     * @param buf
+     * @param offset
+     * @return int value at offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getAsInt,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Reads a long value at the given buffer's offset considering it was written in big-endian
+     * format.
+     *
+     * @param buf
+     * @param offset
+     * @return long value at offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+toLong,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+getAsLong,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getAsLong,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Reads bytes at the given offset as a long value.
+     * @param buf
+     * @param offset
+     * @return long value at offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getAsLong,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Put an int value out to the specified ByteBuffer offset in big-endian format.
+     * @param buf the ByteBuffer to write to
+     * @param offset offset in the ByteBuffer
+     * @param val int to write out
+     * @return incremented offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putInt,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+val,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putInt,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putInt,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_INT,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// APIs to copy data. This will be direct memory location copy and will be much faster,Comment
+"
+",Newline
+    ,Whitespace
+"/**
+     * Copies the bytes from given array's offset to length part into the given buffer.
+     * @param src
+     * @param srcOffset
+     * @param dest
+     * @param destOffset
+     * @param length
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+copy,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+src,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+srcOffset,Identifier
+",",Punctuation
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+dest,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+destOffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+destAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+destOffset,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Object,Identifier
+ ,Whitespace
+destBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dest,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+destAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+destAddress,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+dest,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+destAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+destAddress,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+dest,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+destBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dest,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+srcAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+srcOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+copyMemory,Identifier
+(,Punctuation
+src,Identifier
+",",Punctuation
+ ,Whitespace
+srcAddress,Identifier
+",",Punctuation
+ ,Whitespace
+destBase,Identifier
+",",Punctuation
+ ,Whitespace
+destAddress,Identifier
+",",Punctuation
+ ,Whitespace
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Copies specified number of bytes from given offset of {@code src} ByteBuffer to the
+     * {@code dest} array.
+     *
+     * @param src
+     * @param srcOffset
+     * @param dest
+     * @param destOffset
+     * @param length
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+copy,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+src,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+srcOffset,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+dest,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+destOffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+srcAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+srcOffset,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Object,Identifier
+ ,Whitespace
+srcBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+src,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+srcAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+srcAddress,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+src,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+srcAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+srcAddress,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+src,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+srcBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+src,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+destAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+destOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+copyMemory,Identifier
+(,Punctuation
+srcBase,Identifier
+",",Punctuation
+ ,Whitespace
+srcAddress,Identifier
+",",Punctuation
+ ,Whitespace
+dest,Identifier
+",",Punctuation
+ ,Whitespace
+destAddress,Identifier
+",",Punctuation
+ ,Whitespace
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Copies specified number of bytes from given offset of {@code src} buffer into the {@code dest}
+     * buffer.
+     *
+     * @param src
+     * @param srcOffset
+     * @param dest
+     * @param destOffset
+     * @param length
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+copy,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+src,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+srcOffset,Identifier
+",",Punctuation
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+dest,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+destOffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+srcAddress,Identifier
+",",Punctuation
+ ,Whitespace
+destAddress,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Object,Identifier
+ ,Whitespace
+srcBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+destBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+src,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+srcAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+srcOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+src,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+srcAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+srcOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+src,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+srcBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+src,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dest,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+destAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+destOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+dest,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+destAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+destOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+dest,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+destBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dest,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+copyMemory,Identifier
+(,Punctuation
+srcBase,Identifier
+",",Punctuation
+ ,Whitespace
+srcAddress,Identifier
+",",Punctuation
+ ,Whitespace
+destBase,Identifier
+",",Punctuation
+ ,Whitespace
+destAddress,Identifier
+",",Punctuation
+ ,Whitespace
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// APIs to add primitives to BBs,Comment
+"
+",Newline
+    ,Whitespace
+"/**
+     * Put a short value out to the specified BB position in big-endian format.
+     * @param buf the byte buffer
+     * @param offset position in the buffer
+     * @param val short to write out
+     * @return incremented offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putShort,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+val,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Short,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putShort,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putShort,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_SHORT,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Put a long value out to the specified BB position in big-endian format.
+     * @param buf the byte buffer
+     * @param offset position in the buffer
+     * @param val long to write out
+     * @return incremented offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putLong,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+littleEndian,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+val,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+reverseBytes,Identifier
+(,Punctuation
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putLong,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putLong,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_LONG,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Put a byte value out to the specified BB position in big-endian format.
+     * @param buf the byte buffer
+     * @param offset position in the buffer
+     * @param b byte to write out
+     * @return incremented offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putByte,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+ ,Whitespace
+b,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putByte,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+b,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+putByte,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+b,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Returns the byte at the given offset
+     * @param buf the buffer to read
+     * @param offset the offset at which the byte has to be read
+     * @return the byte at the given offset
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+byte,Keyword
+ ,Whitespace
+toByte,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getByte,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+DirectBuffer,Identifier
+),Punctuation
+ ,Whitespace
+buf,Identifier
+),Punctuation
+.,Punctuation
+address,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+theUnsafe,Identifier
+.,Punctuation
+getByte,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+BYTE_ARRAY_BASE_OFFSET,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+arrayOffset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

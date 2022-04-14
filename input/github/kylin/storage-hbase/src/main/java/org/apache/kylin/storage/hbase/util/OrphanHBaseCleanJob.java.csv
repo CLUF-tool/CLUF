@@ -1,0 +1,1287 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TreeSet,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Option,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+OptionBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Options,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configuration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HBaseConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HTableDescriptor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+HBaseAdmin,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ToolRunner,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+AbstractHadoopJob,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+IRealizationConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+OrphanHBaseCleanJob,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractHadoopJob,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""static-access""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_DELETE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""delete""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""Delete the unused storage""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""delete""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""static-access""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_WHITELIST,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""whitelist""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""metadata store whitelist, separated with comma""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""whitelist""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+OrphanHBaseCleanJob,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+delete,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+metastoreWhitelistSet,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Options,Identifier
+ ,Whitespace
+options,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Options,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""jobs args: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+args,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_DELETE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_WHITELIST,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+parseOptions,Identifier
+(,Punctuation
+options,Identifier
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""options: '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getOptionsAsString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""delete option value: '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getOptionValue,Identifier
+(,Punctuation
+OPTION_DELETE,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+delete,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+OPTION_DELETE,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+metastoreWhitelist,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptionValue,Identifier
+(,Punctuation
+OPTION_WHITELIST,Identifier
+),Punctuation
+.,Punctuation
+split,Identifier
+(,Punctuation
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+ms,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+metastoreWhitelist,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""metadata store in white list: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+ms,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+metastoreWhitelistSet,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+ms,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+conf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HBaseConfiguration,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+getConf,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+cleanUnusedHBaseTables,Identifier
+(,Punctuation
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+e,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+System,Identifier
+.,Punctuation
+err,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+e,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+cleanUnusedHBaseTables,Identifier
+(,Punctuation
+Configuration,Identifier
+ ,Whitespace
+conf,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// get all kylin hbase tables,Comment
+"
+",Newline
+        ,Whitespace
+HBaseAdmin,Identifier
+ ,Whitespace
+hbaseAdmin,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HBaseAdmin,Identifier
+(,Punctuation
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+tableNamePrefix,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+IRealizationConstants,Identifier
+.,Punctuation
+SharedHbaseStorageLocationPrefix,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+HTableDescriptor,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+tableDescriptors,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+listTables,Identifier
+(,Punctuation
+tableNamePrefix,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".*""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+allTablesNeedToBeDropped,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+HTableDescriptor,Identifier
+ ,Whitespace
+desc,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tableDescriptors,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+host,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+IRealizationConstants,Identifier
+.,Punctuation
+HTableTag,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+metastoreWhitelistSet,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+host,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""HTable {} is recognized as orphan because its tag is {}""",String
+",",Punctuation
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+host,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+//collect orphans,Comment
+"
+",Newline
+                ,Whitespace
+allTablesNeedToBeDropped,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+desc,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getNameAsString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""HTable {} belongs to {}""",String
+",",Punctuation
+ ,Whitespace
+desc,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+host,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+delete,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// drop tables,Comment
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+htableName,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+allTablesNeedToBeDropped,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Deleting HBase table """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+htableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hbaseAdmin,Identifier
+.,Punctuation
+tableExists,Identifier
+(,Punctuation
+htableName,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hbaseAdmin,Identifier
+.,Punctuation
+isTableEnabled,Identifier
+(,Punctuation
+htableName,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+disableTable,Identifier
+(,Punctuation
+htableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+                    ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+deleteTable,Identifier
+(,Punctuation
+htableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Deleted HBase table """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+htableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""HBase table""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+htableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" does not exist""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""--------------- Tables To Be Dropped ---------------""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+htableName,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+allTablesNeedToBeDropped,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+htableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""----------------------------------------------------""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+main,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+exitCode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ToolRunner,Identifier
+.,Punctuation
+run,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+OrphanHBaseCleanJob,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+exit,Identifier
+(,Punctuation
+exitCode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

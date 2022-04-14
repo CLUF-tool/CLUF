@@ -1,0 +1,730 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+coprocessor,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+MemoryBudgetController,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+MeasureAggregator,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""rawtypes""",String
+),Punctuation
+"
+",Newline
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+AggregationCache,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+MEMORY_USAGE_CAP,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+500,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+;,Punctuation
+ ,Whitespace
+// 500 MB,Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+MEMOERY_MAX_BYTES,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Runtime,Identifier
+.,Punctuation
+getRuntime,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+maxMemory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+AggrKey,Identifier
+",",Punctuation
+ ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+aggBufMap,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+transient,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rowMemBytes,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+AggrKey,Identifier
+ ,Whitespace
+firstKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+AggregationCache,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+aggBufMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+createBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getBuffer,Identifier
+(,Punctuation
+AggrKey,Identifier
+ ,Whitespace
+aggkey,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+aggBuf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggBufMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+aggkey,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+aggBuf,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+aggBuf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+createBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+AggrKey,Identifier
+ ,Whitespace
+key,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggkey,Identifier
+.,Punctuation
+copy,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+aggBufMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+key,Identifier
+",",Punctuation
+ ,Whitespace
+aggBuf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+firstKey,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+firstKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+key,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+aggBuf,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+aggBufMap,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+checkMemoryUsage,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+firstKey,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// about memory calculation,",Comment
+"
+",Newline
+        ,Whitespace
+// http://seniorjava.wordpress.com/2013/09/01/java-objects-memory-size-reference/,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+rowMemBytes,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+aggBufMap,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+rowMemBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+measureAggregators,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggBufMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+firstKey,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+MeasureAggregator,Identifier
+ ,Whitespace
+agg,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+measureAggregators,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+rowMemBytes,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+agg,Identifier
+.,Punctuation
+getMemBytesEstimate,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+size,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggBufMap,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+memUsage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+40,Literal
+ ,Whitespace
++,Operator
+ ,Whitespace
+rowMemBytes,Identifier
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+size,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memUsage,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+MEMORY_USAGE_CAP,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""Kylin coprocessor memory usage goes beyond cap, (40 + """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+rowMemBytes,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""") * """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+size,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" > """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+MEMORY_USAGE_CAP,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". Abort coprocessor.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+//If less than 5% of max memory,Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+avail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MemoryBudgetController,Identifier
+.,Punctuation
+getSystemAvailBytes,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+avail,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+(,Punctuation
+MEMOERY_MAX_BYTES,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+20,Literal
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""Running Kylin coprocessor when too little memory is left. Abort coprocessor. Current available memory is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+avail,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". Max memory is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+MEMOERY_MAX_BYTES,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

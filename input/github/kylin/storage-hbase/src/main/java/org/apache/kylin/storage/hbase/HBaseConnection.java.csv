@@ -1,0 +1,2153 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ConcurrentHashMap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configuration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FileSystem,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+Path,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HBaseConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HColumnDescriptor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HTableDescriptor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+TableName,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+HBaseAdmin,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+HConnection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+HConnectionManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+.,Punctuation
+StorageException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+HadoopUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ * 
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HBaseConnection,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+HBaseConnection,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Configuration,Identifier
+>,Operator
+ ,Whitespace
+ConfigCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConcurrentHashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Configuration,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+HConnection,Identifier
+>,Operator
+ ,Whitespace
+ConnPool,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConcurrentHashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+HConnection,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Runtime,Identifier
+.,Punctuation
+getRuntime,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+addShutdownHook,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Thread,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+HConnection,Identifier
+ ,Whitespace
+conn,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+ConnPool,Identifier
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+conn,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+e,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+clearConnCache,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ConnPool,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+Configuration,Identifier
+>,Operator
+ ,Whitespace
+hbaseConfig,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+getCurrentHBaseConfiguration,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hbaseConfig,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+storageUrl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getStorageUrl,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+hbaseConfig,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+newHBaseConfiguration,Identifier
+(,Punctuation
+storageUrl,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+hbaseConfig,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+newHBaseConfiguration,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+url,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+conf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HBaseConfiguration,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+HadoopUtil,Identifier
+.,Punctuation
+getCurrentConfiguration,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+"// using a hbase:xxx URL is deprecated, instead hbase config is always loaded from hbase-site.xml in classpath",Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+url,Identifier
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+"""hbase""",String
+.,Punctuation
+equals,Identifier
+(,Punctuation
+url,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""to use hbase storage, pls set 'kylin.storage.url=hbase' in kylin.properties""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// support hbase using a different FS,Comment
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+hbaseClusterFs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getHBaseClusterFs,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isNotEmpty,Identifier
+(,Punctuation
+hbaseClusterFs,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+conf,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+FileSystem,Identifier
+.,Punctuation
+FS_DEFAULT_NAME_KEY,Identifier
+",",Punctuation
+ ,Whitespace
+hbaseClusterFs,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+// https://issues.apache.org/jira/browse/KYLIN-953,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+conf,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""hadoop.tmp.dir""",String
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+conf,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+"""hadoop.tmp.dir""",String
+",",Punctuation
+ ,Whitespace
+"""/tmp""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+conf,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""hbase.fs.tmp.dir""",String
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+conf,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+"""hbase.fs.tmp.dir""",String
+",",Punctuation
+ ,Whitespace
+"""/tmp""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// reduce rpc retry,Comment
+"
+",Newline
+        ,Whitespace
+conf,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+HConstants,Identifier
+.,Punctuation
+HBASE_CLIENT_PAUSE,Identifier
+",",Punctuation
+ ,Whitespace
+"""3000""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+conf,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+HConstants,Identifier
+.,Punctuation
+HBASE_CLIENT_RETRIES_NUMBER,Identifier
+",",Punctuation
+ ,Whitespace
+"""5""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+conf,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+HConstants,Identifier
+.,Punctuation
+HBASE_CLIENT_OPERATION_TIMEOUT,Identifier
+",",Punctuation
+ ,Whitespace
+"""60000""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"// conf.set(ScannerCallable.LOG_SCANNER_ACTIVITY, ""true"");",Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+conf,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+makeQualifiedPathInHBaseCluster,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+path,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+FileSystem,Identifier
+ ,Whitespace
+fs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FileSystem,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+getCurrentHBaseConfiguration,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+makeQualified,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Path,Identifier
+(,Punctuation
+path,Identifier
+),Punctuation
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Cannot create FileSystem from current hbase cluster conf""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+// returned HConnection can be shared by multiple threads and does not require close(),Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""resource""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+HConnection,Identifier
+ ,Whitespace
+get,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+url,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// find configuration,Comment
+"
+",Newline
+        ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+conf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ConfigCache,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+url,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+conf,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+conf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newHBaseConfiguration,Identifier
+(,Punctuation
+url,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ConfigCache,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+url,Identifier
+",",Punctuation
+ ,Whitespace
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+HConnection,Identifier
+ ,Whitespace
+connection,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ConnPool,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+url,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// I don't use DCL since recreate a connection is not a big issue.,Comment
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+connection,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+connection,Identifier
+.,Punctuation
+isClosed,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""connection is null or closed, creating a new one""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+connection,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HConnectionManager,Identifier
+.,Punctuation
+createConnection,Identifier
+(,Punctuation
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+ConnPool,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+url,Identifier
+",",Punctuation
+ ,Whitespace
+connection,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+connection,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+connection,Identifier
+.,Punctuation
+isClosed,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+10000,Literal
+),Punctuation
+;,Punctuation
+// wait a while and retry,Comment
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Throwable,Identifier
+ ,Whitespace
+t,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error when open connection """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+url,Identifier
+",",Punctuation
+ ,Whitespace
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StorageException,Identifier
+(,Punctuation
+"""Error when open connection """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+url,Identifier
+",",Punctuation
+ ,Whitespace
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+connection,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+tableExists,Identifier
+(,Punctuation
+HConnection,Identifier
+ ,Whitespace
+conn,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+HBaseAdmin,Identifier
+ ,Whitespace
+hbase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HBaseAdmin,Identifier
+(,Punctuation
+conn,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+hbase,Identifier
+.,Punctuation
+tableExists,Identifier
+(,Punctuation
+TableName,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+hbase,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+tableExists,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hbaseUrl,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+tableExists,Identifier
+(,Punctuation
+HBaseConnection,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+hbaseUrl,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+createHTableIfNeeded,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hbaseUrl,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+.,Punctuation
+.,Punctuation
+ ,Whitespace
+families,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+createHTableIfNeeded,Identifier
+(,Punctuation
+HBaseConnection,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+hbaseUrl,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+families,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+deleteTable,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hbaseUrl,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+deleteTable,Identifier
+(,Punctuation
+HBaseConnection,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+hbaseUrl,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+createHTableIfNeeded,Identifier
+(,Punctuation
+HConnection,Identifier
+ ,Whitespace
+conn,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+.,Punctuation
+.,Punctuation
+ ,Whitespace
+families,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+HBaseAdmin,Identifier
+ ,Whitespace
+hbase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HBaseAdmin,Identifier
+(,Punctuation
+conn,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableExists,Identifier
+(,Punctuation
+conn,Identifier
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""HTable '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' already exists""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Creating HTable '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+HTableDescriptor,Identifier
+ ,Whitespace
+desc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HTableDescriptor,Identifier
+(,Punctuation
+TableName,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+null,Keyword
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+families,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+families,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+family,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+families,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+HColumnDescriptor,Identifier
+ ,Whitespace
+fd,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HColumnDescriptor,Identifier
+(,Punctuation
+family,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+fd,Identifier
+.,Punctuation
+setInMemory,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// metadata tables are best in memory,Comment
+"
+",Newline
+                    ,Whitespace
+desc,Identifier
+.,Punctuation
+addFamily,Identifier
+(,Punctuation
+fd,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+hbase,Identifier
+.,Punctuation
+createTable,Identifier
+(,Punctuation
+desc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""HTable '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' created""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+hbase,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+deleteTable,Identifier
+(,Punctuation
+HConnection,Identifier
+ ,Whitespace
+conn,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+HBaseAdmin,Identifier
+ ,Whitespace
+hbase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HBaseAdmin,Identifier
+(,Punctuation
+conn,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+tableExists,Identifier
+(,Punctuation
+conn,Identifier
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""HTable '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' does not exists""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""delete HTable '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hbase,Identifier
+.,Punctuation
+isTableEnabled,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+hbase,Identifier
+.,Punctuation
+disableTable,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+hbase,Identifier
+.,Punctuation
+deleteTable,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""HTable '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' deleted""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+hbase,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

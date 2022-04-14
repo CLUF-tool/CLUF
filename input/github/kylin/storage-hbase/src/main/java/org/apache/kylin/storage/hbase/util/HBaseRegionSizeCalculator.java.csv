@@ -1,0 +1,1162 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+/** This class will come with HBase 2.0 in package org.apache.hadoop.hbase.util **/,Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collections,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TreeMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TreeSet,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configuration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+ClusterStatus,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HRegionInfo,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+RegionLoad,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+ServerLoad,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+ServerName,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+HBaseAdmin,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+HTable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Pair,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HBaseRegionSizeCalculator,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+HBaseRegionSizeCalculator,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Maps each region to its size in bytes.
+     **/",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+sizeMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeMap,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+BYTES_COMPARATOR,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+Integer,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>>,Operator
+ ,Whitespace
+countMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeMap,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+BYTES_COMPARATOR,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+ENABLE_REGIONSIZECALCULATOR,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""hbase.regionsizecalculator.enable""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Computes size of each region for table and given column families.
+     * */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+HBaseRegionSizeCalculator,Identifier
+(,Punctuation
+HTable,Identifier
+ ,Whitespace
+table,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+(,Punctuation
+table,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HBaseAdmin,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getConfiguration,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** Constructor for unit testing */,Comment
+"
+",Newline
+    ,Whitespace
+HBaseRegionSizeCalculator,Identifier
+(,Punctuation
+HTable,Identifier
+ ,Whitespace
+table,Identifier
+",",Punctuation
+ ,Whitespace
+HBaseAdmin,Identifier
+ ,Whitespace
+hBaseAdmin,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+enabled,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getConfiguration,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Region size calculation disabled.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Calculating region sizes for table \""""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\"".""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// Get regions for table.,Comment
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+HRegionInfo,Identifier
+>,Operator
+ ,Whitespace
+tableRegionInfos,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+table,Identifier
+.,Punctuation
+getRegionLocations,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+tableRegions,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+BYTES_COMPARATOR,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+HRegionInfo,Identifier
+ ,Whitespace
+regionInfo,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tableRegionInfos,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+tableRegions,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+regionInfo,Identifier
+.,Punctuation
+getRegionName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+ClusterStatus,Identifier
+ ,Whitespace
+clusterStatus,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hBaseAdmin,Identifier
+.,Punctuation
+getClusterStatus,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Collection,Identifier
+<,Operator
+ServerName,Identifier
+>,Operator
+ ,Whitespace
+servers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clusterStatus,Identifier
+.,Punctuation
+getServers,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+megaByte,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1024L,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024L,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+"// Iterate all cluster regions, filter regions from our table and",Comment
+"
+",Newline
+            ,Whitespace
+// compute their size.,Comment
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ServerName,Identifier
+ ,Whitespace
+serverName,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+servers,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+ServerLoad,Identifier
+ ,Whitespace
+serverLoad,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clusterStatus,Identifier
+.,Punctuation
+getLoad,Identifier
+(,Punctuation
+serverName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+RegionLoad,Identifier
+ ,Whitespace
+regionLoad,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+serverLoad,Identifier
+.,Punctuation
+getRegionsLoad,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+regionId,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+regionLoad,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableRegions,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+regionId,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+                        ,Whitespace
+long,Keyword
+ ,Whitespace
+regionSizeBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+regionLoad,Identifier
+.,Punctuation
+getStorefileSizeMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+megaByte,Identifier
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+sizeMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+regionId,Identifier
+",",Punctuation
+ ,Whitespace
+regionSizeBytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+countMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+regionId,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Pair,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+regionLoad,Identifier
+.,Punctuation
+getStores,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+regionLoad,Identifier
+.,Punctuation
+getStorefiles,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                        ,Whitespace
+"// logger.info(""Region "" + regionLoad.getNameAsString()",Comment
+"
+",Newline
+                        ,Whitespace
+"// + "" has size "" + regionSizeBytes);",Comment
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+hBaseAdmin,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+enabled,Identifier
+(,Punctuation
+Configuration,Identifier
+ ,Whitespace
+configuration,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+configuration,Identifier
+.,Punctuation
+getBoolean,Identifier
+(,Punctuation
+ENABLE_REGIONSIZECALCULATOR,Identifier
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Returns size of given region in bytes. Returns 0 if region was not found.
+     **/",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getRegionSize,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+regionId,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Long,Identifier
+ ,Whitespace
+size,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sizeMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+regionId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+size,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Unknown region:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+regionId,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+size,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+>,Operator
+ ,Whitespace
+getRegionSizeMap,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+unmodifiableMap,Identifier
+(,Punctuation
+sizeMap,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+Integer,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>>,Operator
+ ,Whitespace
+getRegionHFileCountMap,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+unmodifiableMap,Identifier
+(,Punctuation
+countMap,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

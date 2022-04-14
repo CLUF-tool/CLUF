@@ -1,0 +1,6391 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+avro,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Charsets,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Throwables,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Files,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+serialization,Identifier
+.,Punctuation
+LineDeserializer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+SpoolDirectorySourceConfigurationConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+After,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Before,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Test,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Assert,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestSpoolingFileLineReader,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+TestSpoolingFileLineReader,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+completedSuffix,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+SpoolDirectorySourceConfigurationConstants,Identifier
+.,Punctuation
+DEFAULT_SPOOLED_FILE_SUFFIX,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+bufferMaxLineLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+500,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+File,Identifier
+ ,Whitespace
+tmpDir,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+bodyAsString,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+events,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+bodies,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayListWithCapacity,Identifier
+(,Punctuation
+events,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+events,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+bodies,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+bodies,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+maxLineLength,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+ctx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+LineDeserializer,Identifier
+.,Punctuation
+MAXLINE_KEY,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+maxLineLength,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+.,Punctuation
+Builder,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+spoolDirectory,Identifier
+(,Punctuation
+tmpDir,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+completedSuffix,Identifier
+(,Punctuation
+completedSuffix,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+deserializerContext,Identifier
+(,Punctuation
+ctx,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+ioe,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+Throwables,Identifier
+.,Punctuation
+propagate,Identifier
+(,Punctuation
+ioe,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+parser,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+bufferMaxLineLength,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+FileFilter,Identifier
+ ,Whitespace
+directoryFilter,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FileFilter,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+accept,Identifier
+(,Punctuation
+File,Identifier
+ ,Whitespace
+candidate,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+candidate,Identifier
+.,Punctuation
+isDirectory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Before,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setUp,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+tmpDir,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Files,Identifier
+.,Punctuation
+createTempDir,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+After,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+File,Identifier
+ ,Whitespace
+f,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tmpDir,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+f,Identifier
+.,Punctuation
+isDirectory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+File,Identifier
+ ,Whitespace
+sdf,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+f,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+sdf,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+f,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+tmpDir,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+// Create three multi-line files then read them back out. Ensures that,Comment
+"
+",Newline
+  ,Whitespace
+// files are accessed in correct order and that lines are read correctly,Comment
+"
+",Newline
+  ,Whitespace
+// from files.,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testBasicSpooling,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file3""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file2line1\nfile2line2\n""",String
+",",Punctuation
+ ,Whitespace
+f2,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file3line1\nfile3line2\n""",String
+",",Punctuation
+ ,Whitespace
+f3,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+6,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""At line {}""",String
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+body,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodyAsString,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Seen event with body: {}""",String
+",",Punctuation
+ ,Whitespace
+body,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+body,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+// Make sure we got every line,Comment
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file3line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file3line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+outFiles,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+directoryFilter,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+3,Literal
+",",Punctuation
+ ,Whitespace
+outFiles,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Make sure files 1 and 2 have been processed and file 3 is still open,Comment
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file3""",String
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+// Make sure this works when there are initially no files,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testInitiallyEmptyDirectory,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertNull,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+10,Literal
+),Punctuation
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Make sure we got all of the first file,Comment
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file2line1\nfile2line2\n""",String
+",",Punctuation
+ ,Whitespace
+f2,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// force roll,Comment
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+outFiles,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+directoryFilter,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+2,Literal
+",",Punctuation
+ ,Whitespace
+outFiles,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+(,Punctuation
+expected,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+IllegalStateException,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+"
+",Newline
+  ,Whitespace
+// Ensures that file immutability is enforced.,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testFileChangesDuringRead,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+out,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+bodiesAsStrings,Identifier
+(,Punctuation
+parser1,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser1,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+2,Literal
+",",Punctuation
+ ,Whitespace
+out,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""file1line3\n""",String
+",",Punctuation
+ ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+parser1,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser1,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+parser1,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser1,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"// Test when a competing destination file is found, but it matches,",Comment
+"
+",Newline
+  ,Whitespace
+//  and we are on a Windows machine.,Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testDestinationExistsAndSameFileWindows,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+System,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+"""os.name""",String
+",",Punctuation
+ ,Whitespace
+"""Some version of Windows""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1Completed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1Completed,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file2line1\nfile2line2\n""",String
+",",Punctuation
+ ,Whitespace
+f2,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Make sure we got every line,Comment
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+4,Literal
+",",Punctuation
+ ,Whitespace
+out,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Make sure original is deleted,Comment
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+outFiles,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+directoryFilter,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+2,Literal
+",",Punctuation
+ ,Whitespace
+outFiles,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"// Test when a competing destination file is found, but it matches,",Comment
+"
+",Newline
+  ,Whitespace
+// and we are not on a Windows machine.,Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+(,Punctuation
+expected,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+IllegalStateException,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testDestinationExistsAndSameFileNotOnWindows,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+System,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+"""os.name""",String
+",",Punctuation
+ ,Whitespace
+"""Some version of Linux""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1Completed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1Completed,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file2line1\nfile2line2\n""",String
+",",Punctuation
+ ,Whitespace
+f2,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Not reached,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+// Test a basic case where a commit is missed.,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testBasicCommitFailure,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\nfile1line3\nfile1line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line5\nfile1line6\nfile1line7\nfile1line8\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line9\nfile1line10\nfile1line11\nfile1line12\n""",String
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+4,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+4,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+4,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line6""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line7""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out4,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+4,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+4,Literal
+",",Punctuation
+ ,Whitespace
+out4,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out4,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line9""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out4,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line10""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out4,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line11""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out4,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line12""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+// Test a case where a commit is missed and the buffer size shrinks.,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testBasicCommitFailureAndBufferSizeChanges,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\nfile1line3\nfile1line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line5\nfile1line6\nfile1line7\nfile1line8\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line9\nfile1line10\nfile1line11\nfile1line12\n""",String
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out4,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out4,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out4,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line6""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out5,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out5,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line7""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out5,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out6,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+15,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out6,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line9""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out6,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line10""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out6,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line11""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out6,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line12""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// Test when a competing destination file is found and it does not match.,Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+(,Punctuation
+expected,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+IllegalStateException,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testDestinationExistsAndDifferentFile,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1Completed,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1XXXe2\n""",String
+",",Punctuation
+ ,Whitespace
+f1Completed,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file2line1\nfile2line2\n""",String
+",",Punctuation
+ ,Whitespace
+f2,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+out,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+bodyAsString,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+// Not reached,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+   ,Whitespace
+// Empty files should be treated the same as other files and rolled.,Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testBehaviorWithEmptyFile,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file0""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+touch,Identifier
+(,Punctuation
+f1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\nfile1line3\nfile1line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line5\nfile1line6\nfile1line7\nfile1line8\n""",String
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+f2,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Expect to skip over first file,Comment
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+8,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+8,Literal
+",",Punctuation
+ ,Whitespace
+out,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line6""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line7""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertNull,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvent,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Make sure original is deleted,Comment
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+outFiles,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+directoryFilter,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+2,Literal
+",",Punctuation
+ ,Whitespace
+outFiles,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+"""Outfiles should have file0 & file1: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+outFiles,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file0""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+"""Outfiles should have file0 & file1: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+outFiles,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testBatchedReadsWithinAFile,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\nfile1line3\nfile1line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line5\nfile1line6\nfile1line7\nfile1line8\n""",String
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Make sure we got every line,Comment
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+5,Literal
+",",Punctuation
+ ,Whitespace
+out,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testBatchedReadsAcrossFileBoundary,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\nfile1line3\nfile1line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line5\nfile1line6\nfile1line7\nfile1line8\n""",String
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file2line1\nfile2line2\nfile2line3\nfile2line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+"""file2line5\nfile2line6\nfile2line7\nfile2line8\n""",String
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+f2,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Should have first 5 lines of file1,Comment
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+5,Literal
+",",Punctuation
+ ,Whitespace
+out1,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Should have 3 remaining lines of file1,Comment
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+3,Literal
+",",Punctuation
+ ,Whitespace
+out2,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line6""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line7""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Should have first 5 lines of file2,Comment
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+5,Literal
+",",Punctuation
+ ,Whitespace
+out3,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file2line5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// file1 should be moved now,Comment
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+outFiles,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+directoryFilter,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+2,Literal
+",",Punctuation
+ ,Whitespace
+outFiles,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+completedSuffix,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+outFiles,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+"// Test the case where we read finish reading and fully commit a file, then",Comment
+"
+",Newline
+  ,Whitespace
+//  the directory is empty.,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testEmptyDirectoryAfterCommittingFile,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\n""",String
+",",Punctuation
+ ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+allLines,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+2,Literal
+",",Punctuation
+ ,Whitespace
+allLines,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+empty,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+10,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+empty,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// When a line violates the character limit we should truncate it.,Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testLineExceedsMaxLineLength,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+maxLineLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+12,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\nfile1line3\nfile1line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line5\nfile1line6\nfile1line7\nfile1line8\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""reallyreallyreallyreallyLongLineHerefile1line9\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line10\nfile1line11\nfile1line12\nfile1line13\n""",String
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+maxLineLength,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line3""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line4""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out1,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line5""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+4,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line6""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line7""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out2,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""reallyreally""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""reallyreally""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""LongLineHere""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line9""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line10""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out3,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line11""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+out4,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bodiesAsStrings,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out4,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line12""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+out4,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""file1line13""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+2,Literal
+",",Punctuation
+ ,Whitespace
+out4,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testNameCorrespondsToLatestRead,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file1line1\nfile1line2\nfile1line3\nfile1line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file1line5\nfile1line6\nfile1line7\nfile1line8\n""",String
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+f1,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ReliableSpoolingFileEventReader,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertNotNull,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+getLastFileRead,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+getLastFileRead,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+"""file1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+f2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tmpDir,Identifier
+.,Punctuation
+getAbsolutePath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/file2""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Files,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""file2line1\nfile2line2\nfile2line3\nfile2line4\n""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+"""file2line5\nfile2line6\nfile2line7\nfile2line8\n""",String
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+f2,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertNotNull,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+getLastFileRead,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+getLastFileRead,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+"""file1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertNotNull,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+getLastFileRead,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+getLastFileRead,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+"""file2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+getLastFileRead,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+"""file2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+readEvents,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertTrue,Identifier
+(,Punctuation
+parser,Identifier
+.,Punctuation
+getLastFileRead,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+"""file2""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,735 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the ""License""); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+kafka,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+server,Identifier
+.,Punctuation
+KafkaConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+server,Identifier
+.,Punctuation
+KafkaServerStartable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+javaapi,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+Producer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+KeyedMessage,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+ProducerConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+admin,Identifier
+.,Punctuation
+AdminUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+I0Itec,Identifier
+.,Punctuation
+zkclient,Identifier
+.,Punctuation
+ZkClient,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+utils,Identifier
+.,Punctuation
+ZKStringSerializer$,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KafkaSourceEmbeddedKafka,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+KafkaServerStartable,Identifier
+ ,Whitespace
+kafkaServer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+KafkaSourceEmbeddedZookeeper,Identifier
+ ,Whitespace
+zookeeper,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+int,Keyword
+ ,Whitespace
+zkPort,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+21818,Literal
+;,Punctuation
+ ,Whitespace
+// none-standard,Comment
+"
+",Newline
+  ,Whitespace
+Producer,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+String,Identifier
+>,Operator
+ ,Whitespace
+producer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+KafkaSourceEmbeddedKafka,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+zookeeper,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaSourceEmbeddedZookeeper,Identifier
+(,Punctuation
+zkPort,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""zookeeper.connect""",String
+",",Punctuation
+zookeeper,Identifier
+.,Punctuation
+getConnectString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""broker.id""",String
+",",Punctuation
+"""1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+KafkaConfig,Identifier
+ ,Whitespace
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaConfig,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaServer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaServerStartable,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaServer,Identifier
+.,Punctuation
+startup,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+initProducer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+producer,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaServer,Identifier
+.,Punctuation
+shutdown,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+zookeeper,Identifier
+.,Punctuation
+stopZookeeper,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getZkConnectString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+zookeeper,Identifier
+.,Punctuation
+getConnectString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initProducer,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+  ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""metadata.broker.list""",String
+",",Punctuation
+"""127.0.0.1:""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+kafkaServer,Identifier
+.,Punctuation
+serverConfig,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+port,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.class""",String
+",",Punctuation
+"""kafka.serializer.StringEncoder""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""request.required.acks""",String
+",",Punctuation
+ ,Whitespace
+"""1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ProducerConfig,Identifier
+ ,Whitespace
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ProducerConfig,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+producer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Producer,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+String,Identifier
+>,Operator
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+produce,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+k,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+v,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+KeyedMessage,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+String,Identifier
+>,Operator
+ ,Whitespace
+message,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KeyedMessage,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+String,Identifier
+>,Operator
+(,Punctuation
+topic,Identifier
+",",Punctuation
+k,Identifier
+",",Punctuation
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+producer,Identifier
+.,Punctuation
+send,Identifier
+(,Punctuation
+message,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+createTopic,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+topicName,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// Create a ZooKeeper client,Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+sessionTimeoutMs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+connectionTimeoutMs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ZkClient,Identifier
+ ,Whitespace
+zkClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ZkClient,Identifier
+(,Punctuation
+zookeeper,Identifier
+.,Punctuation
+getConnectString,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+sessionTimeoutMs,Identifier
+",",Punctuation
+ ,Whitespace
+connectionTimeoutMs,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+ZKStringSerializer$,Identifier
+.,Punctuation
+MODULE$,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+numPartitions,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+replicationFactor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+topicConfig,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+AdminUtils,Identifier
+.,Punctuation
+createTopic,Identifier
+(,Punctuation
+zkClient,Identifier
+",",Punctuation
+ ,Whitespace
+topicName,Identifier
+",",Punctuation
+ ,Whitespace
+numPartitions,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+replicationFactor,Identifier
+",",Punctuation
+ ,Whitespace
+topicConfig,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

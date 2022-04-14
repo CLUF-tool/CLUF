@@ -1,0 +1,859 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+http,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+gson,Identifier
+.,Punctuation
+Gson,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+gson,Identifier
+.,Punctuation
+GsonBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+gson,Identifier
+.,Punctuation
+JsonSyntaxException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+gson,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+TypeToken,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+BufferedReader,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+Type,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+charset,Identifier
+.,Punctuation
+UnsupportedCharsetException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+servlet,Identifier
+.,Punctuation
+http,Identifier
+.,Punctuation
+HttpServletRequest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+EventBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+JSONEvent,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ *
+ * JSONHandler for HTTPSource that accepts an array of events.
+ *
+ * This handler throws exception if the deserialization fails because of bad
+ * format or any other reason.
+ *
+ *
+ * Each event must be encoded as a map with two key-value pairs. <p> 1. headers
+ * - the key for this key-value pair is ""headers"". The value for this key is
+ * another map, which represent the event headers. These headers are inserted
+ * into the Flume event as is. <p> 2. body - The body is a string which
+ * represents the body of the event. The key for this key-value pair is ""body"".
+ * All key-value pairs are considered to be headers. An example: <p> [{""headers""
+ * : {""a"":""b"", ""c"":""d""},""body"": ""random_body""}, {""headers"" : {""e"": ""f""},""body"":
+ * ""random_body2""}] <p> would be interpreted as the following two flume events:
+ * <p> * Event with body: ""random_body"" (in UTF-8/UTF-16/UTF-32 encoded bytes)
+ * and headers : (a:b, c:d) <p> *
+ * Event with body: ""random_body2"" (in UTF-8/UTF-16/UTF-32 encoded bytes) and
+ * headers : (e:f) <p>
+ *
+ * The charset of the body is read from the request and used. If no charset is
+ * set in the request, then the charset is assumed to be JSON's default - UTF-8.
+ * The JSON handler supports UTF-8, UTF-16 and UTF-32.
+ *
+ * To set the charset, the request must have content type specified as
+ * ""application/json; charset=UTF-8"" (replace UTF-8 with UTF-16 or UTF-32 as
+ * required).
+ *
+ * One way to create an event in the format expected by this handler, is to
+ * use {@linkplain JSONEvent} and use {@linkplain Gson} to create the JSON
+ * string using the
+ * {@linkplain Gson#toJson(java.lang.Object, java.lang.reflect.Type) }
+ * method. The type token to pass as the 2nd argument of this method
+ * for list of events can be created by: <p>
+ *
+ * Type type = new TypeToken<List<JSONEvent>>() {}.getType(); <p>
+ *
+ */",Comment
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+JSONHandler,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+HTTPSourceHandler,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+JSONHandler,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Type,Identifier
+ ,Whitespace
+listType,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+new,Keyword
+ ,Whitespace
+TypeToken,Identifier
+<,Operator
+List,Identifier
+<,Operator
+JSONEvent,Identifier
+>>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Gson,Identifier
+ ,Whitespace
+gson,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+JSONHandler,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+gson,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GsonBuilder,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+disableHtmlEscaping,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * {@inheritDoc}
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+getEvents,Identifier
+(,Punctuation
+HttpServletRequest,Identifier
+ ,Whitespace
+request,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+BufferedReader,Identifier
+ ,Whitespace
+reader,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+request,Identifier
+.,Punctuation
+getReader,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+charset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+request,Identifier
+.,Punctuation
+getCharacterEncoding,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"//UTF-8 is default for JSON. If no charset is specified, UTF-8 is to",Comment
+"
+",Newline
+    ,Whitespace
+//be assumed.,Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+charset,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Charset is null, default charset of UTF-8 will be used.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+charset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""UTF-8""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+(,Punctuation
+charset,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""utf-8""",String
+),Punctuation
+"
+",Newline
+            ,Whitespace
+||,Operator
+ ,Whitespace
+charset,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""utf-16""",String
+),Punctuation
+"
+",Newline
+            ,Whitespace
+||,Operator
+ ,Whitespace
+charset,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""utf-32""",String
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Unsupported character set in request {}. """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""JSON handler supports UTF-8, """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""UTF-16 and UTF-32 only.""",String
+",",Punctuation
+ ,Whitespace
+charset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UnsupportedCharsetException,Identifier
+(,Punctuation
+"""JSON handler supports UTF-8, """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""UTF-16 and UTF-32 only.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/*
+     * Gson throws Exception if the data is not parseable to JSON.
+     * Need not catch it since the source will catch it and return error.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+eventList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+gson,Identifier
+.,Punctuation
+fromJson,Identifier
+(,Punctuation
+reader,Identifier
+",",Punctuation
+ ,Whitespace
+listType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+JsonSyntaxException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HTTPBadRequestException,Identifier
+(,Punctuation
+"""Request has invalid JSON Syntax.""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+e,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+eventList,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+(,Punctuation
+(,Punctuation
+JSONEvent,Identifier
+),Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+.,Punctuation
+setCharset,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getSimpleEvents,Identifier
+(,Punctuation
+eventList,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+getSimpleEvents,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+events,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+newEvents,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+events,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+e,Identifier
+:,Operator
+events,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+newEvents,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+newEvents,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

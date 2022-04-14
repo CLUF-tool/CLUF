@@ -1,0 +1,767 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Option,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+OptionBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Options,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configuration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HBaseConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HTableDescriptor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+TableName,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+HBaseAdmin,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ToolRunner,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+AbstractHadoopJob,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""static-access""",String
+),Punctuation
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HtableAlterMetadataCLI,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractHadoopJob,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_METADATA_KEY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""key""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""The metadata key""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""key""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_METADATA_VALUE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""value""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""The metadata value""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""value""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+HtableAlterMetadataCLI,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+metadataKey,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+metadataValue,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Options,Identifier
+ ,Whitespace
+options,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Options,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_HTABLE_NAME,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_METADATA_KEY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_METADATA_VALUE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+parseOptions,Identifier
+(,Punctuation
+options,Identifier
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+tableName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptionValue,Identifier
+(,Punctuation
+OPTION_HTABLE_NAME,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+metadataKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptionValue,Identifier
+(,Punctuation
+OPTION_METADATA_KEY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+metadataValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getOptionValue,Identifier
+(,Punctuation
+OPTION_METADATA_VALUE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+alter,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+printUsage,Identifier
+(,Punctuation
+options,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+e,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+alter,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+conf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HBaseConfiguration,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+HBaseAdmin,Identifier
+ ,Whitespace
+hbaseAdmin,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HBaseAdmin,Identifier
+(,Punctuation
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+HTableDescriptor,Identifier
+ ,Whitespace
+table,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+getTableDescriptor,Identifier
+(,Punctuation
+TableName,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+disableTable,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+table,Identifier
+.,Punctuation
+setValue,Identifier
+(,Punctuation
+metadataKey,Identifier
+",",Punctuation
+ ,Whitespace
+metadataValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+modifyTable,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+enableTable,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+hbaseAdmin,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+main,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+exitCode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ToolRunner,Identifier
+.,Punctuation
+run,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+HtableAlterMetadataCLI,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+exit,Identifier
+(,Punctuation
+exitCode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

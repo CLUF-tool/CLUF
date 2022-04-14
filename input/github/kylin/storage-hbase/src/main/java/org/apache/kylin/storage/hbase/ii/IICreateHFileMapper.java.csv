@@ -1,0 +1,632 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+ii,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+KeyValue,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+KeyValue,Identifier
+.,Punctuation
+Type,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+ImmutableBytesWritable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+KylinMapper,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+IIDesc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+IICreateHFileMapper,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+KylinMapper,Identifier
+<,Operator
+ImmutableBytesWritable,Identifier
+",",Punctuation
+ ,Whitespace
+ImmutableBytesWritable,Identifier
+",",Punctuation
+ ,Whitespace
+ImmutableBytesWritable,Identifier
+",",Punctuation
+ ,Whitespace
+KeyValue,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+timestamp,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setup,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+.,Punctuation
+bindCurrentConfiguration,Identifier
+(,Punctuation
+context,Identifier
+.,Punctuation
+getConfiguration,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+map,Identifier
+(,Punctuation
+ImmutableBytesWritable,Identifier
+ ,Whitespace
+key,Identifier
+",",Punctuation
+ ,Whitespace
+ImmutableBytesWritable,Identifier
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+buffer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+wrap,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+value,Identifier
+.,Punctuation
+getOffset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+value,Identifier
+.,Punctuation
+getLength,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+totalLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+value,Identifier
+.,Punctuation
+getLength,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+valueLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buffer,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+dictionaryLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+totalLength,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+valueLength,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+4,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+KeyValue,Identifier
+ ,Whitespace
+kv,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KeyValue,Identifier
+(,Punctuation
+key,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+key,Identifier
+.,Punctuation
+getOffset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+key,Identifier
+.,Punctuation
+getLength,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+HBASE_FAMILY_BYTES,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+HBASE_FAMILY_BYTES,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+HBASE_QUALIFIER_BYTES,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+HBASE_QUALIFIER_BYTES,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+timestamp,Identifier
+",",Punctuation
+ ,Whitespace
+Type,Identifier
+.,Punctuation
+Put,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+buffer,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+buffer,Identifier
+.,Punctuation
+position,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+valueLength,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// write value,Comment
+"
+",Newline
+        ,Whitespace
+context,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+key,Identifier
+",",Punctuation
+ ,Whitespace
+kv,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+kv,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KeyValue,Identifier
+(,Punctuation
+key,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+key,Identifier
+.,Punctuation
+getOffset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+key,Identifier
+.,Punctuation
+getLength,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+HBASE_FAMILY_BYTES,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+HBASE_FAMILY_BYTES,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+HBASE_DICTIONARY_BYTES,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+IIDesc,Identifier
+.,Punctuation
+HBASE_DICTIONARY_BYTES,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+timestamp,Identifier
+",",Punctuation
+ ,Whitespace
+Type,Identifier
+.,Punctuation
+Put,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+buffer,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+buffer,Identifier
+.,Punctuation
+position,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+valueLength,Identifier
+",",Punctuation
+ ,Whitespace
+dictionaryLength,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// write dictionary,Comment
+"
+",Newline
+        ,Whitespace
+context,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+key,Identifier
+",",Punctuation
+ ,Whitespace
+kv,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,1136 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Serializable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+DateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+ParseException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+SimpleDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Date,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+UUID,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+time,Identifier
+.,Punctuation
+FastDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinVersion,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+JsonAutoDetect,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+JsonAutoDetect,Identifier
+.,Punctuation
+Visibility,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+fasterxml,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+JsonProperty,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Marks the root entity of JSON persistence. Unit of read, write, cache, and
+ * refresh.
+ * 
+ * - CubeInstance - CubeDesc - SourceTable - JobMeta - Dictionary (not JSON but
+ * also top level persistence)
+ * 
+ * @author yangli9
+ */",Comment
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""serial""",String
+),Punctuation
+"
+",Newline
+@,Punctuation
+JsonAutoDetect,Identifier
+(,Punctuation
+fieldVisibility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Visibility,Identifier
+.,Punctuation
+NONE,Identifier
+",",Punctuation
+ ,Whitespace
+getterVisibility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Visibility,Identifier
+.,Punctuation
+NONE,Identifier
+",",Punctuation
+ ,Whitespace
+isGetterVisibility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Visibility,Identifier
+.,Punctuation
+NONE,Identifier
+",",Punctuation
+ ,Whitespace
+setterVisibility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Visibility,Identifier
+.,Punctuation
+NONE,Identifier
+),Punctuation
+"
+",Newline
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+RootPersistentEntity,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+AclEntity,Identifier
+",",Punctuation
+ ,Whitespace
+Serializable,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+DATE_PATTERN,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""yyyy-MM-dd HH:mm:ss z""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+FastDateFormat,Identifier
+ ,Whitespace
+format,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FastDateFormat,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+DATE_PATTERN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+DateFormat,Identifier
+ ,Whitespace
+df,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SimpleDateFormat,Identifier
+(,Punctuation
+DATE_PATTERN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+formatTime,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+millis,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+format,Identifier
+.,Punctuation
+format,Identifier
+(,Punctuation
+millis,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+parseTime,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+timeString,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+timeString,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Date,Identifier
+ ,Whitespace
+dt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+df,Identifier
+.,Punctuation
+parse,Identifier
+(,Punctuation
+timeString,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+dt,Identifier
+.,Punctuation
+getTime,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ParseException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+0l,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+JsonProperty,Identifier
+(,Punctuation
+"""uuid""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+uuid,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+JsonProperty,Identifier
+(,Punctuation
+"""last_modified""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+lastModified,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Metadata model version
+     *
+     * User info only, we don't do version control
+     */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+JsonProperty,Identifier
+(,Punctuation
+"""version""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+version,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinVersion,Identifier
+.,Punctuation
+getCurrentVersion,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getVersion,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+version,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setVersion,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+version,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+version,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+version,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+uuid,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setUuid,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+uuid,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+uuid,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+uuid,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getId,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+uuid,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getLastModified,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+lastModified,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setLastModified,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+lastModified,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+lastModified,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+lastModified,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+updateRandomUuid,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+setUuid,Identifier
+(,Punctuation
+UUID,Identifier
+.,Punctuation
+randomUUID,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+hashCode,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+prime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+31,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prime,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+lastModified,Identifier
+ ,Whitespace
+^,Operator
+ ,Whitespace
+(,Punctuation
+lastModified,Identifier
+ ,Whitespace
+>>>,Operator
+ ,Whitespace
+32,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prime,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+uuid,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+:,Operator
+ ,Whitespace
+uuid,Identifier
+.,Punctuation
+hashCode,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prime,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+version,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+:,Operator
+ ,Whitespace
+version,Identifier
+.,Punctuation
+hashCode,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+equals,Identifier
+(,Punctuation
+Object,Identifier
+ ,Whitespace
+obj,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+ ,Whitespace
+==,Operator
+ ,Whitespace
+obj,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+obj,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+obj,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+RootPersistentEntity,Identifier
+ ,Whitespace
+other,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+RootPersistentEntity,Identifier
+),Punctuation
+ ,Whitespace
+obj,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+lastModified,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+other,Identifier
+.,Punctuation
+lastModified,Identifier
+ ,Whitespace
+||,Operator
+ ,Whitespace
+!,Operator
+(,Punctuation
+version,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+version,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+other,Identifier
+.,Punctuation
+getVersion,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+uuid,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+other,Identifier
+.,Punctuation
+uuid,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+uuid,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+other,Identifier
+.,Punctuation
+uuid,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

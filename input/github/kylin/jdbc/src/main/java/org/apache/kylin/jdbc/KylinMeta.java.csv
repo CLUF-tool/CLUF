@@ -1,0 +1,3899 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+jdbc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+Field,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+SQLException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collections,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Pattern,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+AvaticaUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+ColumnMetaData,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+MetaImpl,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+MissingResultsException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+NoSuchStatementException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+QueryState,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+calcite,Identifier
+.,Punctuation
+avatica,Identifier
+.,Punctuation
+remote,Identifier
+.,Punctuation
+TypedValue,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+ImmutableList,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Implementation of Avatica interface
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KylinMeta,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+MetaImpl,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+KMetaProject,Identifier
+ ,Whitespace
+metaProject,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+KylinMeta,Identifier
+(,Punctuation
+KylinConnection,Identifier
+ ,Whitespace
+connection,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+(,Punctuation
+connection,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+KylinConnection,Identifier
+ ,Whitespace
+connection,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+KylinConnection,Identifier
+),Punctuation
+ ,Whitespace
+connection,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// insert/update/delete go this path, ignorable for Kylin",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+StatementHandle,Identifier
+ ,Whitespace
+prepare,Identifier
+(,Punctuation
+ConnectionHandle,Identifier
+ ,Whitespace
+ch,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+maxRowCount,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+StatementHandle,Identifier
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+super,Keyword
+.,Punctuation
+createStatement,Identifier
+(,Punctuation
+ch,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+result,Identifier
+.,Punctuation
+signature,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+connection,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+mockPreparedSignature,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+// real execution happens in KylinResultSet.execute(),Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ExecuteResult,Identifier
+ ,Whitespace
+execute,Identifier
+(,Punctuation
+StatementHandle,Identifier
+ ,Whitespace
+sh,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+TypedValue,Identifier
+>,Operator
+ ,Whitespace
+parameterValues,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+maxRowCount,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+NoSuchStatementException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+ ,Whitespace
+metaResultSet,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MetaResultSet,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+sh,Identifier
+.,Punctuation
+connectionId,Identifier
+",",Punctuation
+ ,Whitespace
+sh,Identifier
+.,Punctuation
+id,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+sh,Identifier
+.,Punctuation
+signature,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ExecuteResult,Identifier
+(,Punctuation
+ImmutableList,Identifier
+.,Punctuation
+of,Identifier
+(,Punctuation
+metaResultSet,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// mimic from CalciteMetaImpl, real execution happens via callback in KylinResultSet.execute()",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ExecuteResult,Identifier
+ ,Whitespace
+prepareAndExecute,Identifier
+(,Punctuation
+StatementHandle,Identifier
+ ,Whitespace
+sh,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+maxRowCount,Identifier
+",",Punctuation
+ ,Whitespace
+PrepareCallback,Identifier
+ ,Whitespace
+callback,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+callback,Identifier
+.,Punctuation
+getMonitor,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+callback,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+sh,Identifier
+.,Punctuation
+signature,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+connection,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+mockPreparedSignature,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+callback,Identifier
+.,Punctuation
+assign,Identifier
+(,Punctuation
+sh,Identifier
+.,Punctuation
+signature,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+callback,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+ ,Whitespace
+metaResultSet,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MetaResultSet,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+sh,Identifier
+.,Punctuation
+connectionId,Identifier
+",",Punctuation
+ ,Whitespace
+sh,Identifier
+.,Punctuation
+id,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+sh,Identifier
+.,Punctuation
+signature,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ExecuteResult,Identifier
+(,Punctuation
+ImmutableList,Identifier
+.,Punctuation
+of,Identifier
+(,Punctuation
+metaResultSet,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+SQLException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+closeStatement,Identifier
+(,Punctuation
+StatementHandle,Identifier
+ ,Whitespace
+h,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// nothing to do,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+KMetaProject,Identifier
+ ,Whitespace
+getMetaProject,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+metaProject,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+KylinConnection,Identifier
+ ,Whitespace
+conn,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+connection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+metaProject,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+conn,Identifier
+.,Punctuation
+getRemoteClient,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+retrieveMetaData,Identifier
+(,Punctuation
+conn,Identifier
+.,Punctuation
+getProject,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+metaProject,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+ ,Whitespace
+getTableTypes,Identifier
+(,Punctuation
+ConnectionHandle,Identifier
+ ,Whitespace
+ch,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+createResultSet,Identifier
+(,Punctuation
+metaTableTypes,Identifier
+",",Punctuation
+ ,Whitespace
+MetaTableType,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+"""TABLE_TYPE""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+ ,Whitespace
+getCatalogs,Identifier
+(,Punctuation
+ConnectionHandle,Identifier
+ ,Whitespace
+ch,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+KMetaCatalog,Identifier
+>,Operator
+ ,Whitespace
+catalogs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getMetaProject,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+catalogs,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+createResultSet,Identifier
+(,Punctuation
+catalogs,Identifier
+",",Punctuation
+ ,Whitespace
+KMetaCatalog,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+"""TABLE_CAT""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+ ,Whitespace
+getSchemas,Identifier
+(,Punctuation
+ConnectionHandle,Identifier
+ ,Whitespace
+ch,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+schemaPattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+KMetaSchema,Identifier
+>,Operator
+ ,Whitespace
+schemas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getMetaProject,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getSchemas,Identifier
+(,Punctuation
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+schemaPattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+createResultSet,Identifier
+(,Punctuation
+schemas,Identifier
+",",Punctuation
+ ,Whitespace
+KMetaSchema,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+"""TABLE_SCHEM""",String
+",",Punctuation
+ ,Whitespace
+"""TABLE_CATALOG""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+ ,Whitespace
+getTables,Identifier
+(,Punctuation
+ConnectionHandle,Identifier
+ ,Whitespace
+ch,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+schemaPattern,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+tableNamePattern,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+typeList,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+KMetaTable,Identifier
+>,Operator
+ ,Whitespace
+tables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getMetaProject,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getTables,Identifier
+(,Punctuation
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+schemaPattern,Identifier
+",",Punctuation
+ ,Whitespace
+tableNamePattern,Identifier
+",",Punctuation
+ ,Whitespace
+typeList,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+createResultSet,Identifier
+(,Punctuation
+tables,Identifier
+",",Punctuation
+ ,Whitespace
+KMetaTable,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TABLE_CAT""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TABLE_SCHEM""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TABLE_NAME""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TABLE_TYPE""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""REMARKS""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TYPE_CAT""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TYPE_SCHEM""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TYPE_NAME""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""SELF_REFERENCING_COL_NAME""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""REF_GENERATION""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+ ,Whitespace
+getColumns,Identifier
+(,Punctuation
+ConnectionHandle,Identifier
+ ,Whitespace
+ch,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+schemaPattern,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+tableNamePattern,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+columnNamePattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+KMetaColumn,Identifier
+>,Operator
+ ,Whitespace
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getMetaProject,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getColumns,Identifier
+(,Punctuation
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+schemaPattern,Identifier
+",",Punctuation
+ ,Whitespace
+tableNamePattern,Identifier
+",",Punctuation
+ ,Whitespace
+columnNamePattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+createResultSet,Identifier
+(,Punctuation
+columns,Identifier
+",",Punctuation
+ ,Whitespace
+KMetaColumn,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TABLE_CAT""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TABLE_SCHEM""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TABLE_NAME""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""COLUMN_NAME""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""DATA_TYPE""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""TYPE_NAME""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""COLUMN_SIZE""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""BUFFER_LENGTH""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""DECIMAL_DIGITS""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""NUM_PREC_RADIX""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""NULLABLE""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""REMARKS""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""COLUMN_DEF""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""SQL_DATA_TYPE""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""SQL_DATETIME_SUB""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""CHAR_OCTET_LENGTH""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""ORDINAL_POSITION""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""IS_NULLABLE""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""SCOPE_CATALOG""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""SCOPE_TABLE""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""SOURCE_DATA_TYPE""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""IS_AUTOINCREMENT""",String
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+"""IS_GENERATEDCOLUMN""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+{,Punctuation
+ ,Whitespace
+"""rawtypes""",String
+",",Punctuation
+ ,Whitespace
+"""unchecked""",String
+ ,Whitespace
+},Punctuation
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+ ,Whitespace
+createResultSet,Identifier
+(,Punctuation
+List,Identifier
+ ,Whitespace
+iterable,Identifier
+",",Punctuation
+ ,Whitespace
+Class,Identifier
+ ,Whitespace
+clazz,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+.,Punctuation
+.,Punctuation
+ ,Whitespace
+names,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+ColumnMetaData,Identifier
+>,Operator
+ ,Whitespace
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+ColumnMetaData,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Field,Identifier
+>,Operator
+ ,Whitespace
+fields,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Field,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+fieldNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+name,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+names,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fields,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+fieldName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+AvaticaUtils,Identifier
+.,Punctuation
+toCamelCase,Identifier
+(,Punctuation
+name,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+Field,Identifier
+ ,Whitespace
+field,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+field,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clazz,Identifier
+.,Punctuation
+getField,Identifier
+(,Punctuation
+fieldName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NoSuchFieldException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+columns,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+columnMetaData,Identifier
+(,Punctuation
+name,Identifier
+",",Punctuation
+ ,Whitespace
+index,Identifier
+",",Punctuation
+ ,Whitespace
+field,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+fields,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+field,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+fieldNames,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+fieldName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+CursorFactory,Identifier
+ ,Whitespace
+cursorFactory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+CursorFactory,Identifier
+.,Punctuation
+record,Identifier
+(,Punctuation
+clazz,Identifier
+",",Punctuation
+ ,Whitespace
+fields,Identifier
+",",Punctuation
+ ,Whitespace
+fieldNames,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Signature,Identifier
+ ,Whitespace
+signature,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Signature,Identifier
+(,Punctuation
+columns,Identifier
+",",Punctuation
+ ,Whitespace
+"""""",String
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+>,Operator
+ ,Whitespace
+emptyMap,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+cursorFactory,Identifier
+",",Punctuation
+ ,Whitespace
+StatementType,Identifier
+.,Punctuation
+SELECT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+StatementHandle,Identifier
+ ,Whitespace
+sh,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+createStatement,Identifier
+(,Punctuation
+connection,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+handle,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Frame,Identifier
+ ,Whitespace
+frame,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Frame,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+iterable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+MetaResultSet,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+connection,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+id,Identifier
+",",Punctuation
+ ,Whitespace
+sh,Identifier
+.,Punctuation
+id,Identifier
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+signature,Identifier
+",",Punctuation
+ ,Whitespace
+frame,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+Named,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+searchByPatterns,Identifier
+(,Punctuation
+NamedWithChildren,Identifier
+ ,Whitespace
+parent,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+.,Punctuation
+.,Punctuation
+.,Punctuation
+ ,Whitespace
+patterns,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+assert,Identifier
+ ,Whitespace
+patterns,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+patterns,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+findChildren,Identifier
+(,Punctuation
+parent,Identifier
+",",Punctuation
+ ,Whitespace
+patterns,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+patterns,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+children,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+NamedWithChildren,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Pat,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+subPatterns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+copyOfRange,Identifier
+(,Punctuation
+patterns,Identifier
+",",Punctuation
+ ,Whitespace
+1,Literal
+",",Punctuation
+ ,Whitespace
+patterns,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+NamedWithChildren,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+result,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+searchByPatterns,Identifier
+(,Punctuation
+c,Identifier
+",",Punctuation
+ ,Whitespace
+subPatterns,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+findChildren,Identifier
+(,Punctuation
+NamedWithChildren,Identifier
+ ,Whitespace
+parent,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+pattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+null,Keyword
+ ,Whitespace
+==,Operator
+ ,Whitespace
+pattern,Identifier
+.,Punctuation
+s,Identifier
+ ,Whitespace
+||,Operator
+ ,Whitespace
+pattern,Identifier
+.,Punctuation
+s,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""%""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+parent,Identifier
+.,Punctuation
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+NamedWithChildren,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+regex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+likeToRegex,Identifier
+(,Punctuation
+pattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+NamedWithChildren,Identifier
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+parent,Identifier
+.,Punctuation
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+regex,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+c,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+matches,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+result,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Converts a LIKE-style pattern (where '%' represents a wild-card,
+     * escaped using '\') to a Java regex.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+likeToRegex,Identifier
+(,Punctuation
+Pat,Identifier
+ ,Whitespace
+pattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+buf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+"""^""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+char,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+charArray,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pattern,Identifier
+.,Punctuation
+s,Identifier
+.,Punctuation
+toCharArray,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+slash,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+2,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+charArray,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+char,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+charArray,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+slash,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'[',String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+']',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+'\\',String
+:,Operator
+"
+",Newline
+                    ,Whitespace
+slash,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+'%',String
+:,Operator
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""".*""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+'[',String
+:,Operator
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\\[""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+']',String
+:,Operator
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\\]""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+                    ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'[',String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+']',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""$""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+MetaTableType,Identifier
+>,Operator
+ ,Whitespace
+metaTableTypes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+MetaTableType,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+metaTableTypes,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+MetaTableType,Identifier
+(,Punctuation
+"""TABLE""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KMetaProject,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+projectName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaCatalog,Identifier
+>,Operator
+ ,Whitespace
+catalogs,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+KMetaProject,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+projectName,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaCatalog,Identifier
+>,Operator
+ ,Whitespace
+catalogs,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+projectName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+projectName,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+catalogs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+catalogs,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaSchema,Identifier
+>,Operator
+ ,Whitespace
+getSchemas,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+schemaPattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+List,Identifier
+<,Operator
+KMetaSchema,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+searchByPatterns,Identifier
+(,Punctuation
+this,Keyword
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+.,Punctuation
+of,Identifier
+(,Punctuation
+catalog,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+schemaPattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaTable,Identifier
+>,Operator
+ ,Whitespace
+getTables,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+schemaPattern,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+tableNamePattern,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+typeList,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+List,Identifier
+<,Operator
+KMetaTable,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+searchByPatterns,Identifier
+(,Punctuation
+this,Keyword
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+.,Punctuation
+of,Identifier
+(,Punctuation
+catalog,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+schemaPattern,Identifier
+",",Punctuation
+ ,Whitespace
+tableNamePattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaColumn,Identifier
+>,Operator
+ ,Whitespace
+getColumns,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+catalog,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+schemaPattern,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+tableNamePattern,Identifier
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+ ,Whitespace
+columnNamePattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+List,Identifier
+<,Operator
+KMetaColumn,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+searchByPatterns,Identifier
+(,Punctuation
+this,Keyword
+",",Punctuation
+ ,Whitespace
+Pat,Identifier
+.,Punctuation
+of,Identifier
+(,Punctuation
+catalog,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+schemaPattern,Identifier
+",",Punctuation
+ ,Whitespace
+tableNamePattern,Identifier
+",",Punctuation
+ ,Whitespace
+columnNamePattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+projectName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+catalogs,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KMetaCatalog,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableCat,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaSchema,Identifier
+>,Operator
+ ,Whitespace
+schemas,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+KMetaCatalog,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableCatalog,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaSchema,Identifier
+>,Operator
+ ,Whitespace
+schemas,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+tableCat,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tableCatalog,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+schemas,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+schemas,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+tableCat,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+schemas,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KMetaSchema,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+MetaSchema,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaTable,Identifier
+>,Operator
+ ,Whitespace
+tables,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+KMetaSchema,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableCatalog,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableSchem,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaTable,Identifier
+>,Operator
+ ,Whitespace
+tables,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+super,Keyword
+(,Punctuation
+tableCatalog,Identifier
+",",Punctuation
+ ,Whitespace
+tableSchem,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+tables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tables,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+tables,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KMetaTable,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+MetaTable,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaColumn,Identifier
+>,Operator
+ ,Whitespace
+columns,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+KMetaTable,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableCat,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableSchem,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableType,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+KMetaColumn,Identifier
+>,Operator
+ ,Whitespace
+columns,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+super,Keyword
+(,Punctuation
+tableCat,Identifier
+",",Punctuation
+ ,Whitespace
+tableSchem,Identifier
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+tableType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columns,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+columns,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KMetaColumn,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+MetaColumn,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+NamedWithChildren,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+KMetaColumn,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableCat,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableSchem,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+columnName,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+dataType,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+typeName,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+columnSize,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+decimalDigits,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+numPrecRadix,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nullable,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+charOctetLength,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+ordinalPosition,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+isNullable,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+super,Keyword
+(,Punctuation
+tableCat,Identifier
+",",Punctuation
+ ,Whitespace
+tableSchem,Identifier
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+columnName,Identifier
+",",Punctuation
+ ,Whitespace
+dataType,Identifier
+",",Punctuation
+ ,Whitespace
+typeName,Identifier
+",",Punctuation
+ ,Whitespace
+columnSize,Identifier
+",",Punctuation
+ ,Whitespace
+decimalDigits,Identifier
+",",Punctuation
+ ,Whitespace
+numPrecRadix,Identifier
+",",Punctuation
+ ,Whitespace
+nullable,Identifier
+",",Punctuation
+ ,Whitespace
+charOctetLength,Identifier
+",",Punctuation
+ ,Whitespace
+ordinalPosition,Identifier
+",",Punctuation
+ ,Whitespace
+isNullable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+<,Operator
+NamedWithChildren,Identifier
+>,Operator
+ ,Whitespace
+emptyList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Frame,Identifier
+ ,Whitespace
+fetch,Identifier
+(,Punctuation
+StatementHandle,Identifier
+ ,Whitespace
+h,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+fetchMaxRowCount,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+NoSuchStatementException,Identifier
+",",Punctuation
+ ,Whitespace
+MissingResultsException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// TODO Auto-generated method stub,Comment
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+syncResults,Identifier
+(,Punctuation
+StatementHandle,Identifier
+ ,Whitespace
+sh,Identifier
+",",Punctuation
+ ,Whitespace
+QueryState,Identifier
+ ,Whitespace
+state,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+NoSuchStatementException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// TODO Auto-generated method stub,Comment
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+commit,Identifier
+(,Punctuation
+ConnectionHandle,Identifier
+ ,Whitespace
+ch,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// TODO Auto-generated method stub,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+rollback,Identifier
+(,Punctuation
+ConnectionHandle,Identifier
+ ,Whitespace
+ch,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// TODO Auto-generated method stub,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

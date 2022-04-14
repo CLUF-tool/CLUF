@@ -1,0 +1,1856 @@
+"/**
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the ""License""); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an ""AS IS"" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+kafka,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+message,Identifier
+.,Punctuation
+MessageAndMetadata,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+MemoryChannel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurables,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+EventBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+kafka,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TestUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+AfterClass,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+BeforeClass,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Test,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+UnsupportedEncodingException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Assert,Identifier
+.,Punctuation
+assertNull,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Assert,Identifier
+.,Punctuation
+fail,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Unit tests for Kafka Sink
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestKafkaSink,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+TestUtil,Identifier
+ ,Whitespace
+testUtil,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TestUtil,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+BeforeClass,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setup,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+testUtil,Identifier
+.,Punctuation
+prepare,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+topics,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+topics,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+KafkaSinkConstants,Identifier
+.,Punctuation
+DEFAULT_TOPIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+topics,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+TestConstants,Identifier
+.,Punctuation
+STATIC_TOPIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+topics,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+TestConstants,Identifier
+.,Punctuation
+CUSTOM_TOPIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+testUtil,Identifier
+.,Punctuation
+initTopicList,Identifier
+(,Punctuation
+topics,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+AfterClass,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+testUtil,Identifier
+.,Punctuation
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testDefaultTopic,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Sink,Identifier
+ ,Whitespace
+kafkaSink,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaSink,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prepareDefaultContext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+kafkaSink,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Channel,Identifier
+ ,Whitespace
+memoryChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MemoryChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+memoryChannel,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+setChannel,Identifier
+(,Punctuation
+memoryChannel,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""default-topic-test""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+memoryChannel,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+msg,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+memoryChannel,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+ ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+process,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+status,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+fail,Identifier
+(,Punctuation
+"""Error Occurred""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+EventDeliveryException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// ignore,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+fetchedMsg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+),Punctuation
+"
+",Newline
+      ,Whitespace
+testUtil,Identifier
+.,Punctuation
+getNextMessageFromConsumer,Identifier
+(,Punctuation
+KafkaSinkConstants,Identifier
+.,Punctuation
+DEFAULT_TOPIC,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+message,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+msg,Identifier
+",",Punctuation
+ ,Whitespace
+fetchedMsg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testStaticTopic,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prepareDefaultContext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+// add the static topic,Comment
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+KafkaSinkConstants,Identifier
+.,Punctuation
+TOPIC,Identifier
+",",Punctuation
+ ,Whitespace
+TestConstants,Identifier
+.,Punctuation
+STATIC_TOPIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""static-topic-test""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+ ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prepareAndSend,Identifier
+(,Punctuation
+context,Identifier
+",",Punctuation
+ ,Whitespace
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+status,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+fail,Identifier
+(,Punctuation
+"""Error Occurred""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+EventDeliveryException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// ignore,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+fetchedMsg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+),Punctuation
+ ,Whitespace
+testUtil,Identifier
+.,Punctuation
+getNextMessageFromConsumer,Identifier
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+TestConstants,Identifier
+.,Punctuation
+STATIC_TOPIC,Identifier
+),Punctuation
+.,Punctuation
+message,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+msg,Identifier
+",",Punctuation
+ ,Whitespace
+fetchedMsg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testTopicAndKeyFromHeader,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+UnsupportedEncodingException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Sink,Identifier
+ ,Whitespace
+kafkaSink,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaSink,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prepareDefaultContext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+kafkaSink,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Channel,Identifier
+ ,Whitespace
+memoryChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MemoryChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+memoryChannel,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+setChannel,Identifier
+(,Punctuation
+memoryChannel,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""test-topic-and-key-from-header""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+headers,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""topic""",String
+",",Punctuation
+ ,Whitespace
+TestConstants,Identifier
+.,Punctuation
+CUSTOM_TOPIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+headers,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""key""",String
+",",Punctuation
+ ,Whitespace
+TestConstants,Identifier
+.,Punctuation
+CUSTOM_KEY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+memoryChannel,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+msg,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+headers,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+memoryChannel,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+ ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+process,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+status,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+fail,Identifier
+(,Punctuation
+"""Error Occurred""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+EventDeliveryException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// ignore,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+MessageAndMetadata,Identifier
+ ,Whitespace
+fetchedMsg,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+testUtil,Identifier
+.,Punctuation
+getNextMessageFromConsumer,Identifier
+(,Punctuation
+TestConstants,Identifier
+.,Punctuation
+CUSTOM_TOPIC,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+msg,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+),Punctuation
+ ,Whitespace
+fetchedMsg,Identifier
+.,Punctuation
+message,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""UTF-8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+assertEquals,Identifier
+(,Punctuation
+TestConstants,Identifier
+.,Punctuation
+CUSTOM_KEY,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+),Punctuation
+ ,Whitespace
+fetchedMsg,Identifier
+.,Punctuation
+key,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""UTF-8""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testEmptyChannel,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+UnsupportedEncodingException,Identifier
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+EventDeliveryException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Sink,Identifier
+ ,Whitespace
+kafkaSink,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaSink,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prepareDefaultContext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+kafkaSink,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Channel,Identifier
+ ,Whitespace
+memoryChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MemoryChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+memoryChannel,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+setChannel,Identifier
+(,Punctuation
+memoryChannel,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+ ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+process,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+status,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+.,Punctuation
+BACKOFF,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+fail,Identifier
+(,Punctuation
+"""Error Occurred""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+assertNull,Identifier
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+testUtil,Identifier
+.,Punctuation
+getNextMessageFromConsumer,Identifier
+(,Punctuation
+KafkaSinkConstants,Identifier
+.,Punctuation
+DEFAULT_TOPIC,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Context,Identifier
+ ,Whitespace
+prepareDefaultContext,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// Prepares a default context with Kafka Server Properties,Comment
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""brokerList""",String
+",",Punctuation
+ ,Whitespace
+testUtil,Identifier
+.,Punctuation
+getKafkaServerUrl,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""kafka.request.required.acks""",String
+",",Punctuation
+ ,Whitespace
+"""1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""kafka.producer.type""",String
+",",Punctuation
+"""sync""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""batchSize""",String
+",",Punctuation
+ ,Whitespace
+"""1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+context,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Sink,Identifier
+.,Punctuation
+Status,Identifier
+ ,Whitespace
+prepareAndSend,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+),Punctuation
+"
+",Newline
+    ,Whitespace
+throws,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Sink,Identifier
+ ,Whitespace
+kafkaSink,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaSink,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+kafkaSink,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Channel,Identifier
+ ,Whitespace
+memoryChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MemoryChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+memoryChannel,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+setChannel,Identifier
+(,Punctuation
+memoryChannel,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+memoryChannel,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+msg,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+memoryChannel,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+kafkaSink,Identifier
+.,Punctuation
+process,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

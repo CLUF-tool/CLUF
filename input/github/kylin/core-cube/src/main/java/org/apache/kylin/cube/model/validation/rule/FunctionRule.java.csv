@@ -1,0 +1,1569 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+validation,Identifier
+.,Punctuation
+rule,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Iterator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+CubeDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+validation,Identifier
+.,Punctuation
+IValidatorRule,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+validation,Identifier
+.,Punctuation
+ResultLevel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+validation,Identifier
+.,Punctuation
+ValidateContext,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+topn,Identifier
+.,Punctuation
+TopNMeasureType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+MetadataManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+ColumnDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+FunctionDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+MeasureDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+ParameterDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TableDesc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Validate function parameter. Ticket:
+ * https://github.scm.corp.ebay.com/Kylin/Kylin/issues/268
+ * <p/>
+ * if type is column, check values are valid fact table columns if type is
+ * constant, the value only can be numberic
+ * <p/>
+ * the return type only can be int/bigint/long/double/decimal
+ *
+ * @author jianliu
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+FunctionRule,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+IValidatorRule,Identifier
+<,Operator
+CubeDesc,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.kylin.metadata.validation.IValidatorRule#validate(java.lang.Object
+     * , org.apache.kylin.metadata.validation.ValidateContext)
+     */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+validate,Identifier
+(,Punctuation
+CubeDesc,Identifier
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+ValidateContext,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+MeasureDesc,Identifier
+>,Operator
+ ,Whitespace
+measures,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cube,Identifier
+.,Punctuation
+getMeasures,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+FunctionDesc,Identifier
+>,Operator
+ ,Whitespace
+countFuncs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+FunctionDesc,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Iterator,Identifier
+<,Operator
+MeasureDesc,Identifier
+>,Operator
+ ,Whitespace
+it,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+measures,Identifier
+.,Punctuation
+iterator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+it,Identifier
+.,Punctuation
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+MeasureDesc,Identifier
+ ,Whitespace
+measure,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+it,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+FunctionDesc,Identifier
+ ,Whitespace
+func,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+measure,Identifier
+.,Punctuation
+getFunction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ParameterDesc,Identifier
+ ,Whitespace
+parameter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+func,Identifier
+.,Punctuation
+getParameter,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+parameter,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Must define parameter for function """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+func,Identifier
+.,Punctuation
+getExpression,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+measure,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+func,Identifier
+.,Punctuation
+getParameter,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+func,Identifier
+.,Punctuation
+getParameter,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Must define type for parameter type """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+func,Identifier
+.,Punctuation
+getExpression,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+measure,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Must define type for parameter value """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+func,Identifier
+.,Punctuation
+getExpression,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+measure,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+func,Identifier
+.,Punctuation
+getReturnType,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Must define return type for function """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+func,Identifier
+.,Punctuation
+getExpression,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+measure,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+FunctionDesc,Identifier
+.,Punctuation
+PARAMETER_TYPE_COLUMN,Identifier
+",",Punctuation
+ ,Whitespace
+type,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+validateColumnParameter,Identifier
+(,Punctuation
+context,Identifier
+",",Punctuation
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+FunctionDesc,Identifier
+.,Punctuation
+PARAMETER_TYPE_CONSTANT,Identifier
+",",Punctuation
+ ,Whitespace
+type,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+validateCostantParameter,Identifier
+(,Punctuation
+context,Identifier
+",",Punctuation
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+func,Identifier
+.,Punctuation
+getMeasureType,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+validate,Identifier
+(,Punctuation
+func,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IllegalArgumentException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+func,Identifier
+.,Punctuation
+isCount,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+countFuncs,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+func,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+TopNMeasureType,Identifier
+.,Punctuation
+FUNC_TOP_N,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+func,Identifier
+.,Punctuation
+getExpression,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+parameter,Identifier
+.,Punctuation
+getNextParameter,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Must define 2 parameters for function """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+func,Identifier
+.,Punctuation
+getExpression,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" in """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+measure,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+countFuncs,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Must define one and only one count(1) function, but there are """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+countFuncs,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" -- """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+countFuncs,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param context
+     * @param cube
+     * @param value
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+validateCostantParameter,Identifier
+(,Punctuation
+ValidateContext,Identifier
+ ,Whitespace
+context,Identifier
+",",Punctuation
+ ,Whitespace
+CubeDesc,Identifier
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Parameter value must be number, but it is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param context
+     * @param cube
+     * @param value
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+validateColumnParameter,Identifier
+(,Punctuation
+ValidateContext,Identifier
+ ,Whitespace
+context,Identifier
+",",Punctuation
+ ,Whitespace
+CubeDesc,Identifier
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+factTable,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cube,Identifier
+.,Punctuation
+getFactTable,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+factTable,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Fact table can not be null.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+TableDesc,Identifier
+ ,Whitespace
+table,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MetadataManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+cube,Identifier
+.,Punctuation
+getConfig,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+getTableDesc,Identifier
+(,Punctuation
+factTable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+table,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Fact table can not be found: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+cube,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+// Prepare column set,Comment
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+set,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ColumnDesc,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+cdesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+table,Identifier
+.,Punctuation
+getColumns,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+cdesc,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ColumnDesc,Identifier
+ ,Whitespace
+columnDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cdesc,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+set,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+columnDesc,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+items,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+value,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+items,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+item,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+items,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+item,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+set,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+item,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Column [""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+item,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""] does not exist in factable table""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+factTable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

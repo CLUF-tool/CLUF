@@ -1,0 +1,928 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+steps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+KeyValue,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Text,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+kv,Identifier
+.,Punctuation
+RowConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+CubeDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+HBaseColumnDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+MeasureCodec,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+MeasureDesc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author George Song (ysong1)
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KeyValueCreator,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+cfBytes,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+qBytes,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+timestamp,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+int,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+refIndex,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+MeasureDesc,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+refMeasures,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+MeasureCodec,Identifier
+ ,Whitespace
+codec,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Object,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+colValues,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+valueBuf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+allocate,Identifier
+(,Punctuation
+RowConstants,Identifier
+.,Punctuation
+ROWVALUE_BUFFER_SIZE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isFullCopy,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+KeyValueCreator,Identifier
+(,Punctuation
+CubeDesc,Identifier
+ ,Whitespace
+cubeDesc,Identifier
+",",Punctuation
+ ,Whitespace
+HBaseColumnDesc,Identifier
+ ,Whitespace
+colDesc,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+cfBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toBytes,Identifier
+(,Punctuation
+colDesc,Identifier
+.,Punctuation
+getColumnFamilyName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+qBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toBytes,Identifier
+(,Punctuation
+colDesc,Identifier
+.,Punctuation
+getQualifier,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+// use 0 for timestamp,Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+refIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colDesc,Identifier
+.,Punctuation
+getMeasureIndex,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+refMeasures,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+colDesc,Identifier
+.,Punctuation
+getMeasures,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+codec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MeasureCodec,Identifier
+(,Punctuation
+refMeasures,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+colValues,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Object,Identifier
+[,Punctuation
+refMeasures,Identifier
+.,Punctuation
+length,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+isFullCopy,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+MeasureDesc,Identifier
+>,Operator
+ ,Whitespace
+measures,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cubeDesc,Identifier
+.,Punctuation
+getMeasures,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+measures,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+refIndex,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+||,Operator
+ ,Whitespace
+refIndex,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+i,Identifier
+),Punctuation
+"
+",Newline
+                ,Whitespace
+isFullCopy,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+KeyValue,Identifier
+ ,Whitespace
+create,Identifier
+(,Punctuation
+Text,Identifier
+ ,Whitespace
+key,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+measureValues,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+create,Identifier
+(,Punctuation
+key,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+key,Identifier
+.,Punctuation
+getLength,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+measureValues,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+KeyValue,Identifier
+ ,Whitespace
+create,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+keyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+keyOffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+keyLength,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+measureValues,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+colValues,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+colValues,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+measureValues,Identifier
+[,Punctuation
+refIndex,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+valueBuf,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+codec,Identifier
+.,Punctuation
+encode,Identifier
+(,Punctuation
+colValues,Identifier
+",",Punctuation
+ ,Whitespace
+valueBuf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+create,Identifier
+(,Punctuation
+keyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+keyOffset,Identifier
+",",Punctuation
+ ,Whitespace
+keyLength,Identifier
+",",Punctuation
+ ,Whitespace
+valueBuf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+valueBuf,Identifier
+.,Punctuation
+position,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+KeyValue,Identifier
+ ,Whitespace
+create,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+keyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+keyOffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+keyLength,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+voffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+vlen,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KeyValue,Identifier
+(,Punctuation
+keyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+keyOffset,Identifier
+",",Punctuation
+ ,Whitespace
+keyLength,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+cfBytes,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+cfBytes,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+qBytes,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+qBytes,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+timestamp,Identifier
+",",Punctuation
+ ,Whitespace
+KeyValue,Identifier
+.,Punctuation
+Type,Identifier
+.,Punctuation
+Put,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+voffset,Identifier
+",",Punctuation
+ ,Whitespace
+vlen,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+KeyValue,Identifier
+ ,Whitespace
+create,Identifier
+(,Punctuation
+Text,Identifier
+ ,Whitespace
+key,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+voffset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+vlen,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+create,Identifier
+(,Punctuation
+key,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+key,Identifier
+.,Punctuation
+getLength,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+voffset,Identifier
+",",Punctuation
+ ,Whitespace
+vlen,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

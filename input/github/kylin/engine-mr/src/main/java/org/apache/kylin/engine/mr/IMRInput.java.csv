@@ -1,0 +1,307 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+mapreduce,Identifier
+.,Punctuation
+Job,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+job,Identifier
+.,Punctuation
+execution,Identifier
+.,Punctuation
+DefaultChainedExecutable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TableDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+IRealizationSegment,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Any ITableSource that wishes to serve as input of MapReduce build engine must adapt to this interface.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+IMRInput,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** Return a helper to participate in batch cubing job flow. */,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IMRBatchCubingInputSide,Identifier
+ ,Whitespace
+getBatchCubingInputSide,Identifier
+(,Punctuation
+IRealizationSegment,Identifier
+ ,Whitespace
+seg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** Return an InputFormat that reads from specified table. */,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IMRTableInputFormat,Identifier
+ ,Whitespace
+getTableInputFormat,Identifier
+(,Punctuation
+TableDesc,Identifier
+ ,Whitespace
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Utility that configures mapper to read from a table.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+IMRTableInputFormat,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Configure the InputFormat of given job. */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configureJob,Identifier
+(,Punctuation
+Job,Identifier
+ ,Whitespace
+job,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Parse a mapper input object into column values. */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+parseMapperInput,Identifier
+(,Punctuation
+Object,Identifier
+ ,Whitespace
+mapperInput,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Participate the batch cubing flow as the input side. Responsible for creating
+     * intermediate flat table (Phase 1) and clean up any leftover (Phase 4).
+     * 
+     * - Phase 1: Create Flat Table
+     * - Phase 2: Build Dictionary (with FlatTableInputFormat)
+     * - Phase 3: Build Cube (with FlatTableInputFormat)
+     * - Phase 4: Update Metadata & Cleanup
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+IMRBatchCubingInputSide,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Return an InputFormat that reads from the intermediate flat table */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+IMRTableInputFormat,Identifier
+ ,Whitespace
+getFlatTableInputFormat,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Add step that creates an intermediate flat table as defined by CubeJoinedFlatTableDesc */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addStepPhase1_CreateFlatTable,Identifier
+(,Punctuation
+DefaultChainedExecutable,Identifier
+ ,Whitespace
+jobFlow,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"/** Add step that does necessary clean up, like delete the intermediate flat table */",Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addStepPhase4_Cleanup,Identifier
+(,Punctuation
+DefaultChainedExecutable,Identifier
+ ,Whitespace
+jobFlow,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

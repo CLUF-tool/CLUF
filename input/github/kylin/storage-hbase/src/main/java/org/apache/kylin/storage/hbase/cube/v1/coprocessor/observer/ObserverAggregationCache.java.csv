@@ -1,0 +1,1452 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+v1,Identifier
+.,Punctuation
+coprocessor,Identifier
+.,Punctuation
+observer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Iterator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+.,Punctuation
+Entry,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+Cell,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HRegionInfo,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+KeyValue,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+KeyValue,Identifier
+.,Punctuation
+Type,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+regionserver,Identifier
+.,Punctuation
+RegionScanner,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+MeasureAggregator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+coprocessor,Identifier
+.,Punctuation
+AggrKey,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+coprocessor,Identifier
+.,Punctuation
+AggregationCache,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""rawtypes""",String
+),Punctuation
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ObserverAggregationCache,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AggregationCache,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ObserverAggregators,Identifier
+ ,Whitespace
+aggregators,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ObserverAggregationCache,Identifier
+(,Punctuation
+ObserverAggregators,Identifier
+ ,Whitespace
+aggregators,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+aggregators,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggregators,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+RegionScanner,Identifier
+ ,Whitespace
+getScanner,Identifier
+(,Punctuation
+RegionScanner,Identifier
+ ,Whitespace
+innerScanner,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AggregationRegionScanner,Identifier
+(,Punctuation
+innerScanner,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+createBuffer,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+aggregators,Identifier
+.,Punctuation
+createBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+AggregationRegionScanner,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+RegionScanner,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+RegionScanner,Identifier
+ ,Whitespace
+innerScanner,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Iterator,Identifier
+<,Operator
+Entry,Identifier
+<,Operator
+AggrKey,Identifier
+",",Punctuation
+ ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+iterator,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+AggregationRegionScanner,Identifier
+(,Punctuation
+RegionScanner,Identifier
+ ,Whitespace
+innerScanner,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+innerScanner,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+innerScanner,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+iterator,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggBufMap,Identifier
+.,Punctuation
+entrySet,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+iterator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+next,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Cell,Identifier
+>,Operator
+ ,Whitespace
+results,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+"// AggregateRegionObserver.LOG.info(""Kylin Scanner next()"");",Comment
+"
+",Newline
+                ,Whitespace
+boolean,Keyword
+ ,Whitespace
+hasMore,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+iterator,Identifier
+.,Punctuation
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+Entry,Identifier
+<,Operator
+AggrKey,Identifier
+",",Punctuation
+ ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+iterator,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+makeCells,Identifier
+(,Punctuation
+entry,Identifier
+",",Punctuation
+ ,Whitespace
+results,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+hasMore,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+iterator,Identifier
+.,Punctuation
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+"// AggregateRegionObserver.LOG.info(""Kylin Scanner next() done"");",Comment
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+hasMore,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""Error when calling next""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+makeCells,Identifier
+(,Punctuation
+Entry,Identifier
+<,Operator
+AggrKey,Identifier
+",",Punctuation
+ ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+entry,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+Cell,Identifier
+>,Operator
+ ,Whitespace
+results,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+[,Punctuation
+],Punctuation
+ ,Whitespace
+families,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggregators,Identifier
+.,Punctuation
+getHColFamilies,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+[,Punctuation
+],Punctuation
+ ,Whitespace
+qualifiers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggregators,Identifier
+.,Punctuation
+getHColQualifiers,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+nHCols,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggregators,Identifier
+.,Punctuation
+getHColsNum,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+AggrKey,Identifier
+ ,Whitespace
+rowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getKey,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+MeasureAggregator,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+aggBuf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ByteBuffer,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+rowValues,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggregators,Identifier
+.,Punctuation
+getHColValues,Identifier
+(,Punctuation
+aggBuf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nHCols,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Cell,Identifier
+ ,Whitespace
+keyValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KeyValue,Identifier
+(,Punctuation
+rowKey,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+rowKey,Identifier
+.,Punctuation
+offset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+rowKey,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                        ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                        ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                        ,Whitespace
+HConstants,Identifier
+.,Punctuation
+LATEST_TIMESTAMP,Identifier
+",",Punctuation
+ ,Whitespace
+Type,Identifier
+.,Punctuation
+Put,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                        ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+results,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+keyValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nHCols,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+Cell,Identifier
+ ,Whitespace
+keyValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KeyValue,Identifier
+(,Punctuation
+rowKey,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+rowKey,Identifier
+.,Punctuation
+offset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+rowKey,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                            ,Whitespace
+families,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+families,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                            ,Whitespace
+qualifiers,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+qualifiers,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                            ,Whitespace
+HConstants,Identifier
+.,Punctuation
+LATEST_TIMESTAMP,Identifier
+",",Punctuation
+ ,Whitespace
+Type,Identifier
+.,Punctuation
+Put,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+                            ,Whitespace
+rowValues,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+rowValues,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+position,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+results,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+keyValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+next,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Cell,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+limit,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+next,Identifier
+(,Punctuation
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+nextRaw,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Cell,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+next,Identifier
+(,Punctuation
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+nextRaw,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Cell,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+limit,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+next,Identifier
+(,Punctuation
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// AggregateRegionObserver.LOG.info(""Kylin Scanner close()"");",Comment
+"
+",Newline
+            ,Whitespace
+innerScanner,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+"// AggregateRegionObserver.LOG.info(""Kylin Scanner close() done"");",Comment
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+HRegionInfo,Identifier
+ ,Whitespace
+getRegionInfo,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// AggregateRegionObserver.LOG.info(""Kylin Scanner getRegionInfo()"");",Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+innerScanner,Identifier
+.,Punctuation
+getRegionInfo,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getMaxResultSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// AggregateRegionObserver.LOG.info(""Kylin Scanner getMaxResultSize()"");",Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isFilterDone,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// AggregateRegionObserver.LOG.info(""Kylin Scanner isFilterDone()"");",Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+reseek,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UnsupportedOperationException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getMvccReadPoint,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// AggregateRegionObserver.LOG.info(""Kylin Scanner getMvccReadPoint()"");",Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

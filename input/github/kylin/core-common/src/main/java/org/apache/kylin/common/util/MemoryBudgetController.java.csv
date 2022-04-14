@@ -1,0 +1,2663 @@
+"/*
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements. See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the ""License""); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an ""AS IS"" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ConcurrentHashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+locks,Identifier
+.,Punctuation
+ReentrantLock,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MemoryBudgetController,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+debug,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+MemoryConsumer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+// return number MB released,Comment
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+freeUp,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+mb,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""serial""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+NotEnoughBudgetException,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+NotEnoughBudgetException,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+super,Keyword
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+NotEnoughBudgetException,Identifier
+(,Punctuation
+Throwable,Identifier
+ ,Whitespace
+cause,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+super,Keyword
+(,Punctuation
+cause,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ConsumerEntry,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+MemoryConsumer,Identifier
+ ,Whitespace
+consumer,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+reservedMB,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ConsumerEntry,Identifier
+(,Punctuation
+MemoryConsumer,Identifier
+ ,Whitespace
+consumer,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+consumer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+consumer,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+MemoryBudgetController,Identifier
+ ,Whitespace
+ZERO_BUDGET,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MemoryBudgetController,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+ONE_MB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1024,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+ONE_GB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1024,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+MemoryBudgetController,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// all budget numbers are in MB,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+totalBudgetMB,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ConcurrentHashMap,Identifier
+<,Operator
+MemoryConsumer,Identifier
+",",Punctuation
+ ,Whitespace
+ConsumerEntry,Identifier
+>,Operator
+ ,Whitespace
+booking,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConcurrentHashMap,Identifier
+<,Operator
+MemoryConsumer,Identifier
+",",Punctuation
+ ,Whitespace
+ConsumerEntry,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+totalReservedMB,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ReentrantLock,Identifier
+ ,Whitespace
+lock,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ReentrantLock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MemoryBudgetController,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+totalBudgetMB,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+totalBudgetMB,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+totalBudgetMB,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+totalBudgetMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+totalBudgetMB,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+totalReservedMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getTotalBudgetMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+totalBudgetMB,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getTotalReservedMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+lock,Identifier
+.,Punctuation
+lock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+totalReservedMB,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+lock,Identifier
+.,Punctuation
+unlock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getRemainingBudgetMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+lock,Identifier
+.,Punctuation
+lock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+totalBudgetMB,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+totalReservedMB,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+lock,Identifier
+.,Punctuation
+unlock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+reserveInsist,Identifier
+(,Punctuation
+MemoryConsumer,Identifier
+ ,Whitespace
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+requestMB,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+requestMB,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+totalBudgetMB,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NotEnoughBudgetException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+waitStart,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+reserve,Identifier
+(,Punctuation
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+requestMB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+debug,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+waitStart,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+consumer,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" waited """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+(,Punctuation
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+waitStart,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" ms on the """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+requestMB,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB request""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+NotEnoughBudgetException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// retry,Comment
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+waitStart,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+waitStart,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+lock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+lock,Identifier
+.,Punctuation
+wait,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NotEnoughBudgetException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/** reserve without wait, fail with NotEnoughBudgetException immediately if no mem */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+reserve,Identifier
+(,Punctuation
+MemoryConsumer,Identifier
+ ,Whitespace
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+requestMB,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+totalBudgetMB,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+requestMB,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NotEnoughBudgetException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+ok,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+ok,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+gap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+calculateGap,Identifier
+(,Punctuation
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+requestMB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+gap,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+"// to void deadlock, don't hold lock when invoking consumer.freeUp()",Comment
+"
+",Newline
+                ,Whitespace
+tryFreeUp,Identifier
+(,Punctuation
+gap,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+ok,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+updateBooking,Identifier
+(,Punctuation
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+requestMB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+calculateGap,Identifier
+(,Punctuation
+MemoryConsumer,Identifier
+ ,Whitespace
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+requestMB,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+lock,Identifier
+.,Punctuation
+lock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ConsumerEntry,Identifier
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+booking,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+consumer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+curMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+?,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+:,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+reservedMB,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+delta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+requestMB,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+curMB,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+delta,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+(,Punctuation
+totalBudgetMB,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+totalReservedMB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+lock,Identifier
+.,Punctuation
+unlock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+tryFreeUp,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+gap,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+"// note don't hold lock when calling consumer.freeUp(), that method holding lock for itself and may cause deadlock",Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ConsumerEntry,Identifier
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+booking,Identifier
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+mb,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+consumer,Identifier
+.,Punctuation
+freeUp,Identifier
+(,Punctuation
+gap,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+mb,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+lock,Identifier
+.,Punctuation
+lock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+updateBookingWithDelta,Identifier
+(,Punctuation
+entry,Identifier
+.,Punctuation
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+-,Operator
+mb,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+lock,Identifier
+.,Punctuation
+unlock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+gap,Identifier
+ ,Whitespace
+-=,Operator
+ ,Whitespace
+mb,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+gap,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+gap,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NotEnoughBudgetException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+debug,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+getRemainingBudgetMB,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Remaining budget is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getRemainingBudgetMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB free, but system only has """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB free. If this persists, some memory calculation must be wrong.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+updateBooking,Identifier
+(,Punctuation
+MemoryConsumer,Identifier
+ ,Whitespace
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+requestMB,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+lock,Identifier
+.,Punctuation
+lock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ConsumerEntry,Identifier
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+booking,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+consumer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+entry,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+requestMB,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+entry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConsumerEntry,Identifier
+(,Punctuation
+consumer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+booking,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+entry,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+delta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+requestMB,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+reservedMB,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+updateBookingWithDelta,Identifier
+(,Punctuation
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+delta,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+lock,Identifier
+.,Punctuation
+unlock,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// lock MUST be obtained before entering,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+updateBookingWithDelta,Identifier
+(,Punctuation
+MemoryConsumer,Identifier
+ ,Whitespace
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+delta,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+delta,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ConsumerEntry,Identifier
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+booking,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+consumer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+entry,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+delta,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+entry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConsumerEntry,Identifier
+(,Punctuation
+consumer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+booking,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+consumer,Identifier
+",",Punctuation
+ ,Whitespace
+entry,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// double check gap again, it may be changed by other concurrent requests",Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+delta,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+gap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+delta,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+(,Punctuation
+totalBudgetMB,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+totalReservedMB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+gap,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+totalReservedMB,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+delta,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+entry,Identifier
+.,Punctuation
+reservedMB,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+delta,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+entry,Identifier
+.,Punctuation
+reservedMB,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+booking,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+entry,Identifier
+.,Punctuation
+consumer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+debug,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+entry,Identifier
+.,Punctuation
+consumer,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" reserved """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+reservedMB,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB, total reserved """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+totalReservedMB,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB, remaining budget """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getRemainingBudgetMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+delta,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+(,Punctuation
+lock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+lock,Identifier
+.,Punctuation
+notifyAll,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+gcAndGetSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+tolerance,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+lastMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Runtime,Identifier
+.,Punctuation
+getRuntime,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+gc,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+1000,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+thisMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+lastMB,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+lastMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+thisMB,Identifier
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+lastMB,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+thisMB,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+tolerance,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+thisMB,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+lastMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+thisMB,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getSystemAvailBytes,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Runtime,Identifier
+ ,Whitespace
+runtime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Runtime,Identifier
+.,Punctuation
+getRuntime,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+totalMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+runtime,Identifier
+.,Punctuation
+totalMemory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// current heap allocated to the VM process,Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+freeMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+runtime,Identifier
+.,Punctuation
+freeMemory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+"// out of the current heap, how much is free",Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+maxMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+runtime,Identifier
+.,Punctuation
+maxMemory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// Max heap VM can use e.g. Xmx setting,Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+usedMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+totalMemory,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+freeMemory,Identifier
+;,Punctuation
+ ,Whitespace
+// how much of the current heap the VM is using,Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+availableMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+maxMemory,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+usedMemory,Identifier
+;,Punctuation
+ ,Whitespace
+// available memory i.e. Maximum heap size minus the current amount used,Comment
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+availableMemory,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+getSystemAvailBytes,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+/,Operator
+ ,Whitespace
+ONE_MB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// protective estimate of memory usage, prefer overestimate rather than underestimate",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MemoryWaterLevel,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+lowAvail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+highAvail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+MIN_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+markHigh,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// get avail mem without gc,Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+mb,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MemoryBudgetController,Identifier
+.,Punctuation
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+mb,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+lowAvail,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+lowAvail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mb,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Lower system avail """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+lowAvail,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB in markHigh()""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+markLow,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// get avail mem after gc,Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+mb,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MemoryBudgetController,Identifier
+.,Punctuation
+gcAndGetSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+mb,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+highAvail,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+highAvail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mb,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Higher system avail """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+highAvail,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB in markLow()""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getEstimateMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+highAvail,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+lowAvail,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

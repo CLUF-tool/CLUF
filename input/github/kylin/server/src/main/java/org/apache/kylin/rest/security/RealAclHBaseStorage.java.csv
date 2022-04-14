@@ -1,0 +1,591 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+security,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+HTableInterface,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+service,Identifier
+.,Punctuation
+AclService,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+service,Identifier
+.,Punctuation
+UserService,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+HBaseConnection,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+RealAclHBaseStorage,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+AclHBaseStorage,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+hbaseUrl,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+aclTableName,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+userTableName,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+prepareHBaseTable,Identifier
+(,Punctuation
+Class,Identifier
+ ,Whitespace
+clazz,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+metadataUrl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getMetadataUrl,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+cut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metadataUrl,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+'@',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+tableNameBase,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cut,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+?,Operator
+ ,Whitespace
+DEFAULT_TABLE_PREFIX,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+metadataUrl,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+cut,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+hbaseUrl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cut,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+?,Operator
+ ,Whitespace
+metadataUrl,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+metadataUrl,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+cut,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+clazz,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+AclService,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+aclTableName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tableNameBase,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+ACL_TABLE_NAME,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+HBaseConnection,Identifier
+.,Punctuation
+createHTableIfNeeded,Identifier
+(,Punctuation
+hbaseUrl,Identifier
+",",Punctuation
+ ,Whitespace
+aclTableName,Identifier
+",",Punctuation
+ ,Whitespace
+ACL_INFO_FAMILY,Identifier
+",",Punctuation
+ ,Whitespace
+ACL_ACES_FAMILY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+aclTableName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+clazz,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+UserService,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+userTableName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tableNameBase,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+USER_TABLE_NAME,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+HBaseConnection,Identifier
+.,Punctuation
+createHTableIfNeeded,Identifier
+(,Punctuation
+hbaseUrl,Identifier
+",",Punctuation
+ ,Whitespace
+userTableName,Identifier
+",",Punctuation
+ ,Whitespace
+USER_AUTHORITY_FAMILY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+userTableName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""prepareHBaseTable for unknown class: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+clazz,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+HTableInterface,Identifier
+ ,Whitespace
+getTable,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+aclTableName,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+HBaseConnection,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+hbaseUrl,Identifier
+),Punctuation
+.,Punctuation
+getTable,Identifier
+(,Punctuation
+aclTableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+StringUtils,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+tableName,Identifier
+",",Punctuation
+ ,Whitespace
+userTableName,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+HBaseConnection,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+hbaseUrl,Identifier
+),Punctuation
+.,Punctuation
+getTable,Identifier
+(,Punctuation
+userTableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""getTable failed""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

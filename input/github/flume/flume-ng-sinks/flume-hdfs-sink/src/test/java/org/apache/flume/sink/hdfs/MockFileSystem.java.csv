@@ -1,0 +1,1143 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+hdfs,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+URI,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FSDataInputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FSDataOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FileStatus,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+FileSystem,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+Path,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+permission,Identifier
+.,Punctuation
+FsPermission,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Progressable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MockFileSystem,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+FileSystem,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+MockFileSystem,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+FileSystem,Identifier
+ ,Whitespace
+fs,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+int,Keyword
+ ,Whitespace
+numberOfRetriesRequired,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+MockFsDataOutputStream,Identifier
+ ,Whitespace
+latestOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+int,Keyword
+ ,Whitespace
+currentRenameAttempts,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+boolean,Keyword
+ ,Whitespace
+closeSucceed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+MockFileSystem,Identifier
+(,Punctuation
+FileSystem,Identifier
+ ,Whitespace
+fs,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+numberOfRetriesRequired,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+fs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fs,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+numberOfRetriesRequired,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+numberOfRetriesRequired,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+MockFileSystem,Identifier
+(,Punctuation
+FileSystem,Identifier
+ ,Whitespace
+fs,Identifier
+",",Punctuation
+"
+",Newline
+                        ,Whitespace
+int,Keyword
+ ,Whitespace
+numberOfRetriesRequired,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+closeSucceed,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+fs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fs,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+numberOfRetriesRequired,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+numberOfRetriesRequired,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+closeSucceed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+closeSucceed,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+FSDataOutputStream,Identifier
+ ,Whitespace
+append,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+arg1,Identifier
+",",Punctuation
+ ,Whitespace
+Progressable,Identifier
+ ,Whitespace
+arg2,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+latestOutputStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MockFsDataOutputStream,Identifier
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+fs,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+arg1,Identifier
+",",Punctuation
+ ,Whitespace
+arg2,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+closeSucceed,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+latestOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+FSDataOutputStream,Identifier
+ ,Whitespace
+create,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+"//throw new IOException (""HI there2"");",Comment
+"
+",Newline
+    ,Whitespace
+latestOutputStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MockFsDataOutputStream,Identifier
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+fs,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+arg0,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+closeSucceed,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+latestOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+FSDataOutputStream,Identifier
+ ,Whitespace
+create,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+FsPermission,Identifier
+ ,Whitespace
+arg1,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+arg2,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+arg3,Identifier
+",",Punctuation
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+arg4,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+arg5,Identifier
+",",Punctuation
+ ,Whitespace
+Progressable,Identifier
+ ,Whitespace
+arg6,Identifier
+),Punctuation
+"
+",Newline
+    ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""Not a real file system""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+delete,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+arg0,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+delete,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+arg1,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+arg1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+FileStatus,Identifier
+ ,Whitespace
+getFileStatus,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+getFileStatus,Identifier
+(,Punctuation
+arg0,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+URI,Identifier
+ ,Whitespace
+getUri,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+getUri,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+Path,Identifier
+ ,Whitespace
+getWorkingDirectory,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+getWorkingDirectory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+FileStatus,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+listStatus,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+listStatus,Identifier
+(,Punctuation
+arg0,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+mkdirs,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+FsPermission,Identifier
+ ,Whitespace
+arg1,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// TODO Auto-generated method stub,Comment
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+mkdirs,Identifier
+(,Punctuation
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+arg1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+FSDataInputStream,Identifier
+ ,Whitespace
+open,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+arg1,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+open,Identifier
+(,Punctuation
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+arg1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+rename,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+Path,Identifier
+ ,Whitespace
+arg1,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+currentRenameAttempts,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+"""Attempting to Rename: '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+currentRenameAttempts,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' of '""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+      ,Whitespace
+numberOfRetriesRequired,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+currentRenameAttempts,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+numberOfRetriesRequired,Identifier
+ ,Whitespace
+||,Operator
+"
+",Newline
+      ,Whitespace
+numberOfRetriesRequired,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Renaming file""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+fs,Identifier
+.,Punctuation
+rename,Identifier
+(,Punctuation
+arg0,Identifier
+",",Punctuation
+ ,Whitespace
+arg1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""MockIOException""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setWorkingDirectory,Identifier
+(,Punctuation
+Path,Identifier
+ ,Whitespace
+arg0,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+fs,Identifier
+.,Punctuation
+setWorkingDirectory,Identifier
+(,Punctuation
+arg0,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,411 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+security,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+core,Identifier
+.,Punctuation
+userdetails,Identifier
+.,Punctuation
+UserDetails,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+core,Identifier
+.,Punctuation
+userdetails,Identifier
+.,Punctuation
+UsernameNotFoundException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+ldap,Identifier
+.,Punctuation
+userdetails,Identifier
+.,Punctuation
+LdapUserDetailsService,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+saml,Identifier
+.,Punctuation
+SAMLCredential,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * An implementation of SAMLUserDetailsService by delegating the query to LdapUserDetailsService.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SAMLUserDetailsService,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+saml,Identifier
+.,Punctuation
+userdetails,Identifier
+.,Punctuation
+SAMLUserDetailsService,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+SAMLUserDetailsService,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+LdapUserDetailsService,Identifier
+ ,Whitespace
+ldapUserDetailsService,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SAMLUserDetailsService,Identifier
+(,Punctuation
+LdapUserDetailsService,Identifier
+ ,Whitespace
+ldapUserDetailsService,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+ldapUserDetailsService,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ldapUserDetailsService,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+loadUserBySAML,Identifier
+(,Punctuation
+SAMLCredential,Identifier
+ ,Whitespace
+samlCredential,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+UsernameNotFoundException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+userEmail,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+samlCredential,Identifier
+.,Punctuation
+getAttributeAsString,Identifier
+(,Punctuation
+"""email""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""samlCredential.email:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+userEmail,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+userName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+userEmail,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+userEmail,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+"""@""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+UserDetails,Identifier
+ ,Whitespace
+userDetails,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+userDetails,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ldapUserDetailsService,Identifier
+.,Punctuation
+loadUserByUsername,Identifier
+(,Punctuation
+userName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+org,Identifier
+.,Punctuation
+springframework,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+core,Identifier
+.,Punctuation
+userdetails,Identifier
+.,Punctuation
+UsernameNotFoundException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""User not found in LDAP, check whether he/she has been added to the groups.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""userDeail by search ldap with '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+userName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' is: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+userDetails,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+userDetails,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

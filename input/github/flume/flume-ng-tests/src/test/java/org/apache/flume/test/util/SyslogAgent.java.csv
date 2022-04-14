@@ -1,0 +1,2038 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+test,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Charsets,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Files,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+log4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Assert,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+BufferedOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+ServerSocket,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+Socket,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+TimeUnit,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Syslog Flume Agent.
+ * A Syslog source of some kind is configured and a client is available to write
+ * messages to the agent. The Flume agents port is randomly assigned (not in use).
+ *
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SyslogAgent,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOGGER,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Logger,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+SyslogAgent,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Collection,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+tempResources,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+File,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_ATTEMPTS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+20,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+DEFAULT_TIMEOUT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+500L,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+enum,Identifier
+ ,Whitespace
+SyslogSourceType,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+TCP,Identifier
+(,Punctuation
+"""syslogtcp""",String
+),Punctuation
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+MULTIPORTTCP,Identifier
+(,Punctuation
+"""multiport_syslogtcp""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+syslogSourceType,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+SyslogSourceType,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+syslogSourceType,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+syslogSourceType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+syslogSourceType,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+syslogSourceType,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Properties,Identifier
+ ,Whitespace
+agentProps,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+File,Identifier
+ ,Whitespace
+sinkOutputDir,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+keepFields,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+BufferedOutputStream,Identifier
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+SyslogAgent,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+hostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""localhost""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+setRandomPort,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setRandomPort,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ServerSocket,Identifier
+ ,Whitespace
+s,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ServerSocket,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+getLocalPort,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+s,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+SyslogSourceType,Identifier
+ ,Whitespace
+sourceType,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+"/* Create 3 temp dirs, each used as value within agentProps */",Comment
+"
+",Newline
+    ,Whitespace
+sinkOutputDir,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Files,Identifier
+.,Punctuation
+createTempDir,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tempResources,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+sinkOutputDir,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sinkOutputDirPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sinkOutputDir,Identifier
+.,Punctuation
+getCanonicalPath,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Created rolling file sink's output dir: """,String
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+sinkOutputDirPath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/* Build props to pass to flume agent */,Comment
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Active sets,Comment
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.channels""",String
+",",Punctuation
+ ,Whitespace
+"""c1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sources""",String
+",",Punctuation
+ ,Whitespace
+"""r1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sinks""",String
+",",Punctuation
+ ,Whitespace
+"""k1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// c1,Comment
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.channels.c1.type""",String
+",",Punctuation
+ ,Whitespace
+"""memory""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.channels.c1.capacity""",String
+",",Punctuation
+ ,Whitespace
+"""1000""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.channels.c1.transactionCapacity""",String
+",",Punctuation
+ ,Whitespace
+"""100""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// r1,Comment
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sources.r1.channels""",String
+",",Punctuation
+ ,Whitespace
+"""c1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sources.r1.type""",String
+",",Punctuation
+ ,Whitespace
+sourceType,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sources.r1.host""",String
+",",Punctuation
+ ,Whitespace
+hostname,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+sourceType,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+SyslogSourceType,Identifier
+.,Punctuation
+MULTIPORTTCP,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sources.r1.ports""",String
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+port,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sources.r1.port""",String
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+port,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// k1,Comment
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sinks.k1.channel""",String
+",",Punctuation
+ ,Whitespace
+"""c1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sinks.k1.sink.directory""",String
+",",Punctuation
+ ,Whitespace
+sinkOutputDirPath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sinks.k1.type""",String
+",",Punctuation
+ ,Whitespace
+"""FILE_ROLL""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sinks.k1.sink.rollInterval""",String
+",",Punctuation
+ ,Whitespace
+"""0""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// Blocks until flume agent boots up.,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+start,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+keepFields,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+keepFields,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+keepFields,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Set properties that should be different per agent start and stop.,Comment
+"
+",Newline
+    ,Whitespace
+agentProps,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""a1.sources.r1.keepFields""",String
+",",Punctuation
+ ,Whitespace
+keepFields,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Recreate temporary directory.,Comment
+"
+",Newline
+    ,Whitespace
+sinkOutputDir,Identifier
+.,Punctuation
+mkdir,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/* Start flume agent */,Comment
+"
+",Newline
+    ,Whitespace
+StagedInstall,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+startAgent,Identifier
+(,Punctuation
+"""a1""",String
+",",Punctuation
+ ,Whitespace
+agentProps,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Started flume agent with syslog source on port """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+port,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// Wait for source, channel, sink to start and create client.",Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+numberOfAttempts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+client,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+BufferedOutputStream,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Socket,Identifier
+(,Punctuation
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+),Punctuation
+.,Punctuation
+getOutputStream,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+++,Operator
+numberOfAttempts,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+DEFAULT_ATTEMPTS,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AssertionError,Identifier
+(,Punctuation
+"""Could not connect to source after """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+DEFAULT_ATTEMPTS,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" attempts with """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+DEFAULT_TIMEOUT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" ms timeout.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+MILLISECONDS,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+DEFAULT_TIMEOUT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isRunning,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+StagedInstall,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRunning,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+StagedInstall,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+stopAgent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+File,Identifier
+ ,Whitespace
+tempResource,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tempResources,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// Should always be a directory.,Comment
+"
+",Newline
+      ,Whitespace
+FileUtils,Identifier
+.,Punctuation
+deleteDirectory,Identifier
+(,Punctuation
+tempResource,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+runKeepFieldsTest,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+/* Create expected output and log message */,Comment
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+logMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""<34>1 Oct 11 22:14:15 mymachine su: Test\n""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+expectedOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""su: Test\n""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+keepFields,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""true""",String
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+keepFields,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""all""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+expectedOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+logMessage,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+keepFields,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""false""",String
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+keepFields,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""none""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+keepFields,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+"""hostname""",String
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+expectedOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""mymachine """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+expectedOutput,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+keepFields,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+"""timestamp""",String
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+expectedOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""Oct 11 22:14:15 """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+expectedOutput,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+keepFields,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+"""version""",String
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+expectedOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""1 """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+expectedOutput,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+keepFields,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+"""priority""",String
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+expectedOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""<34>""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+expectedOutput,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Created expected output: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+expectedOutput,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/* Send test message to agent */,Comment
+"
+",Newline
+    ,Whitespace
+sendMessage,Identifier
+(,Punctuation
+logMessage,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/* Wait for output file */,Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+numberOfListDirAttempts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+sinkOutputDir,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+length,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+++,Operator
+numberOfListDirAttempts,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+DEFAULT_ATTEMPTS,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AssertionError,Identifier
+(,Punctuation
+"""FILE_ROLL sink hasn't written any files after """,String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+DEFAULT_ATTEMPTS,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" attempts with """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+DEFAULT_TIMEOUT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" ms timeout.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+MILLISECONDS,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+DEFAULT_TIMEOUT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Only 1 file should be in FILE_ROLL sink's dir (rolling is disabled),Comment
+"
+",Newline
+    ,Whitespace
+File,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+sinkOutputDirChildren,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sinkOutputDir,Identifier
+.,Punctuation
+listFiles,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+"""Expected FILE_ROLL sink's dir to have only 1 child,""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+""" but found """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sinkOutputDirChildren,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" children.""",String
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+1,Literal
+",",Punctuation
+ ,Whitespace
+sinkOutputDirChildren,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/* Wait for output file stats to be as expected. */,Comment
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+outputDirChild,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sinkOutputDirChildren,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+numberOfStatsAttempts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+outputDirChild,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+expectedOutput,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+++,Operator
+numberOfStatsAttempts,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+DEFAULT_ATTEMPTS,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AssertionError,Identifier
+(,Punctuation
+"""Expected output and FILE_ROLL sink's""",String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+""" lengths did not match after """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+DEFAULT_ATTEMPTS,Identifier
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+""" attempts with """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+DEFAULT_TIMEOUT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" ms timeout.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+MILLISECONDS,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+DEFAULT_TIMEOUT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+actualOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sinkOutputDirChildren,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+Files,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+actualOutput,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+expectedOutput,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Actual output doesn't match expected output.\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Output: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Files,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+actualOutput,Identifier
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AssertionError,Identifier
+(,Punctuation
+"""FILE_ROLL sink's actual output doesn't """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""match expected output.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+sendMessage,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+message,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+message,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

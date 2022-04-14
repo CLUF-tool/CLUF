@@ -1,0 +1,1650 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+api,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileNotFoundException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileReader,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Reader,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Locale,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Factory class to construct Flume {@link RPCClient} implementations.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+RpcClientFactory,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Returns an instance of {@link RpcClient}, optionally with failover.
+   * To create a failover client, the properties object should have a
+   * property <tt>client.type</tt> which has the value ""failover"". The client
+   * connects to hosts specified by <tt>hosts</tt> property in given properties.
+   *
+   * @see org.apache.flume.api.FailoverRpcClient
+   * <p>
+   * If no <tt>client.type</tt> is specified, a default client that connects to
+   * single host at a given port is created.(<tt>type</tt> can also simply be
+   * <tt>DEFAULT</tt> for the default client).
+   *
+   * @see org.apache.flume.api.NettyAvroClient
+   *
+   * @param properties The properties to instantiate the client with.
+   * @throws FlumeException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+Properties,Identifier
+ ,Whitespace
+properties,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+properties,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_CLIENT_TYPE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+type,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+type,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ClientType,Identifier
+.,Punctuation
+DEFAULT,Identifier
+.,Punctuation
+getClientClassName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractRpcClient,Identifier
+>,Operator
+ ,Whitespace
+clazz,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+AbstractRpcClient,Identifier
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+clientClassType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+type,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+ClientType,Identifier
+ ,Whitespace
+clientType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+clientType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ClientType,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+type,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+Locale,Identifier
+.,Punctuation
+ENGLISH,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IllegalArgumentException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+clientType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ClientType,Identifier
+.,Punctuation
+OTHER,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+clientType,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+ClientType,Identifier
+.,Punctuation
+OTHER,Identifier
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+clientClassType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clientType,Identifier
+.,Punctuation
+getClientClassName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+clazz,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+(,Punctuation
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractRpcClient,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+Class,Identifier
+.,Punctuation
+forName,Identifier
+(,Punctuation
+clientClassType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ClassNotFoundException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""No such client!""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clazz,Identifier
+.,Punctuation
+newInstance,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InstantiationException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Cannot instantiate client. """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""Exception follows:""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IllegalAccessException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Cannot instantiate client. """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""Exception follows:""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+properties,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Delegates to {@link #getInstance(Properties props)}, given a File path
+   * to a {@link Properties} file.
+   * @param propertiesFile Valid properties file
+   * @return RpcClient configured according to the given Properties file.
+   * @throws FileNotFoundException If the file cannot be found
+   * @throws IOException If there is an IO error
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+File,Identifier
+ ,Whitespace
+propertiesFile,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+FileNotFoundException,Identifier
+",",Punctuation
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Reader,Identifier
+ ,Whitespace
+reader,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FileReader,Identifier
+(,Punctuation
+propertiesFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+load,Identifier
+(,Punctuation
+reader,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Deprecated. Use
+   * {@link getDefaultInstance() getDefaultInstance(String, Integer)} instead.
+   * @throws FlumeException
+   * @deprecated
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+port,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getDefaultInstance,Identifier
+(,Punctuation
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Returns an instance of {@link RpcClient} connected to the specified
+   * {@code hostname} and {@code port}.
+   * @throws FlumeException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getDefaultInstance,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+port,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getDefaultInstance,Identifier
+(,Punctuation
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Deprecated. Use
+   * {@link getDefaultInstance() getDefaultInstance(String, Integer, Integer)}
+   * instead.
+   * @throws FlumeException
+   * @deprecated
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+port,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+Integer,Identifier
+ ,Whitespace
+batchSize,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getDefaultInstance,Identifier
+(,Punctuation
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+batchSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Returns an instance of {@link RpcClient} connected to the specified
+   * {@code hostname} and {@code port} with the specified {@code batchSize}.
+   * @throws FlumeException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getDefaultInstance,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+port,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+Integer,Identifier
+ ,Whitespace
+batchSize,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hostname,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NullPointerException,Identifier
+(,Punctuation
+"""hostname must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+port,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NullPointerException,Identifier
+(,Punctuation
+"""port must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+batchSize,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NullPointerException,Identifier
+(,Punctuation
+"""batchSize must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_HOSTS,Identifier
+",",Punctuation
+ ,Whitespace
+"""h1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_HOSTS_PREFIX,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""h1""",String
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+hostname,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""":""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+port,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_BATCH_SIZE,Identifier
+",",Punctuation
+ ,Whitespace
+batchSize,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+NettyAvroRpcClient,Identifier
+ ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NettyAvroRpcClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Return an {@linkplain RpcClient} that uses Thrift for communicating with
+   * the next hop. The next hop must have a ThriftSource listening on the
+   * specified port.
+   * @param hostname - The hostname of the next hop.
+   * @param port - The port on which the ThriftSource is listening
+   * @param batchSize - batch size of each transaction.
+   * @return an {@linkplain RpcClient} which uses thrift configured with the
+   * given parameters.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getThriftInstance,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+port,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+Integer,Identifier
+ ,Whitespace
+batchSize,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hostname,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NullPointerException,Identifier
+(,Punctuation
+"""hostname must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+port,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NullPointerException,Identifier
+(,Punctuation
+"""port must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+batchSize,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NullPointerException,Identifier
+(,Punctuation
+"""batchSize must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_HOSTS,Identifier
+",",Punctuation
+ ,Whitespace
+"""h1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_HOSTS_PREFIX,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""h1""",String
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+hostname,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""":""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+port,Identifier
+.,Punctuation
+intValue,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_BATCH_SIZE,Identifier
+",",Punctuation
+ ,Whitespace
+batchSize,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ThriftRpcClient,Identifier
+ ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ThriftRpcClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+client,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Return an {@linkplain RpcClient} that uses Thrift for communicating with
+   * the next hop. The next hop must have a ThriftSource listening on the
+   * specified port. This will use the default batch size. See {@linkplain
+   * RpcClientConfigurationConstants}
+   * @param hostname - The hostname of the next hop.
+   * @param port - The port on which the ThriftSource is listening
+   * @return - An {@linkplain RpcClient} which uses thrift configured with the
+   * given parameters.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getThriftInstance,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+port,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getThriftInstance,Identifier
+(,Punctuation
+hostname,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+RpcClientConfigurationConstants,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+DEFAULT_BATCH_SIZE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Return an {@linkplain RpcClient} that uses Thrift for communicating with
+   * the next hop.
+   * @param props
+   * @return - An {@linkplain RpcClient} which uses thrift configured with the
+   * given parameters.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RpcClient,Identifier
+ ,Whitespace
+getThriftInstance,Identifier
+(,Punctuation
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+setProperty,Identifier
+(,Punctuation
+RpcClientConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_CLIENT_TYPE,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+ClientType,Identifier
+.,Punctuation
+THRIFT,Identifier
+.,Punctuation
+clientClassName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+enum,Identifier
+ ,Whitespace
+ClientType,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+OTHER,Identifier
+(,Punctuation
+null,Keyword
+),Punctuation
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+DEFAULT,Identifier
+(,Punctuation
+NettyAvroRpcClient,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+DEFAULT_FAILOVER,Identifier
+(,Punctuation
+FailoverRpcClient,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+DEFAULT_LOADBALANCE,Identifier
+(,Punctuation
+LoadBalancingRpcClient,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+THRIFT,Identifier
+(,Punctuation
+ThriftRpcClient,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getCanonicalName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+clientClassName,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ClientType,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+className,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+clientClassName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+className,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getClientClassName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+.,Punctuation
+clientClassName,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

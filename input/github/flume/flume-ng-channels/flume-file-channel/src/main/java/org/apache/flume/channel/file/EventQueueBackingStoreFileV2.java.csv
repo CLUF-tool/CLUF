@@ -1,0 +1,948 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+atomic,Identifier
+.,Punctuation
+AtomicInteger,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+final,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+EventQueueBackingStoreFileV2,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+EventQueueBackingStoreFile,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+INDEX_SIZE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+INDEX_HEAD,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+3,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+INDEX_ACTIVE_LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+5,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+MAX_ACTIVE_LOGS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1024,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+EventQueueBackingStoreFileV2,Identifier
+(,Punctuation
+File,Identifier
+ ,Whitespace
+checkpointFile,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+capacity,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+name,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+BadCheckpointException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+(,Punctuation
+capacity,Identifier
+",",Punctuation
+ ,Whitespace
+name,Identifier
+",",Punctuation
+ ,Whitespace
+checkpointFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+capacity,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""capacity must be greater than 0 """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+capacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+setLogWriteOrderID,Identifier
+(,Punctuation
+elementsBuffer,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+INDEX_WRITE_ORDER_ID,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+setSize,Identifier
+(,Punctuation
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+elementsBuffer,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+INDEX_SIZE,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+setHead,Identifier
+(,Punctuation
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+elementsBuffer,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+INDEX_HEAD,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+indexMaxLog,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+INDEX_ACTIVE_LOG,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+MAX_ACTIVE_LOGS,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+INDEX_ACTIVE_LOG,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+indexMaxLog,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+nextFileCode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+elementsBuffer,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nextFileCode,Identifier
+  ,Whitespace
+!=,Operator
+ ,Whitespace
+EMPTY,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Pair,Identifier
+<,Operator
+Integer,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>,Operator
+ ,Whitespace
+idAndCount,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+            ,Whitespace
+deocodeActiveLogCounter,Identifier
+(,Punctuation
+nextFileCode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logFileIDReferenceCounts,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+idAndCount,Identifier
+.,Punctuation
+getLeft,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+(,Punctuation
+idAndCount,Identifier
+.,Punctuation
+getRight,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getVersion,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+Serialization,Identifier
+.,Punctuation
+VERSION_2,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+incrementFileID,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+fileID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+incrementFileID,Identifier
+(,Punctuation
+fileID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+logFileIDReferenceCounts,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+MAX_ACTIVE_LOGS,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""Too many active logs """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Pair,Identifier
+<,Operator
+Integer,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>,Operator
+ ,Whitespace
+deocodeActiveLogCounter,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+fileId,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+>>>,Operator
+ ,Whitespace
+32,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+Pair,Identifier
+.,Punctuation
+of,Identifier
+(,Punctuation
+fileId,Identifier
+",",Punctuation
+ ,Whitespace
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+encodeActiveLogCounter,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+fileId,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+count,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fileId,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+long,Keyword
+),Punctuation
+fileId,Identifier
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+32,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+result,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+(,Punctuation
+long,Keyword
+),Punctuation
+ ,Whitespace
+count,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+writeCheckpointMetaData,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+elementsBuffer,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+INDEX_SIZE,Identifier
+",",Punctuation
+ ,Whitespace
+getSize,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+elementsBuffer,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+INDEX_HEAD,Identifier
+",",Punctuation
+ ,Whitespace
+getHead,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+fileIdAndCountEncoded,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Integer,Identifier
+ ,Whitespace
+fileId,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+logFileIDReferenceCounts,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Integer,Identifier
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+logFileIDReferenceCounts,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+fileId,Identifier
+),Punctuation
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+encodeActiveLogCounter,Identifier
+(,Punctuation
+fileId,Identifier
+",",Punctuation
+ ,Whitespace
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+fileIdAndCountEncoded,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+value,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+emptySlots,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MAX_ACTIVE_LOGS,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+fileIdAndCountEncoded,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+emptySlots,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+  ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+fileIdAndCountEncoded,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+0L,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+MAX_ACTIVE_LOGS,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+elementsBuffer,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+INDEX_ACTIVE_LOG,Identifier
+",",Punctuation
+ ,Whitespace
+fileIdAndCountEncoded,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

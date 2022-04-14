@@ -1,0 +1,591 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentFactory,Identifier
+.,Punctuation
+jsonBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+charset,Identifier
+.,Punctuation
+Charset,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+jackson,Identifier
+.,Punctuation
+core,Identifier
+.,Punctuation
+JsonParseException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentParser,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentType,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Utility methods for using ElasticSearch {@link XContentBuilder}
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ContentBuilderUtil,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Charset,Identifier
+ ,Whitespace
+charset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Charset,Identifier
+.,Punctuation
+defaultCharset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ContentBuilderUtil,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+appendField,Identifier
+(,Punctuation
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+field,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+data,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+XContentType,Identifier
+ ,Whitespace
+contentType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+XContentFactory,Identifier
+.,Punctuation
+xContentType,Identifier
+(,Punctuation
+data,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+contentType,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+addSimpleField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+field,Identifier
+",",Punctuation
+ ,Whitespace
+data,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+addComplexField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+field,Identifier
+",",Punctuation
+ ,Whitespace
+contentType,Identifier
+",",Punctuation
+ ,Whitespace
+data,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addSimpleField,Identifier
+(,Punctuation
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+fieldName,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+data,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+field,Identifier
+(,Punctuation
+fieldName,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+data,Identifier
+",",Punctuation
+ ,Whitespace
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addComplexField,Identifier
+(,Punctuation
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+fieldName,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+XContentType,Identifier
+ ,Whitespace
+contentType,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+data,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+XContentParser,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+XContentFactory,Identifier
+.,Punctuation
+xContent,Identifier
+(,Punctuation
+contentType,Identifier
+),Punctuation
+.,Punctuation
+createParser,Identifier
+(,Punctuation
+data,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+parser,Identifier
+.,Punctuation
+nextToken,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"// Add the field name, but not the value.",Comment
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+field,Identifier
+(,Punctuation
+fieldName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// This will add the whole parsed content as the value of the field.,Comment
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+copyCurrentStructure,Identifier
+(,Punctuation
+parser,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+JsonParseException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// If we get an exception here the most likely cause is nested JSON that,Comment
+"
+",Newline
+      ,Whitespace
+// can't be figured out in the body. At this point just push it through,Comment
+"
+",Newline
+      ,Whitespace
+"// as is, we have already added the field so don't do it again",Comment
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+endObject,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+field,Identifier
+(,Punctuation
+fieldName,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+data,Identifier
+",",Punctuation
+ ,Whitespace
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+parser,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+parser,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

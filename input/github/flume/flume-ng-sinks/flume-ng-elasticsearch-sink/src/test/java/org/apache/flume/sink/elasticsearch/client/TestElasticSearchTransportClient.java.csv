@@ -1,0 +1,1137 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+client,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+ElasticSearchEventSerializer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+IndexNameBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+action,Identifier
+.,Punctuation
+ListenableActionFuture,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+action,Identifier
+.,Punctuation
+bulk,Identifier
+.,Punctuation
+BulkRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+action,Identifier
+.,Punctuation
+bulk,Identifier
+.,Punctuation
+BulkResponse,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+action,Identifier
+.,Punctuation
+index,Identifier
+.,Punctuation
+IndexRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+Client,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+bytes,Identifier
+.,Punctuation
+BytesReference,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+BytesStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Before,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Test,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mockito,Identifier
+.,Punctuation
+Mock,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mockito,Identifier
+.,Punctuation
+Matchers,Identifier
+.,Punctuation
+any,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mockito,Identifier
+.,Punctuation
+Matchers,Identifier
+.,Punctuation
+anyString,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mockito,Identifier
+.,Punctuation
+Mockito,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mockito,Identifier
+.,Punctuation
+MockitoAnnotations,Identifier
+.,Punctuation
+initMocks,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestElasticSearchTransportClient,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+ ,Whitespace
+fixture,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Mock,Identifier
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ElasticSearchEventSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Mock,Identifier
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+IndexNameBuilder,Identifier
+ ,Whitespace
+nameBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Mock,Identifier
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Client,Identifier
+ ,Whitespace
+elasticSearchClient,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Mock,Identifier
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+BulkRequestBuilder,Identifier
+ ,Whitespace
+bulkRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Mock,Identifier
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+IndexRequestBuilder,Identifier
+ ,Whitespace
+indexRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Mock,Identifier
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Before,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setUp,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+initMocks,Identifier
+(,Punctuation
+this,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+BytesReference,Identifier
+ ,Whitespace
+bytesReference,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mock,Identifier
+(,Punctuation
+BytesReference,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+BytesStream,Identifier
+ ,Whitespace
+bytesStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mock,Identifier
+(,Punctuation
+BytesStream,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+nameBuilder,Identifier
+.,Punctuation
+getIndexName,Identifier
+(,Punctuation
+any,Identifier
+(,Punctuation
+Event,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+"""foo_index""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+bytesReference,Identifier
+.,Punctuation
+toBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+"""{\""body\"":\""test\""}""",String
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+bytesStream,Identifier
+.,Punctuation
+bytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+bytesReference,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+serializer,Identifier
+.,Punctuation
+getContentBuilder,Identifier
+(,Punctuation
+any,Identifier
+(,Punctuation
+Event,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+bytesStream,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+elasticSearchClient,Identifier
+.,Punctuation
+prepareIndex,Identifier
+(,Punctuation
+anyString,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+anyString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+indexRequestBuilder,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+indexRequestBuilder,Identifier
+.,Punctuation
+setSource,Identifier
+(,Punctuation
+bytesReference,Identifier
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+indexRequestBuilder,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+fixture,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ElasticSearchTransportClient,Identifier
+(,Punctuation
+elasticSearchClient,Identifier
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+fixture,Identifier
+.,Punctuation
+setBulkRequestBuilder,Identifier
+(,Punctuation
+bulkRequestBuilder,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+shouldAddNewEventWithoutTTL,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+fixture,Identifier
+.,Punctuation
+addEvent,Identifier
+(,Punctuation
+event,Identifier
+",",Punctuation
+ ,Whitespace
+nameBuilder,Identifier
+",",Punctuation
+ ,Whitespace
+"""bar_type""",String
+",",Punctuation
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+verify,Identifier
+(,Punctuation
+indexRequestBuilder,Identifier
+),Punctuation
+.,Punctuation
+setSource,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+serializer,Identifier
+.,Punctuation
+getContentBuilder,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+.,Punctuation
+bytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+verify,Identifier
+(,Punctuation
+bulkRequestBuilder,Identifier
+),Punctuation
+.,Punctuation
+add,Identifier
+(,Punctuation
+indexRequestBuilder,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+shouldAddNewEventWithTTL,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+fixture,Identifier
+.,Punctuation
+addEvent,Identifier
+(,Punctuation
+event,Identifier
+",",Punctuation
+ ,Whitespace
+nameBuilder,Identifier
+",",Punctuation
+ ,Whitespace
+"""bar_type""",String
+",",Punctuation
+ ,Whitespace
+10,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+verify,Identifier
+(,Punctuation
+indexRequestBuilder,Identifier
+),Punctuation
+.,Punctuation
+setTTL,Identifier
+(,Punctuation
+10,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+verify,Identifier
+(,Punctuation
+indexRequestBuilder,Identifier
+),Punctuation
+.,Punctuation
+setSource,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+serializer,Identifier
+.,Punctuation
+getContentBuilder,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+.,Punctuation
+bytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+shouldExecuteBulkRequestBuilder,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ListenableActionFuture,Identifier
+<,Operator
+BulkResponse,Identifier
+>,Operator
+ ,Whitespace
+action,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+(,Punctuation
+ListenableActionFuture,Identifier
+<,Operator
+BulkResponse,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+mock,Identifier
+(,Punctuation
+ListenableActionFuture,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+BulkResponse,Identifier
+ ,Whitespace
+response,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mock,Identifier
+(,Punctuation
+BulkResponse,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+bulkRequestBuilder,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+action,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+action,Identifier
+.,Punctuation
+actionGet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+response,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+response,Identifier
+.,Punctuation
+hasFailures,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+fixture,Identifier
+.,Punctuation
+addEvent,Identifier
+(,Punctuation
+event,Identifier
+",",Punctuation
+ ,Whitespace
+nameBuilder,Identifier
+",",Punctuation
+ ,Whitespace
+"""bar_type""",String
+",",Punctuation
+ ,Whitespace
+10,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+fixture,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+verify,Identifier
+(,Punctuation
+bulkRequestBuilder,Identifier
+),Punctuation
+.,Punctuation
+execute,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+(,Punctuation
+expected,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+EventDeliveryException,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+shouldThrowExceptionOnExecuteFailed,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ListenableActionFuture,Identifier
+<,Operator
+BulkResponse,Identifier
+>,Operator
+ ,Whitespace
+action,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+(,Punctuation
+ListenableActionFuture,Identifier
+<,Operator
+BulkResponse,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+mock,Identifier
+(,Punctuation
+ListenableActionFuture,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+BulkResponse,Identifier
+ ,Whitespace
+response,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mock,Identifier
+(,Punctuation
+BulkResponse,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+bulkRequestBuilder,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+action,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+action,Identifier
+.,Punctuation
+actionGet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+response,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+when,Identifier
+(,Punctuation
+response,Identifier
+.,Punctuation
+hasFailures,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+thenReturn,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+fixture,Identifier
+.,Punctuation
+addEvent,Identifier
+(,Punctuation
+event,Identifier
+",",Punctuation
+ ,Whitespace
+nameBuilder,Identifier
+",",Punctuation
+ ,Whitespace
+"""bar_type""",String
+",",Punctuation
+ ,Whitespace
+10,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+fixture,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

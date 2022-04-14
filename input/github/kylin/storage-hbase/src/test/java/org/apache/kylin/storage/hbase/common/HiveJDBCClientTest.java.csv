@@ -1,0 +1,1490 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+common,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileWriter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+Connection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+DriverManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+ResultSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+SQLException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+Statement,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A simple test case to check whether the Hive JDBC interface can fulfill Kylin's need; 
+ * Before run it, you need startup the hive server on localhost: $HIVE_HOME/bin/hiveserver2
+ * @author shaoshi
+ *
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HiveJDBCClientTest,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+driverName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""org.apache.hive.jdbc.HiveDriver""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tempFileName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""/tmp/a.txt""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+//@Before,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setup,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Class,Identifier
+.,Punctuation
+forName,Identifier
+(,Punctuation
+driverName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ClassNotFoundException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+e,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+exit,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+File,Identifier
+ ,Whitespace
+testFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+tempFileName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+testFile,Identifier
+.,Punctuation
+exists,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+FileWriter,Identifier
+ ,Whitespace
+writer,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+writer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FileWriter,Identifier
+(,Punctuation
+testFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""1 a\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""2 b\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+writer,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+e,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+//@After,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+Connection,Identifier
+ ,Whitespace
+getHiveConnection,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SQLException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+DriverManager,Identifier
+.,Punctuation
+getConnection,Identifier
+(,Punctuation
+"""jdbc:hive2://localhost:10000/default""",String
+",",Punctuation
+ ,Whitespace
+"""hive""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+//@Test,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testConnectToHive,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SQLException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"//replace ""hive"" here with the name of the user the queries should run as",Comment
+"
+",Newline
+        ,Whitespace
+Connection,Identifier
+ ,Whitespace
+con,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getHiveConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Statement,Identifier
+ ,Whitespace
+stmt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+con,Identifier
+.,Punctuation
+createStatement,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""testHiveDriverTable""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+stmt,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+"""drop table if exists """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+stmt,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+"""create table """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" (key int, value string) row format delimited fields terminated by ' '""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+// show tables,Comment
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""show tables '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Running: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ResultSet,Identifier
+ ,Whitespace
+res,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stmt,Identifier
+.,Punctuation
+executeQuery,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+res,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+res,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+res,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// describe table,Comment
+"
+",Newline
+        ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""describe """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Running: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+res,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stmt,Identifier
+.,Punctuation
+executeQuery,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+res,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+res,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\t""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+res,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+res,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// load data into table,Comment
+"
+",Newline
+        ,Whitespace
+// NOTE: filepath has to be local to the hive server,Comment
+"
+",Newline
+        ,Whitespace
+// NOTE: /tmp/a.txt is a ctrl-A separated file with two fields per line,Comment
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+filepath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tempFileName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""load data local inpath '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+filepath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' into table """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Running: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+stmt,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// select * query,Comment
+"
+",Newline
+        ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""select * from """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Running: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+res,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stmt,Identifier
+.,Punctuation
+executeQuery,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+res,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+res,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\t""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+res,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+res,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// regular hive query,Comment
+"
+",Newline
+        ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""select count(1) from """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Running: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+res,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stmt,Identifier
+.,Punctuation
+executeQuery,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+res,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+res,Identifier
+.,Punctuation
+getInt,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+res,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+//@Test,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testShowExtendedTable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SQLException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Connection,Identifier
+ ,Whitespace
+con,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getHiveConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""testHiveDriverTable""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""show table extended like """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ResultSet,Identifier
+ ,Whitespace
+res,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+executeSQL,Identifier
+(,Punctuation
+con,Identifier
+",",Punctuation
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+res,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""--- """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+res,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"""tab_name""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""describe extended """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+res,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+executeSQL,Identifier
+(,Punctuation
+con,Identifier
+",",Punctuation
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+res,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""---""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+res,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" | """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+res,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+ResultSet,Identifier
+ ,Whitespace
+executeSQL,Identifier
+(,Punctuation
+Connection,Identifier
+ ,Whitespace
+con,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SQLException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Statement,Identifier
+ ,Whitespace
+stmt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+con,Identifier
+.,Punctuation
+createStatement,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Running: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+stmt,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+stmt,Identifier
+.,Punctuation
+getResultSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+runTests,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SQLException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+setup,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+testConnectToHive,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+testShowExtendedTable,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+e,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+e,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+main,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SQLException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+HiveJDBCClientTest,Identifier
+ ,Whitespace
+test,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveJDBCClientTest,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+test,Identifier
+.,Punctuation
+runTests,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

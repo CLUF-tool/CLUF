@@ -1,0 +1,293 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+kite,Identifier
+.,Punctuation
+policy,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+kite,Identifier
+.,Punctuation
+DatasetSink,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+data,Identifier
+.,Punctuation
+Syncable,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A policy for dealing with non-recoverable event delivery failures.
+ *
+ * Non-recoverable event delivery failures include:
+ *
+ * 1. Error parsing the event body thrown from the {@link EntityParser}
+ * 2. A schema mismatch between the schema of an event and the schema of the
+ *    destination dataset.
+ * 3. A missing schema from the Event header when using the
+ *    {@link AvroEntityParser}.
+ *
+ * The life cycle of a FailurePolicy mimics the life cycle of the
+ * {@link DatasetSink#writer}:
+ *
+ * 1. When a new writer is created, the policy will be instantiated.
+ * 2. As Event failures happen,
+ *    {@link #handle(org.apache.flume.Event, java.lang.Throwable)} will be
+ *    called to let the policy handle the failure.
+ * 3. If the {@link DatasetSink} is configured to commit on batch, then the
+ *    {@link #sync()} method will be called when the batch is committed.
+ * 4. When the writer is closed, the policy's {@link #close()} method will be
+ *    called.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+FailurePolicy,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Handle a non-recoverable event.
+   *
+   * @param event The event
+   * @param cause The cause of the failure
+   * @throws EventDeliveryException The policy failed to handle the event. When
+   *                                this is thrown, the Flume transaction will
+   *                                be rolled back and the event will be retried
+   *                                along with the rest of the batch.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+handle,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+",",Punctuation
+ ,Whitespace
+Throwable,Identifier
+ ,Whitespace
+cause,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Ensure any handled events are on stable storage.
+   *
+   * This allows the policy implementation to sync any data that it may not
+   * have fully handled.
+   *
+   * See {@link Syncable#sync()}.
+   *
+   * @throws EventDeliveryException The policy failed while syncing data.
+   *                                When this is thrown, the Flume transaction
+   *                                will be rolled back and the batch will be
+   *                                retried.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+sync,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Close this FailurePolicy and release any resources.
+   *
+   * @throws EventDeliveryException The policy failed while closing resources.
+   *                                When this is thrown, the Flume transaction
+   *                                will be rolled back and the batch will be
+   *                                retried.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+EventDeliveryException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Knows how to build {@code FailurePolicy}s. Implementers must provide a
+   * no-arg constructor.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+Builder,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Build a new {@code FailurePolicy}
+     *
+     * @param config The Flume configuration context
+     * @return The {@code FailurePolicy}
+     */",Comment
+"
+",Newline
+    ,Whitespace
+FailurePolicy,Identifier
+ ,Whitespace
+build,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

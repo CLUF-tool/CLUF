@@ -1,0 +1,2215 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+serialization,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Charsets,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+OutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+avro,Identifier
+.,Punctuation
+Schema,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+serialization,Identifier
+.,Punctuation
+SyslogAvroEventSerializer,Identifier
+.,Punctuation
+SyslogEvent,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+SyslogUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+joda,Identifier
+.,Punctuation
+time,Identifier
+.,Punctuation
+DateTime,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+joda,Identifier
+.,Punctuation
+time,Identifier
+.,Punctuation
+format,Identifier
+.,Punctuation
+DateTimeFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+joda,Identifier
+.,Punctuation
+time,Identifier
+.,Punctuation
+format,Identifier
+.,Punctuation
+DateTimeFormatter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * This class exists to give an idea of how to use the AvroEventWriter
+ * and is not intended for inclusion in the Flume core.<br/>
+ * Problems with it are:<br/>
+ * (1) assumes very little parsing is done at the first hop (more TBD)<br/>
+ * (2) no field has been defined for use as a UUID for deduping<br/>
+ * (3) tailored to syslog messages but not specific to any application<br/>
+ * (4) not efficient about data copying from an implementation perspective<br/>
+ * Often, it makes more sense to parse your (meta-)data out of the message part
+ * itself and then store that in an application-specific Avro schema.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SyslogAvroEventSerializer,Identifier
+"
+",Newline
+    ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractAvroEventSerializer,Identifier
+<,Operator
+SyslogEvent,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+DateTimeFormatter,Identifier
+ ,Whitespace
+dateFmt1,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+DateTimeFormat,Identifier
+.,Punctuation
+forPattern,Identifier
+(,Punctuation
+"""MMM dd HH:mm:ss""",String
+),Punctuation
+.,Punctuation
+withZoneUTC,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+DateTimeFormatter,Identifier
+ ,Whitespace
+dateFmt2,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+DateTimeFormat,Identifier
+.,Punctuation
+forPattern,Identifier
+(,Punctuation
+"""MMM  d HH:mm:ss""",String
+),Punctuation
+.,Punctuation
+withZoneUTC,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+SyslogAvroEventSerializer,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// It's usually better to embed this schema in the class as a string.,Comment
+"
+",Newline
+  ,Whitespace
+// Avro does this for you if you generate Java classes from a schema file.,Comment
+"
+",Newline
+  ,Whitespace
+"// But since this is a test class, having the schema in an .avsc file is more",Comment
+"
+",Newline
+  ,Whitespace
+// readable. Should probably just use the maven avro plugin to generate,Comment
+"
+",Newline
+  ,Whitespace
+// the inner SyslogEvent class from this file.,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+File,Identifier
+ ,Whitespace
+schemaFile,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+"""src/test/resources/syslog_event.avsc""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+OutputStream,Identifier
+ ,Whitespace
+out,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Schema,Identifier
+ ,Whitespace
+schema,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+SyslogAvroEventSerializer,Identifier
+(,Punctuation
+OutputStream,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+out,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+schema,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Schema,Identifier
+.,Punctuation
+Parser,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+parse,Identifier
+(,Punctuation
+schemaFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+OutputStream,Identifier
+ ,Whitespace
+getOutputStream,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+out,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+Schema,Identifier
+ ,Whitespace
+getSchema,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+schema,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// very simple rfc3164 parser,Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+SyslogEvent,Identifier
+ ,Whitespace
+convert,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+SyslogEvent,Identifier
+ ,Whitespace
+sle,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SyslogEvent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Stringify body so it's easy to parse.,Comment
+"
+",Newline
+    ,Whitespace
+// This is a pretty inefficient way to do it.,Comment
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+Charsets,Identifier
+.,Punctuation
+UTF_8,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// parser read pointer,Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+seek,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// Check Flume headers to see if we came from SyslogTcp(or UDP) Source,",Comment
+"
+",Newline
+    ,Whitespace
+// which at the time of this writing only parses the priority.,Comment
+"
+",Newline
+    ,Whitespace
+// This is a bit schizophrenic and it should parse all the fields or none.,Comment
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+fromSyslogSource,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+headers,Identifier
+.,Punctuation
+containsKey,Identifier
+(,Punctuation
+SyslogUtils,Identifier
+.,Punctuation
+SYSLOG_FACILITY,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+fromSyslogSource,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+facility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+SyslogUtils,Identifier
+.,Punctuation
+SYSLOG_FACILITY,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+sle,Identifier
+.,Punctuation
+setFacility,Identifier
+(,Punctuation
+facility,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+headers,Identifier
+.,Punctuation
+containsKey,Identifier
+(,Punctuation
+SyslogUtils,Identifier
+.,Punctuation
+SYSLOG_SEVERITY,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+fromSyslogSource,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+severity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+SyslogUtils,Identifier
+.,Punctuation
+SYSLOG_SEVERITY,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+sle,Identifier
+.,Punctuation
+setSeverity,Identifier
+(,Punctuation
+severity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// assume the message was received raw (maybe via NetcatSource),Comment
+"
+",Newline
+    ,Whitespace
+// parse the priority string,Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+fromSyslogSource,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+msg,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'<',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+end,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+msg,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+""">""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+end,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+seek,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+end,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+String,Identifier
+ ,Whitespace
+priStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+msg,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+1,Literal
+",",Punctuation
+ ,Whitespace
+end,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+int,Keyword
+ ,Whitespace
+priority,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+priStr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+int,Keyword
+ ,Whitespace
+severity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+priority,Identifier
+ ,Whitespace
+%,Operator
+ ,Whitespace
+8,Literal
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+int,Keyword
+ ,Whitespace
+facility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+priority,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+severity,Identifier
+),Punctuation
+ ,Whitespace
+/,Operator
+ ,Whitespace
+8,Literal
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+sle,Identifier
+.,Punctuation
+setFacility,Identifier
+(,Punctuation
+facility,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+sle,Identifier
+.,Punctuation
+setSeverity,Identifier
+(,Punctuation
+severity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// parse the timestamp,Comment
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+timestampStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+msg,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+seek,Identifier
+",",Punctuation
+ ,Whitespace
+seek,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+15,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+ts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+parseRfc3164Date,Identifier
+(,Punctuation
+timestampStr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ts,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+sle,Identifier
+.,Punctuation
+setTimestamp,Identifier
+(,Punctuation
+ts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+seek,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+15,Literal
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+// space after timestamp,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// parse the hostname,Comment
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+nextSpace,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+msg,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+' ',String
+",",Punctuation
+ ,Whitespace
+seek,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nextSpace,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+msg,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+seek,Identifier
+",",Punctuation
+ ,Whitespace
+nextSpace,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+sle,Identifier
+.,Punctuation
+setHostname,Identifier
+(,Punctuation
+hostname,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+seek,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+nextSpace,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// everything else is the message,Comment
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+actualMessage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+msg,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+seek,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+sle,Identifier
+.,Punctuation
+setMessage,Identifier
+(,Punctuation
+actualMessage,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Serialized event as: {}""",String
+",",Punctuation
+ ,Whitespace
+sle,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+sle,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Returns epoch time in millis, or 0 if the string cannot be parsed.
+   * We use two date formats because the date spec in rfc3164 is kind of weird.
+   * <br/>
+   * <b>Warning:</b> logic is used here to determine the year even though it's
+   * not part of the timestamp format, and we assume that the machine running
+   * Flume has a clock that is at least close to the same day as the machine
+   * that generated the event. We also assume that the event was generated
+   * recently.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+parseRfc3164Date,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+in,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+DateTime,Identifier
+ ,Whitespace
+date,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+date,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dateFmt1,Identifier
+.,Punctuation
+parseDateTime,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IllegalArgumentException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+"// ignore the exception, we act based on nullity of date object",Comment
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Date parse failed on ({}), trying single-digit date""",String
+",",Punctuation
+ ,Whitespace
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+date,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+date,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dateFmt2,Identifier
+.,Punctuation
+parseDateTime,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IllegalArgumentException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+"// ignore the exception, we act based on nullity of date object",Comment
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""2nd date parse failed on ({}), unknown date format""",String
+",",Punctuation
+ ,Whitespace
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// hacky stuff to try and deal with boundary cases, i.e. new year's eve.",Comment
+"
+",Newline
+    ,Whitespace
+// rfc3164 dates are really dumb.,Comment
+"
+",Newline
+    ,Whitespace
+// NB: cannot handle replaying of old logs or going back to the future,Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+date,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+DateTime,Identifier
+ ,Whitespace
+now,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DateTime,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+year,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+now,Identifier
+.,Punctuation
+getYear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+DateTime,Identifier
+ ,Whitespace
+corrected,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+date,Identifier
+.,Punctuation
+withYear,Identifier
+(,Punctuation
+year,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+"// flume clock is ahead or there is some latency, and the year rolled",Comment
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+corrected,Identifier
+.,Punctuation
+isAfter,Identifier
+(,Punctuation
+now,Identifier
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+corrected,Identifier
+.,Punctuation
+minusMonths,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+.,Punctuation
+isAfter,Identifier
+(,Punctuation
+now,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+corrected,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+date,Identifier
+.,Punctuation
+withYear,Identifier
+(,Punctuation
+year,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+// flume clock is behind and the year rolled,Comment
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+corrected,Identifier
+.,Punctuation
+isBefore,Identifier
+(,Punctuation
+now,Identifier
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+corrected,Identifier
+.,Punctuation
+plusMonths,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+.,Punctuation
+isBefore,Identifier
+(,Punctuation
+now,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+corrected,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+date,Identifier
+.,Punctuation
+withYear,Identifier
+(,Punctuation
+year,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+date,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+corrected,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+date,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+date,Identifier
+.,Punctuation
+getMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Builder,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+EventSerializer,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+EventSerializer,Identifier
+ ,Whitespace
+build,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+",",Punctuation
+ ,Whitespace
+OutputStream,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+SyslogAvroEventSerializer,Identifier
+ ,Whitespace
+writer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+writer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SyslogAvroEventSerializer,Identifier
+(,Punctuation
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+writer,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Unable to parse schema file. Exception follows.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+writer,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"// This class would ideally be generated from the avro schema file,",Comment
+"
+",Newline
+  ,Whitespace
+// but we are letting reflection do the work instead.,Comment
+"
+",Newline
+  ,Whitespace
+// There's no great reason not to let Avro generate it.,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SyslogEvent,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+facility,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+severity,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+timestamp,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+hostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+message,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setFacility,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+f,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+facility,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+f,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getFacility,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+return,Keyword
+ ,Whitespace
+facility,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setSeverity,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+s,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+severity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getSeverity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+return,Keyword
+ ,Whitespace
+severity,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setTimestamp,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+t,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+t,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getTimestamp,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+return,Keyword
+ ,Whitespace
+timestamp,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setHostname,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+h,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+hostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+h,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getHostname,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+return,Keyword
+ ,Whitespace
+hostname,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setMessage,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+m,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+message,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+m,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+return,Keyword
+ ,Whitespace
+message,Identifier
+;,Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""{ Facility: """,String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+facility,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+""", """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" Severity: """,String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+severity,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+""", """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" Timestamp: """,String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+timestamp,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+""", """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" Hostname: """,String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+hostname,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+""", """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""" Message: \""""",String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+message,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\"" }""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+builder,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

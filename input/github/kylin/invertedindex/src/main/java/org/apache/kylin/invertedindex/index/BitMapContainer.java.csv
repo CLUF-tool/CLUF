@@ -1,0 +1,653 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+index,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+//import it.uniroma3.mat.extendedset.intset.ConciseSet;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import java.nio.ByteBuffer;,Comment
+"
+",Newline
+//import java.nio.IntBuffer;,Comment
+"
+",Newline
+//import java.util.ArrayList;,Comment
+"
+",Newline
+//import java.util.Arrays;,Comment
+"
+",Newline
+//import java.util.List;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import org.apache.hadoop.hbase.io.ImmutableBytesWritable;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import org.apache.kylin.common.util.BytesUtil;,Comment
+"
+",Newline
+//import org.apache.kylin.dict.Dictionary;,Comment
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+//public class BitMapContainer implements ColumnValueContainer {,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    int valueLen;,Comment
+"
+",Newline
+//    int nValues;,Comment
+"
+",Newline
+//    int size;,Comment
+"
+",Newline
+//    ConciseSet[] sets;,Comment
+"
+",Newline
+//    boolean closedForChange;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    transient byte[] temp;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+"//    public BitMapContainer(TableRecordInfoDigest digest, int col) {",Comment
+"
+",Newline
+//        this.valueLen = digest.length(col);,Comment
+"
+",Newline
+//        this.size = 0;,Comment
+"
+",Newline
+//        this.nValues = digest.getMaxID(col) + 1;,Comment
+"
+",Newline
+//        this.sets = null;,Comment
+"
+",Newline
+//        this.closedForChange = false;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        this.temp = new byte[valueLen];,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+//    public void append(ImmutableBytesWritable valueBytes) {,Comment
+"
+",Newline
+"//        int value = BytesUtil.readUnsigned(valueBytes.get(), valueBytes.getOffset(), valueLen);",Comment
+"
+",Newline
+//        append(value);,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    public void append(int value) {,Comment
+"
+",Newline
+//        checkUpdateMode();,Comment
+"
+",Newline
+//        if (value == Dictionary.NULL_ID[valueLen]) {,Comment
+"
+",Newline
+//            value = nValues; // set[nValues] holds NULL,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        sets[value].add(size);,Comment
+"
+",Newline
+//        size++;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+"//    public void getValueAt(int i, ImmutableBytesWritable valueBytes) {",Comment
+"
+",Newline
+//        int value = getValueIntAt(i);,Comment
+"
+",Newline
+"//        BytesUtil.writeUnsigned(value, temp, 0, valueLen);",Comment
+"
+",Newline
+"//        valueBytes.set(temp, 0, valueLen);",Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+"//    public ConciseSet getBitMap(Integer startId, Integer endId) {",Comment
+"
+",Newline
+//        if (startId == null && endId == null) {,Comment
+"
+",Newline
+//            return sets[this.nValues];,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        int start = 0;,Comment
+"
+",Newline
+//        int end = this.nValues - 1;,Comment
+"
+",Newline
+//        if (startId != null) {,Comment
+"
+",Newline
+//            start = startId;,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        if (endId != null) {,Comment
+"
+",Newline
+//            end = endId;,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        ConciseSet ret = new ConciseSet();,Comment
+"
+",Newline
+//        for (int i = start; i <= end; ++i) {,Comment
+"
+",Newline
+//            ConciseSet temp = getBitMap(i);,Comment
+"
+",Newline
+//            ret.addAll(temp);,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        return ret;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private ConciseSet getBitMap(int valueId) {,Comment
+"
+",Newline
+//        if (valueId >= 0 && valueId <= getMaxValueId()),Comment
+"
+",Newline
+//            return sets[valueId];,Comment
+"
+",Newline
+//        else,Comment
+"
+",Newline
+//            return sets[this.nValues];,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+//    public int getMaxValueId() {,Comment
+"
+",Newline
+//        return this.nValues - 1;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    public int getValueIntAt(int i) {,Comment
+"
+",Newline
+//        for (int v = 0; v < nValues; v++) {,Comment
+"
+",Newline
+//            if (sets[v].contains(i)) {,Comment
+"
+",Newline
+//                return v;,Comment
+"
+",Newline
+//            },Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+"//        // if v is not in [0..nValues-1], then it must be nValue (NULL)",Comment
+"
+",Newline
+//        return Dictionary.NULL_ID[valueLen];,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private void checkUpdateMode() {,Comment
+"
+",Newline
+//        if (isClosedForChange()) {,Comment
+"
+",Newline
+//            throw new IllegalStateException();,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        if (sets == null) {,Comment
+"
+",Newline
+//            sets = new ConciseSet[nValues + 1];,Comment
+"
+",Newline
+//            for (int i = 0; i <= nValues; i++) {,Comment
+"
+",Newline
+//                sets[i] = new ConciseSet();,Comment
+"
+",Newline
+//            },Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private boolean isClosedForChange() {,Comment
+"
+",Newline
+//        return closedForChange;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+//    public void closeForChange() {,Comment
+"
+",Newline
+//        closedForChange = true;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+//    public int getSize() {,Comment
+"
+",Newline
+//        return size;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    public List<ImmutableBytesWritable> toBytes() {,Comment
+"
+",Newline
+//        if (isClosedForChange() == false),Comment
+"
+",Newline
+//            closeForChange();,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        List<ImmutableBytesWritable> r = new ArrayList<ImmutableBytesWritable>(nValues + 1);,Comment
+"
+",Newline
+//        for (int i = 0; i <= nValues; i++) {,Comment
+"
+",Newline
+//            r.add(setToBytes(sets[i]));,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        return r;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    public void fromBytes(List<ImmutableBytesWritable> bytes) {,Comment
+"
+",Newline
+//        assert nValues + 1 == bytes.size();,Comment
+"
+",Newline
+//        sets = new ConciseSet[nValues + 1];,Comment
+"
+",Newline
+//        size = 0;,Comment
+"
+",Newline
+//        for (int i = 0; i <= nValues; i++) {,Comment
+"
+",Newline
+//            sets[i] = bytesToSet(bytes.get(i));,Comment
+"
+",Newline
+//            size += sets[i].size();,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//        closedForChange = true;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private ImmutableBytesWritable setToBytes(ConciseSet set) {,Comment
+"
+",Newline
+//        byte[] array;,Comment
+"
+",Newline
+//        if (set.isEmpty()) // ConciseSet.toByteBuffer() throws exception when,Comment
+"
+",Newline
+//                           // set is empty,Comment
+"
+",Newline
+//            array = BytesUtil.EMPTY_BYTE_ARRAY;,Comment
+"
+",Newline
+//        else,Comment
+"
+",Newline
+//            array = set.toByteBuffer().array();,Comment
+"
+",Newline
+//        return new ImmutableBytesWritable(array);,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    private ConciseSet bytesToSet(ImmutableBytesWritable bytes) {,Comment
+"
+",Newline
+//        if (bytes.get() == null || bytes.getLength() == 0) {,Comment
+"
+",Newline
+//            return new ConciseSet();,Comment
+"
+",Newline
+//        } else {,Comment
+"
+",Newline
+"//            IntBuffer intBuffer = ByteBuffer.wrap(bytes.get(), bytes.getOffset(), bytes.getLength()).asIntBuffer();",Comment
+"
+",Newline
+//            int[] words = new int[intBuffer.capacity()];,Comment
+"
+",Newline
+//            intBuffer.get(words);,Comment
+"
+",Newline
+"//            return new ConciseSet(words, false);",Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+//    public int hashCode() {,Comment
+"
+",Newline
+//        final int prime = 31;,Comment
+"
+",Newline
+//        int result = 1;,Comment
+"
+",Newline
+//        result = prime * result + (closedForChange ? 1231 : 1237);,Comment
+"
+",Newline
+//        result = prime * result + nValues;,Comment
+"
+",Newline
+//        result = prime * result + Arrays.hashCode(sets);,Comment
+"
+",Newline
+//        result = prime * result + size;,Comment
+"
+",Newline
+//        result = prime * result + valueLen;,Comment
+"
+",Newline
+//        return result;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+//    public boolean equals(Object obj) {,Comment
+"
+",Newline
+//        if (this == obj),Comment
+"
+",Newline
+//            return true;,Comment
+"
+",Newline
+//        if (obj == null),Comment
+"
+",Newline
+//            return false;,Comment
+"
+",Newline
+//        if (getClass() != obj.getClass()),Comment
+"
+",Newline
+//            return false;,Comment
+"
+",Newline
+//        BitMapContainer other = (BitMapContainer) obj;,Comment
+"
+",Newline
+//        if (closedForChange != other.closedForChange),Comment
+"
+",Newline
+//            return false;,Comment
+"
+",Newline
+//        if (nValues != other.nValues),Comment
+"
+",Newline
+//            return false;,Comment
+"
+",Newline
+"//        if (!Arrays.equals(sets, other.sets))",Comment
+"
+",Newline
+//            return false;,Comment
+"
+",Newline
+//        if (size != other.size),Comment
+"
+",Newline
+//            return false;,Comment
+"
+",Newline
+//        if (valueLen != other.valueLen),Comment
+"
+",Newline
+//            return false;,Comment
+"
+",Newline
+//        return true;,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//},Comment
+"
+",Newline

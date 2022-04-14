@@ -1,0 +1,1862 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+source,Identifier
+.,Punctuation
+hive,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+UUID,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+metastore,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+FieldSchema,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+metastore,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+Table,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+HadoopUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+MetadataConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+MetadataManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+ColumnDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TableDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Management class to sync hive table metadata with command See main method for
+ * how to use the class
+ *
+ * @author jianliu
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HiveSourceTableLoader,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unused""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+HiveSourceTableLoader,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+OUTPUT_SURFIX,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""json""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+TABLE_FOLDER_NAME,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""table""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+TABLE_EXD_FOLDER_NAME,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""table_exd""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+reloadHiveTables,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+hiveTables,Identifier
+",",Punctuation
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+db2tables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+table,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+hiveTables,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+parts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HadoopUtil,Identifier
+.,Punctuation
+parseHiveTableName,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+set,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+db2tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+parts,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+set,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+set,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+db2tables,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+parts,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+",",Punctuation
+ ,Whitespace
+set,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+set,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+parts,Identifier
+[,Punctuation
+1,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// extract from hive,Comment
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+loadedTables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+database,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+db2tables,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+loaded,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+extractHiveTables,Identifier
+(,Punctuation
+database,Identifier
+",",Punctuation
+ ,Whitespace
+db2tables,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+database,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+loadedTables,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+loaded,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+loadedTables,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+unLoadHiveTable,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+hiveTable,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+MetadataManager,Identifier
+ ,Whitespace
+metaMgr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MetadataManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+removeSourceTable,Identifier
+(,Punctuation
+hiveTable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+removeTableExd,Identifier
+(,Punctuation
+hiveTable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+extractHiveTables,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+database,Identifier
+",",Punctuation
+ ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+tables,Identifier
+",",Punctuation
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+loadedTables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+MetadataManager,Identifier
+ ,Whitespace
+metaMgr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MetadataManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tables,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Table,Identifier
+ ,Whitespace
+table,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+HiveClient,Identifier
+ ,Whitespace
+hiveClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+FieldSchema,Identifier
+>,Operator
+ ,Whitespace
+partitionFields,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+FieldSchema,Identifier
+>,Operator
+ ,Whitespace
+fields,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+table,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hiveClient,Identifier
+.,Punctuation
+getHiveTable,Identifier
+(,Punctuation
+database,Identifier
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+partitionFields,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+table,Identifier
+.,Punctuation
+getPartitionKeys,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+fields,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hiveClient,Identifier
+.,Punctuation
+getHiveTableFields,Identifier
+(,Punctuation
+database,Identifier
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+e,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+fields,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+partitionFields,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+partitionFields,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+fields,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+partitionFields,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+tableSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hiveClient,Identifier
+.,Punctuation
+getFileSizeForTable,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+tableFileNum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hiveClient,Identifier
+.,Punctuation
+getFileNumberForTable,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+TableDesc,Identifier
+ ,Whitespace
+tableDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+getTableDesc,Identifier
+(,Punctuation
+database,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableDesc,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+tableDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TableDesc,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+setDatabase,Identifier
+(,Punctuation
+database,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+setName,Identifier
+(,Punctuation
+tableName,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+setUuid,Identifier
+(,Punctuation
+UUID,Identifier
+.,Punctuation
+randomUUID,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+setLastModified,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+columnNumber,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fields,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+ColumnDesc,Identifier
+>,Operator
+ ,Whitespace
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+ColumnDesc,Identifier
+>,Operator
+(,Punctuation
+columnNumber,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+columnNumber,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+FieldSchema,Identifier
+ ,Whitespace
+field,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fields,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+ColumnDesc,Identifier
+ ,Whitespace
+cdesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ColumnDesc,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+cdesc,Identifier
+.,Punctuation
+setName,Identifier
+(,Punctuation
+field,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+"// use ""double"" in kylin for ""float""",Comment
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+"""float""",String
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+field,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+cdesc,Identifier
+.,Punctuation
+setDatatype,Identifier
+(,Punctuation
+"""double""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+cdesc,Identifier
+.,Punctuation
+setDatatype,Identifier
+(,Punctuation
+field,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+cdesc,Identifier
+.,Punctuation
+setId,Identifier
+(,Punctuation
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+columns,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+cdesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+setColumns,Identifier
+(,Punctuation
+columns,Identifier
+.,Punctuation
+toArray,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ColumnDesc,Identifier
+[,Punctuation
+columnNumber,Identifier
+],Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+StringBuffer,Identifier
+ ,Whitespace
+partitionColumnString,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+n,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+partitionFields,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+n,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+partitionColumnString,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""", """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+partitionColumnString,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+partitionFields,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+map,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+getTableDescExd,Identifier
+(,Punctuation
+tableDesc,Identifier
+.,Punctuation
+getIdentity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+map,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+map,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_TABLENAME,Identifier
+",",Punctuation
+ ,Whitespace
+table,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_LOCATION,Identifier
+",",Punctuation
+ ,Whitespace
+table,Identifier
+.,Punctuation
+getSd,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getLocation,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_IF,Identifier
+",",Punctuation
+ ,Whitespace
+table,Identifier
+.,Punctuation
+getSd,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getInputFormat,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_OF,Identifier
+",",Punctuation
+ ,Whitespace
+table,Identifier
+.,Punctuation
+getSd,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getOutputFormat,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_OWNER,Identifier
+",",Punctuation
+ ,Whitespace
+table,Identifier
+.,Punctuation
+getOwner,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_LAT,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+table,Identifier
+.,Punctuation
+getLastAccessTime,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_PC,Identifier
+",",Punctuation
+ ,Whitespace
+partitionColumnString,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_TFS,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+tableSize,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_TNF,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+tableFileNum,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+map,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+MetadataConstants,Identifier
+.,Punctuation
+TABLE_EXD_PARTITIONED,Identifier
+",",Punctuation
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+partitionFields,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+partitionFields,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+saveSourceTable,Identifier
+(,Punctuation
+tableDesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+saveTableExd,Identifier
+(,Punctuation
+tableDesc,Identifier
+.,Punctuation
+getIdentity,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+map,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+loadedTables,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+tableDesc,Identifier
+.,Punctuation
+getIdentity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+loadedTables,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,4266 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+kafka,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+admin,Identifier
+.,Punctuation
+AdminUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+javaapi,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+Producer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+KeyedMessage,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+producer,Identifier
+.,Punctuation
+ProducerConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+utils,Identifier
+.,Punctuation
+ZKStringSerializer$,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+I0Itec,Identifier
+.,Punctuation
+zkclient,Identifier
+.,Punctuation
+ZkClient,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+RandomStringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Transaction,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurables,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+EventBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+kafka,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TestUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+atomic,Identifier
+.,Punctuation
+AtomicBoolean,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+atomic,Identifier
+.,Punctuation
+AtomicInteger,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestKafkaChannel,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+TestUtil,Identifier
+ ,Whitespace
+testUtil,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TestUtil,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+topic,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+usedTopics,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+CountDownLatch,Identifier
+ ,Whitespace
+latch,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+BeforeClass,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setupClass,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+testUtil,Identifier
+.,Punctuation
+prepare,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+2500,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Before,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setup,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+topicFound,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+topicFound,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+topic,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+RandomStringUtils,Identifier
+.,Punctuation
+randomAlphabetic,Identifier
+(,Punctuation
+8,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+usedTopics,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+topic,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+usedTopics,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+topic,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+topicFound,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+createTopic,Identifier
+(,Punctuation
+topic,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+2500,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+latch,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CountDownLatch,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+AfterClass,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+testUtil,Identifier
+.,Punctuation
+tearDown,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testSuccess,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+doTestSuccessRollback,Identifier
+(,Punctuation
+false,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testSuccessInterleave,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+doTestSuccessRollback,Identifier
+(,Punctuation
+false,Keyword
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testRollbacks,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+doTestSuccessRollback,Identifier
+(,Punctuation
+true,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testRollbacksInterleave,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+doTestSuccessRollback,Identifier
+(,Punctuation
+true,Keyword
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doTestSuccessRollback,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+rollback,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+interleave,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startChannel,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writeAndVerify,Identifier
+(,Punctuation
+rollback,Identifier
+",",Punctuation
+ ,Whitespace
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+interleave,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channel,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testStopAndStart,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+doTestStopAndStart,Identifier
+(,Punctuation
+false,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testStopAndStartWithRollback,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+doTestStopAndStart,Identifier
+(,Punctuation
+true,Keyword
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testStopAndStartWithRollbackAndNoRetry,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+doTestStopAndStart,Identifier
+(,Punctuation
+true,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testNoParsingAsFlumeAgent,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startChannel,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Producer,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+producer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Producer,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+new,Keyword
+ ,Whitespace
+ProducerConfig,Identifier
+(,Punctuation
+channel,Identifier
+.,Punctuation
+getKafkaConf,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+KeyedMessage,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+original,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+50,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+KeyedMessage,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+data,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KeyedMessage,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+RandomStringUtils,Identifier
+.,Punctuation
+randomAlphabetic,Identifier
+(,Punctuation
+6,Literal
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+original,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+data,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+producer,Identifier
+.,Punctuation
+send,Identifier
+(,Punctuation
+original,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+ ,Whitespace
+submitterSvc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+"
+",Newline
+      ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+(,Punctuation
+Executors,Identifier
+.,Punctuation
+newCachedThreadPool,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+events,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pullEvents,Identifier
+(,Punctuation
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+submitterSvc,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+50,Literal
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+wait,Identifier
+(,Punctuation
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Set,Identifier
+<,Operator
+Integer,Identifier
+>,Operator
+ ,Whitespace
+finals,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+50,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+finals,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+events,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+50,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertTrue,Identifier
+(,Punctuation
+finals,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+finals,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertTrue,Identifier
+(,Punctuation
+finals,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channel,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * This method starts a channel, puts events into it. The channel is then
+   * stopped and restarted. Then we check to make sure if all events we put
+   * come out. Optionally, 10 events are rolled back,
+   * and optionally we restart the agent immediately after and we try to pull it
+   * out.
+   *
+   * @param rollback
+   * @param retryAfterRollback
+   * @throws Exception
+   */",Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doTestStopAndStart,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+rollback,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+retryAfterRollback,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startChannel,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ExecutorService,Identifier
+ ,Whitespace
+underlying,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Executors,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+newCachedThreadPool,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+ ,Whitespace
+submitterSvc,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+new,Keyword
+ ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+(,Punctuation
+underlying,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+Event,Identifier
+>>,Operator
+ ,Whitespace
+events,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+createBaseList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+putEvents,Identifier
+(,Punctuation
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+events,Identifier
+",",Punctuation
+ ,Whitespace
+submitterSvc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+completed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+wait,Identifier
+(,Punctuation
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channel,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startChannel,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+total,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+50,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+rollback,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+retryAfterRollback,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+total,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+40,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventsPulled,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+pullEvents,Identifier
+(,Punctuation
+channel2,Identifier
+",",Punctuation
+ ,Whitespace
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+total,Identifier
+",",Punctuation
+ ,Whitespace
+rollback,Identifier
+",",Punctuation
+ ,Whitespace
+retryAfterRollback,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+wait,Identifier
+(,Punctuation
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channel2,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+retryAfterRollback,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+rollback,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startChannel,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+expectedRemaining,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+50,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+eventsPulled,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventsPulled2,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+pullEvents,Identifier
+(,Punctuation
+channel3,Identifier
+",",Punctuation
+ ,Whitespace
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+expectedRemaining,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+wait,Identifier
+(,Punctuation
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+expectedRemaining,Identifier
+",",Punctuation
+ ,Whitespace
+eventsPulled2,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+eventsPulled,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+eventsPulled2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+channel3,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+underlying,Identifier
+.,Punctuation
+shutdownNow,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+verify,Identifier
+(,Punctuation
+eventsPulled,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+startChannel,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+parseAsFlume,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prepareDefaultContext,Identifier
+(,Punctuation
+parseAsFlume,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channel,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+channel,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+writeAndVerify,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+testRollbacks,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+writeAndVerify,Identifier
+(,Punctuation
+testRollbacks,Identifier
+",",Punctuation
+ ,Whitespace
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+writeAndVerify,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+testRollbacks,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+interleave,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+Event,Identifier
+>>,Operator
+ ,Whitespace
+events,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+createBaseList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+ ,Whitespace
+submitterSvc,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+new,Keyword
+ ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+(,Punctuation
+Executors,Identifier
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+newCachedThreadPool,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+putEvents,Identifier
+(,Punctuation
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+events,Identifier
+",",Punctuation
+ ,Whitespace
+submitterSvc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+interleave,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+wait,Identifier
+(,Punctuation
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+ ,Whitespace
+submitterSvc2,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+new,Keyword
+ ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+(,Punctuation
+Executors,Identifier
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+newCachedThreadPool,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventsPulled,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+pullEvents,Identifier
+(,Punctuation
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+submitterSvc2,Identifier
+",",Punctuation
+ ,Whitespace
+50,Literal
+",",Punctuation
+ ,Whitespace
+testRollbacks,Identifier
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+interleave,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+wait,Identifier
+(,Punctuation
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+wait,Identifier
+(,Punctuation
+submitterSvc2,Identifier
+",",Punctuation
+ ,Whitespace
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+verify,Identifier
+(,Punctuation
+eventsPulled,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+Event,Identifier
+>>,Operator
+ ,Whitespace
+createBaseList,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+Event,Identifier
+>>,Operator
+ ,Whitespace
+events,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+List,Identifier
+<,Operator
+Event,Identifier
+>>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+5,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+10,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+events,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+eventList,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+10,Literal
+;,Punctuation
+ ,Whitespace
+j,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+hdrs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+v,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" - """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+String,Identifier
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+j,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+hdrs,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""header""",String
+",",Punctuation
+ ,Whitespace
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+eventList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+EventBuilder,Identifier
+.,Punctuation
+withBody,Identifier
+(,Punctuation
+v,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+hdrs,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+events,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+putEvents,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel,Identifier
+",",Punctuation
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+List,Identifier
+<,Operator
+Event,Identifier
+>>,Operator
+"
+",Newline
+    ,Whitespace
+events,Identifier
+",",Punctuation
+ ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+ ,Whitespace
+submitterSvc,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+5,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+submitterSvc,Identifier
+.,Punctuation
+submit,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Callable,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+Void,Identifier
+ ,Whitespace
+call,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+channel,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+tx,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventsToPut,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+events,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+index,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+10,Literal
+;,Punctuation
+ ,Whitespace
+j,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+channel,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+eventsToPut,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+j,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+tx,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+tx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+pullEvents,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+KafkaChannel,Identifier
+ ,Whitespace
+channel,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+ ,Whitespace
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+total,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+testRollbacks,Identifier
+",",Punctuation
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+retryAfterRollback,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventsPulled,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+synchronizedList,Identifier
+(,Punctuation
+new,Keyword
+"
+",Newline
+      ,Whitespace
+ArrayList,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+50,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+CyclicBarrier,Identifier
+ ,Whitespace
+barrier,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CyclicBarrier,Identifier
+(,Punctuation
+5,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+ ,Whitespace
+counter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+ ,Whitespace
+rolledBackCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+AtomicBoolean,Identifier
+ ,Whitespace
+startedGettingEvents,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AtomicBoolean,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+AtomicBoolean,Identifier
+ ,Whitespace
+rolledBack,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AtomicBoolean,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+k,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+k,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+5,Literal
+;,Punctuation
+ ,Whitespace
+k,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+k,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+submitterSvc,Identifier
+.,Punctuation
+submit,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Callable,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+Void,Identifier
+ ,Whitespace
+call,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+Transaction,Identifier
+ ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventsLocal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newLinkedList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+int,Keyword
+ ,Whitespace
+takenByThisThread,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+channel,Identifier
+.,Punctuation
+registerThread,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+1000,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+barrier,Identifier
+.,Punctuation
+await,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+counter,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+(,Punctuation
+total,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+rolledBackCount,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tx,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+channel,Identifier
+.,Punctuation
+getTransaction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+tx,Identifier
+.,Punctuation
+begin,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+Event,Identifier
+ ,Whitespace
+e,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+channel,Identifier
+.,Punctuation
+take,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+e,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+startedGettingEvents,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+eventsLocal,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+testRollbacks,Identifier
+ ,Whitespace
+&&,Operator
+"
+",Newline
+                  ,Whitespace
+index,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+4,Literal
+ ,Whitespace
+&&,Operator
+"
+",Newline
+                  ,Whitespace
+(,Punctuation
+!,Operator
+rolledBack,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+"
+",Newline
+                  ,Whitespace
+startedGettingEvents,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                  ,Whitespace
+tx,Identifier
+.,Punctuation
+rollback,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+tx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+rolledBack,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+eventsLocalSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+eventsLocal,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+eventsLocal,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+retryAfterRollback,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+rolledBackCount,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+eventsLocalSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                  ,Whitespace
+tx,Identifier
+.,Punctuation
+commit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+tx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+eventsPulled,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+eventsLocal,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+counter,Identifier
+.,Punctuation
+getAndAdd,Identifier
+(,Punctuation
+eventsLocal,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+eventsLocal,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+              ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+eventsLocal,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tx,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+tx,Identifier
+.,Punctuation
+rollback,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+tx,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+},Punctuation
+"
+",Newline
+              ,Whitespace
+tx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+ex,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+// Close txn.,Comment
+"
+",Newline
+          ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+eventsPulled,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+wait,Identifier
+(,Punctuation
+ExecutorCompletionService,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+ ,Whitespace
+submitterSvc,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+max,Identifier
+),Punctuation
+"
+",Newline
+    ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+completed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+completed,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+max,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+submitterSvc,Identifier
+.,Punctuation
+take,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+completed,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+verify,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+eventsPulled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertFalse,Identifier
+(,Punctuation
+eventsPulled,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+50,Literal
+",",Punctuation
+ ,Whitespace
+eventsPulled,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+eventStrings,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+e,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+eventsPulled,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Assert,Identifier
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""header""",String
+),Punctuation
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+eventStrings,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""header""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+5,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+10,Literal
+;,Punctuation
+ ,Whitespace
+j,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+v,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" - """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+j,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertTrue,Identifier
+(,Punctuation
+eventStrings,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+eventStrings,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+v,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertTrue,Identifier
+(,Punctuation
+eventStrings,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Context,Identifier
+ ,Whitespace
+prepareDefaultContext,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+parseAsFlume,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// Prepares a default context with Kafka Server Properties,Comment
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+KafkaChannelConfiguration,Identifier
+.,Punctuation
+BROKER_LIST_FLUME_KEY,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+testUtil,Identifier
+.,Punctuation
+getKafkaServerUrl,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+KafkaChannelConfiguration,Identifier
+.,Punctuation
+ZOOKEEPER_CONNECT_FLUME_KEY,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+testUtil,Identifier
+.,Punctuation
+getZkUrl,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+KafkaChannelConfiguration,Identifier
+.,Punctuation
+PARSE_AS_FLUME_EVENT,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+parseAsFlume,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+KafkaChannelConfiguration,Identifier
+.,Punctuation
+READ_SMALLEST_OFFSET,Identifier
+",",Punctuation
+ ,Whitespace
+"""true""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+context,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+KafkaChannelConfiguration,Identifier
+.,Punctuation
+TOPIC,Identifier
+",",Punctuation
+ ,Whitespace
+topic,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+context,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+createTopic,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+topicName,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+numPartitions,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+5,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+sessionTimeoutMs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+connectionTimeoutMs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ZkClient,Identifier
+ ,Whitespace
+zkClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ZkClient,Identifier
+(,Punctuation
+testUtil,Identifier
+.,Punctuation
+getZkUrl,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+sessionTimeoutMs,Identifier
+",",Punctuation
+ ,Whitespace
+connectionTimeoutMs,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+ZKStringSerializer$,Identifier
+.,Punctuation
+MODULE$,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+replicationFactor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+topicConfig,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+AdminUtils,Identifier
+.,Punctuation
+createTopic,Identifier
+(,Punctuation
+zkClient,Identifier
+",",Punctuation
+ ,Whitespace
+topicName,Identifier
+",",Punctuation
+ ,Whitespace
+numPartitions,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+replicationFactor,Identifier
+",",Punctuation
+ ,Whitespace
+topicConfig,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+deleteTopic,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+topicName,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+sessionTimeoutMs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+connectionTimeoutMs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ZkClient,Identifier
+ ,Whitespace
+zkClient,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ZkClient,Identifier
+(,Punctuation
+testUtil,Identifier
+.,Punctuation
+getZkUrl,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+sessionTimeoutMs,Identifier
+",",Punctuation
+ ,Whitespace
+connectionTimeoutMs,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+ZKStringSerializer$,Identifier
+.,Punctuation
+MODULE$,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+AdminUtils,Identifier
+.,Punctuation
+deleteTopic,Identifier
+(,Punctuation
+zkClient,Identifier
+",",Punctuation
+ ,Whitespace
+topicName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

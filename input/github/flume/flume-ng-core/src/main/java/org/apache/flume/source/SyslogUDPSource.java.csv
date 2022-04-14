@@ -1,0 +1,1382 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+source,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+InetSocketAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+SocketAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+Executors,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+TimeUnit,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+CounterGroup,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+EventDrivenSource,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurables,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+jboss,Identifier
+.,Punctuation
+netty,Identifier
+.,Punctuation
+bootstrap,Identifier
+.,Punctuation
+ConnectionlessBootstrap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+jboss,Identifier
+.,Punctuation
+netty,Identifier
+.,Punctuation
+buffer,Identifier
+.,Punctuation
+ChannelBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+jboss,Identifier
+.,Punctuation
+netty,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+jboss,Identifier
+.,Punctuation
+netty,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+socket,Identifier
+.,Punctuation
+oio,Identifier
+.,Punctuation
+OioDatagramChannelFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SyslogUDPSource,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractSource,Identifier
+"
+",Newline
+      ,Whitespace
+implements,Keyword
+ ,Whitespace
+EventDrivenSource,Identifier
+",",Punctuation
+ ,Whitespace
+Configurable,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+maxsize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+16,Literal
+;,Punctuation
+ ,Whitespace
+// 64k is max allowable in RFC 5426,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+host,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Channel,Identifier
+ ,Whitespace
+nettyChannel,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+formaterProp,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+keepFields,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+SyslogUDPSource,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+CounterGroup,Identifier
+ ,Whitespace
+counterGroup,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CounterGroup,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// Default Min size,Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_MIN_SIZE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+2048,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_INITIAL_SIZE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+DEFAULT_MIN_SIZE,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+syslogHandler,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+SimpleChannelHandler,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+SyslogUtils,Identifier
+ ,Whitespace
+syslogUtils,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SyslogUtils,Identifier
+(,Punctuation
+DEFAULT_INITIAL_SIZE,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setFormater,Identifier
+(,Punctuation
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+prop,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+syslogUtils,Identifier
+.,Punctuation
+addFormats,Identifier
+(,Punctuation
+prop,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setKeepFields,Identifier
+(,Punctuation
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+keepFields,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+syslogUtils,Identifier
+.,Punctuation
+setKeepFields,Identifier
+(,Punctuation
+keepFields,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+messageReceived,Identifier
+(,Punctuation
+ChannelHandlerContext,Identifier
+ ,Whitespace
+ctx,Identifier
+",",Punctuation
+ ,Whitespace
+MessageEvent,Identifier
+ ,Whitespace
+mEvent,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+syslogUtils,Identifier
+.,Punctuation
+setEventSize,Identifier
+(,Punctuation
+maxsize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Event,Identifier
+ ,Whitespace
+e,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+syslogUtils,Identifier
+.,Punctuation
+extractEvent,Identifier
+(,Punctuation
+(,Punctuation
+ChannelBuffer,Identifier
+),Punctuation
+mEvent,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+e,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+getChannelProcessor,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+processEvent,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+counterGroup,Identifier
+.,Punctuation
+incrementAndGet,Identifier
+(,Punctuation
+"""events.success""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ChannelException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+counterGroup,Identifier
+.,Punctuation
+incrementAndGet,Identifier
+(,Punctuation
+"""events.dropped""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error writting to channel""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+start,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// setup Netty server,Comment
+"
+",Newline
+    ,Whitespace
+ConnectionlessBootstrap,Identifier
+ ,Whitespace
+serverBootstrap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConnectionlessBootstrap,Identifier
+"
+",Newline
+        ,Whitespace
+(,Punctuation
+new,Keyword
+ ,Whitespace
+OioDatagramChannelFactory,Identifier
+(,Punctuation
+Executors,Identifier
+.,Punctuation
+newCachedThreadPool,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+syslogHandler,Identifier
+ ,Whitespace
+handler,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+syslogHandler,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+handler,Identifier
+.,Punctuation
+setFormater,Identifier
+(,Punctuation
+formaterProp,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+handler,Identifier
+.,Punctuation
+setKeepFields,Identifier
+(,Punctuation
+keepFields,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serverBootstrap,Identifier
+.,Punctuation
+setOption,Identifier
+(,Punctuation
+"""receiveBufferSizePredictorFactory""",String
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+new,Keyword
+ ,Whitespace
+AdaptiveReceiveBufferSizePredictorFactory,Identifier
+(,Punctuation
+DEFAULT_MIN_SIZE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+DEFAULT_INITIAL_SIZE,Identifier
+",",Punctuation
+ ,Whitespace
+maxsize,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serverBootstrap,Identifier
+.,Punctuation
+setPipelineFactory,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ChannelPipelineFactory,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+      ,Whitespace
+public,Keyword
+ ,Whitespace
+ChannelPipeline,Identifier
+ ,Whitespace
+getPipeline,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+       ,Whitespace
+return,Keyword
+ ,Whitespace
+Channels,Identifier
+.,Punctuation
+pipeline,Identifier
+(,Punctuation
+handler,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+     ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+host,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+nettyChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serverBootstrap,Identifier
+.,Punctuation
+bind,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+InetSocketAddress,Identifier
+(,Punctuation
+port,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+nettyChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+serverBootstrap,Identifier
+.,Punctuation
+bind,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+InetSocketAddress,Identifier
+(,Punctuation
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Syslog UDP Source stopping...""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Metrics:{}""",String
+",",Punctuation
+ ,Whitespace
+counterGroup,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nettyChannel,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+nettyChannel,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+nettyChannel,Identifier
+.,Punctuation
+getCloseFuture,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+await,Identifier
+(,Punctuation
+60,Literal
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""netty server stop interrupted""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+nettyChannel,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Configurables,Identifier
+.,Punctuation
+ensureRequiredNonNull,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+context,Identifier
+",",Punctuation
+ ,Whitespace
+SyslogSourceConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_PORT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+SyslogSourceConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_PORT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+host,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+SyslogSourceConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_HOST,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+formaterProp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getSubProperties,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+SyslogSourceConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_FORMAT_PREFIX,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+keepFields,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SyslogUtils,Identifier
+.,Punctuation
+chooseFieldsToKeep,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+SyslogSourceConfigurationConstants,Identifier
+.,Punctuation
+CONFIG_KEEP_FIELDS,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+SyslogSourceConfigurationConstants,Identifier
+.,Punctuation
+DEFAULT_KEEP_FIELDS,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getSourcePort,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+SocketAddress,Identifier
+ ,Whitespace
+localAddress,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+nettyChannel,Identifier
+.,Punctuation
+getLocalAddress,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+localAddress,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+InetSocketAddress,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+InetSocketAddress,Identifier
+ ,Whitespace
+addr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+InetSocketAddress,Identifier
+),Punctuation
+ ,Whitespace
+localAddress,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+addr,Identifier
+.,Punctuation
+getPort,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

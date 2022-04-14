@@ -1,0 +1,3016 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+gridtable,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ByteArray,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+BytesSerializer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+BytesUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ImmutableBitSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+TupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+GTScanRequest,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+GTInfo,Identifier
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+GTScanRange,Identifier
+ ,Whitespace
+range,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+columns,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+transient,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+selectedColBlocks,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// optional filtering,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+filterPushDown,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// optional aggregation,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+aggrGroupBy,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+aggrMetrics,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+aggrMetricsFuncs,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// hint to storage behavior,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+allowPreAggregation,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+aggrCacheGB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+// no limit,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+GTScanRequest,Identifier
+(,Punctuation
+GTInfo,Identifier
+ ,Whitespace
+info,Identifier
+",",Punctuation
+ ,Whitespace
+GTScanRange,Identifier
+ ,Whitespace
+range,Identifier
+",",Punctuation
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+columns,Identifier
+",",Punctuation
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+filterPushDown,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+info,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+range,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+range,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+?,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTScanRange,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+GTRecord,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTRecord,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+:,Operator
+ ,Whitespace
+range,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columns,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+filterPushDown,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+filterPushDown,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+validate,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+GTScanRequest,Identifier
+(,Punctuation
+GTInfo,Identifier
+ ,Whitespace
+info,Identifier
+",",Punctuation
+ ,Whitespace
+GTScanRange,Identifier
+ ,Whitespace
+range,Identifier
+",",Punctuation
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+dimensions,Identifier
+",",Punctuation
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+aggrGroupBy,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+aggrMetrics,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+aggrMetricsFuncs,Identifier
+",",Punctuation
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+filterPushDown,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+allowPreAggregation,Identifier
+",",Punctuation
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+aggrCacheGB,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+info,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+range,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+range,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+?,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTScanRange,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+GTRecord,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTRecord,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+:,Operator
+ ,Whitespace
+range,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dimensions,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+filterPushDown,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+filterPushDown,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+aggrGroupBy,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggrGroupBy,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+aggrMetrics,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggrMetrics,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+aggrMetricsFuncs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggrMetricsFuncs,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+allowPreAggregation,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+allowPreAggregation,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+aggrCacheGB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggrCacheGB,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+validate,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+validate,Identifier
+(,Punctuation
+GTInfo,Identifier
+ ,Whitespace
+info,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hasAggregation,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+aggrGroupBy,Identifier
+.,Punctuation
+intersects,Identifier
+(,Punctuation
+aggrMetrics,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+aggrMetrics,Identifier
+.,Punctuation
+cardinality,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+aggrMetricsFuncs,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columns,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+EMPTY,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columns,Identifier
+.,Punctuation
+or,Identifier
+(,Punctuation
+aggrGroupBy,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columns,Identifier
+.,Punctuation
+or,Identifier
+(,Punctuation
+aggrMetrics,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+columns,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+.,Punctuation
+colAll,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+selectedColBlocks,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+.,Punctuation
+selectColumnBlocks,Identifier
+(,Punctuation
+columns,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hasFilterPushDown,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+validateFilterPushDown,Identifier
+(,Punctuation
+info,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+validateFilterPushDown,Identifier
+(,Punctuation
+GTInfo,Identifier
+ ,Whitespace
+info,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+hasFilterPushDown,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+filterColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+TupleFilter,Identifier
+.,Punctuation
+collectColumns,Identifier
+(,Punctuation
+filterPushDown,Identifier
+",",Punctuation
+ ,Whitespace
+filterColumns,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TblColRef,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+filterColumns,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// filter columns must belong to the table,Comment
+"
+",Newline
+            ,Whitespace
+info,Identifier
+.,Punctuation
+validateColRef,Identifier
+(,Punctuation
+col,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+// filter columns must be returned to satisfy upper layer evaluation (calcite),Comment
+"
+",Newline
+            ,Whitespace
+columns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+columns,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getColumnDesc,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getZeroBasedIndex,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// un-evaluatable filter must be removed,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+TupleFilter,Identifier
+.,Punctuation
+isEvaluableRecursively,Identifier
+(,Punctuation
+filterPushDown,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+unevaluableColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+filterPushDown,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+GTUtil,Identifier
+.,Punctuation
+convertFilterUnevaluatable,Identifier
+(,Punctuation
+filterPushDown,Identifier
+",",Punctuation
+ ,Whitespace
+info,Identifier
+",",Punctuation
+ ,Whitespace
+unevaluableColumns,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// columns in un-evaluatable filter must be returned without loss so upper layer can do final evaluation,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hasAggregation,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+TblColRef,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+unevaluableColumns,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+aggrGroupBy,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+aggrGroupBy,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getColumnDesc,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getZeroBasedIndex,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IGTScanner,Identifier
+ ,Whitespace
+decorateScanner,Identifier
+(,Punctuation
+IGTScanner,Identifier
+ ,Whitespace
+scanner,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+decorateScanner,Identifier
+(,Punctuation
+scanner,Identifier
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+//by default do not check mem,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * doFilter,doAggr,doMemCheck are only for profiling use.
+     * in normal cases they are all true.
+     * 
+     * Refer to CoprocessorBehavior for explanation
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IGTScanner,Identifier
+ ,Whitespace
+decorateScanner,Identifier
+(,Punctuation
+IGTScanner,Identifier
+ ,Whitespace
+scanner,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+doFilter,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+doAggr,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+IGTScanner,Identifier
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+scanner,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+doFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+//Skip reading this section if you're not profiling! ,Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+scanned,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+lookAndForget,Identifier
+(,Punctuation
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EmptyGTScanner,Identifier
+(,Punctuation
+scanned,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+.,Punctuation
+hasFilterPushDown,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTFilterScanner,Identifier
+(,Punctuation
+result,Identifier
+",",Punctuation
+ ,Whitespace
+this,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+doAggr,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+//Skip reading this section if you're not profiling! ,Comment
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+scanned,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+lookAndForget,Identifier
+(,Punctuation
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+EmptyGTScanner,Identifier
+(,Punctuation
+scanned,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+.,Punctuation
+allowPreAggregation,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+hasAggregation,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTAggregateScanner,Identifier
+(,Punctuation
+result,Identifier
+",",Punctuation
+ ,Whitespace
+this,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+//touch every byte of the cell so that the cost of scanning will be truly reflected,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+lookAndForget,Identifier
+(,Punctuation
+IGTScanner,Identifier
+ ,Whitespace
+scanner,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+ ,Whitespace
+meaninglessByte,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+scanned,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+GTRecord,Identifier
+ ,Whitespace
+gtRecord,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+scanner,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+scanned,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ByteArray,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+gtRecord,Identifier
+.,Punctuation
+getInternal,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+col,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+int,Keyword
+ ,Whitespace
+endIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+col,Identifier
+.,Punctuation
+offset,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+col,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+col,Identifier
+.,Punctuation
+offset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+endIndex,Identifier
+;,Punctuation
+ ,Whitespace
+++,Operator
+i,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+meaninglessByte,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+col,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+"""Meaningless byte is """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+meaninglessByte,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+scanned,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+hasFilterPushDown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+filterPushDown,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"//TODO BUG?  select sum() from fact, no aggr by",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+hasAggregation,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+aggrGroupBy,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+aggrMetrics,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+aggrMetricsFuncs,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+GTInfo,Identifier
+ ,Whitespace
+getInfo,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+GTRecord,Identifier
+ ,Whitespace
+getPkStart,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+range,Identifier
+.,Punctuation
+pkStart,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+GTRecord,Identifier
+ ,Whitespace
+getPkEnd,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+range,Identifier
+.,Punctuation
+pkEnd,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+GTRecord,Identifier
+>,Operator
+ ,Whitespace
+getFuzzyKeys,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+range,Identifier
+.,Punctuation
+fuzzyKeys,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+getSelectedColBlocks,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+selectedColBlocks,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+getColumns,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+columns,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+getFilterPushDown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+filterPushDown,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+getAggrGroupBy,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+aggrGroupBy,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+getAggrMetrics,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+aggrMetrics,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getAggrMetricsFuncs,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+aggrMetricsFuncs,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+getAggrCacheGB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+aggrCacheGB,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setAggrCacheGB,Identifier
+(,Punctuation
+double,Keyword
+ ,Whitespace
+gb,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+aggrCacheGB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+gb,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+"""GTScanRequest [range=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+range,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", columns=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+columns,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", filterPushDown=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+filterPushDown,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", aggrGroupBy=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+aggrGroupBy,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", aggrMetrics=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+aggrMetrics,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", aggrMetricsFuncs=""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+aggrMetricsFuncs,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""]""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+BytesSerializer,Identifier
+<,Operator
+GTScanRequest,Identifier
+>,Operator
+ ,Whitespace
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+BytesSerializer,Identifier
+<,Operator
+GTScanRequest,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+serialize,Identifier
+(,Punctuation
+GTScanRequest,Identifier
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+GTInfo,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+serialize,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+info,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+serializeGTRecord,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+range,Identifier
+.,Punctuation
+pkStart,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+serializeGTRecord,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+range,Identifier
+.,Punctuation
+pkEnd,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeVInt,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+range,Identifier
+.,Punctuation
+fuzzyKeys,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+GTRecord,Identifier
+ ,Whitespace
+f,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+value,Identifier
+.,Punctuation
+range,Identifier
+.,Punctuation
+fuzzyKeys,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+serializeGTRecord,Identifier
+(,Punctuation
+f,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+serialize,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+columns,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeByteArray,Identifier
+(,Punctuation
+GTUtil,Identifier
+.,Punctuation
+serializeGTFilter,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+filterPushDown,Identifier
+",",Punctuation
+ ,Whitespace
+value,Identifier
+.,Punctuation
+info,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+serialize,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+aggrGroupBy,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+serialize,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+aggrMetrics,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeAsciiStringArray,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+aggrMetricsFuncs,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeVInt,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+allowPreAggregation,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+1,Literal
+ ,Whitespace
+:,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+out,Identifier
+.,Punctuation
+putDouble,Identifier
+(,Punctuation
+value,Identifier
+.,Punctuation
+aggrCacheGB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+GTScanRequest,Identifier
+ ,Whitespace
+deserialize,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+in,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+GTInfo,Identifier
+ ,Whitespace
+sInfo,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+GTInfo,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+GTRecord,Identifier
+ ,Whitespace
+sPkStart,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+deserializeGTRecord,Identifier
+(,Punctuation
+in,Identifier
+",",Punctuation
+ ,Whitespace
+sInfo,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+GTRecord,Identifier
+ ,Whitespace
+sPkEnd,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+deserializeGTRecord,Identifier
+(,Punctuation
+in,Identifier
+",",Punctuation
+ ,Whitespace
+sInfo,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+GTRecord,Identifier
+>,Operator
+ ,Whitespace
+sFuzzyKeys,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+sFuzzyKeySize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+readVInt,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+sFuzzyKeySize,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+sFuzzyKeys,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+deserializeGTRecord,Identifier
+(,Punctuation
+in,Identifier
+",",Punctuation
+ ,Whitespace
+sInfo,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+GTScanRange,Identifier
+ ,Whitespace
+sRange,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTScanRange,Identifier
+(,Punctuation
+sPkStart,Identifier
+",",Punctuation
+ ,Whitespace
+sPkEnd,Identifier
+",",Punctuation
+ ,Whitespace
+sFuzzyKeys,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+sColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+sGTFilter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+GTUtil,Identifier
+.,Punctuation
+deserializeGTFilter,Identifier
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+readByteArray,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+sInfo,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+sAggGroupBy,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+sAggrMetrics,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+sAggrMetricFuncs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+readAsciiStringArray,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+boolean,Keyword
+ ,Whitespace
+sAllowPreAggr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+BytesUtil,Identifier
+.,Punctuation
+readVInt,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+double,Keyword
+ ,Whitespace
+sAggrCacheGB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+in,Identifier
+.,Punctuation
+getDouble,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTScanRequest,Identifier
+(,Punctuation
+sInfo,Identifier
+",",Punctuation
+ ,Whitespace
+sRange,Identifier
+",",Punctuation
+ ,Whitespace
+sColumns,Identifier
+",",Punctuation
+ ,Whitespace
+sAggGroupBy,Identifier
+",",Punctuation
+ ,Whitespace
+sAggrMetrics,Identifier
+",",Punctuation
+ ,Whitespace
+sAggrMetricFuncs,Identifier
+",",Punctuation
+ ,Whitespace
+sGTFilter,Identifier
+",",Punctuation
+ ,Whitespace
+sAllowPreAggr,Identifier
+",",Punctuation
+ ,Whitespace
+sAggrCacheGB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+serializeGTRecord,Identifier
+(,Punctuation
+GTRecord,Identifier
+ ,Whitespace
+gtRecord,Identifier
+",",Punctuation
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+writeVInt,Identifier
+(,Punctuation
+gtRecord,Identifier
+.,Punctuation
+cols,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ByteArray,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+gtRecord,Identifier
+.,Punctuation
+cols,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+col,Identifier
+.,Punctuation
+exportData,Identifier
+(,Punctuation
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+serialize,Identifier
+(,Punctuation
+gtRecord,Identifier
+.,Punctuation
+maskForEqualHashComp,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+GTRecord,Identifier
+ ,Whitespace
+deserializeGTRecord,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+in,Identifier
+",",Punctuation
+ ,Whitespace
+GTInfo,Identifier
+ ,Whitespace
+sInfo,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+colLength,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BytesUtil,Identifier
+.,Punctuation
+readVInt,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ByteArray,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+sCols,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ByteArray,Identifier
+[,Punctuation
+colLength,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+colLength,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+sCols,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteArray,Identifier
+.,Punctuation
+importData,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+ImmutableBitSet,Identifier
+ ,Whitespace
+sMaskForEqualHashComp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ImmutableBitSet,Identifier
+.,Punctuation
+serializer,Identifier
+.,Punctuation
+deserialize,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GTRecord,Identifier
+(,Punctuation
+sInfo,Identifier
+",",Punctuation
+ ,Whitespace
+sMaskForEqualHashComp,Identifier
+",",Punctuation
+ ,Whitespace
+sCols,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

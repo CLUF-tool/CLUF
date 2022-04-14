@@ -1,0 +1,3243 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+hive,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ThreadFactoryBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+junit,Identifier
+.,Punctuation
+framework,Identifier
+.,Punctuation
+Assert,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+event,Identifier
+.,Punctuation
+SimpleEvent,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+instrumentation,Identifier
+.,Punctuation
+SinkCounter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+CliSessionState,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+HiveConf,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+metastore,Identifier
+.,Punctuation
+txn,Identifier
+.,Punctuation
+TxnDbUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+ql,Identifier
+.,Punctuation
+CommandNeedRetryException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+ql,Identifier
+.,Punctuation
+Driver,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+ql,Identifier
+.,Punctuation
+session,Identifier
+.,Punctuation
+SessionState,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hive,Identifier
+.,Punctuation
+hcatalog,Identifier
+.,Punctuation
+streaming,Identifier
+.,Punctuation
+HiveEndPoint,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Before,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Rule,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Test,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+rules,Identifier
+.,Punctuation
+TemporaryFolder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ExecutorService,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+Executors,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestHiveWriter,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+final,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+dbName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""testing""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+final,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tblName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""alerts""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+PART1_NAME,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""continent""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+PART2_NAME,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""country""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+partNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+PART1_NAME,Identifier
+",",Punctuation
+ ,Whitespace
+PART2_NAME,Identifier
+ ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+COL1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""id""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+COL2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""msg""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+colNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+COL1,Identifier
+",",Punctuation
+COL2,Identifier
+},Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+colTypes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+"""int""",String
+",",Punctuation
+ ,Whitespace
+"""string""",String
+ ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+PART1_VALUE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""Asia""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+PART2_VALUE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""India""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+partVals,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+metaStoreURI,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+ ,Whitespace
+serializer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+HiveConf,Identifier
+ ,Whitespace
+conf,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ExecutorService,Identifier
+ ,Whitespace
+callTimeoutPool,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+int,Keyword
+ ,Whitespace
+timeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+ ,Whitespace
+// msec,Comment
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Rule,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+TemporaryFolder,Identifier
+ ,Whitespace
+dbFolder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TemporaryFolder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Driver,Identifier
+ ,Whitespace
+driver,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+TestHiveWriter,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+partVals,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+partVals,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+PART1_VALUE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+partVals,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+PART2_VALUE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+metaStoreURI,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+callTimeoutPoolSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+callTimeoutPool,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Executors,Identifier
+.,Punctuation
+newFixedThreadPool,Identifier
+(,Punctuation
+callTimeoutPoolSize,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+ThreadFactoryBuilder,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+setNameFormat,Identifier
+(,Punctuation
+"""hiveWriterTest""",String
+),Punctuation
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 1) Start metastore,Comment
+"
+",Newline
+    ,Whitespace
+conf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveConf,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+TestUtil,Identifier
+.,Punctuation
+setConfValues,Identifier
+(,Punctuation
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+metaStoreURI,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+conf,Identifier
+.,Punctuation
+setVar,Identifier
+(,Punctuation
+HiveConf,Identifier
+.,Punctuation
+ConfVars,Identifier
+.,Punctuation
+METASTOREURIS,Identifier
+",",Punctuation
+ ,Whitespace
+metaStoreURI,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 2) Setup Hive client,Comment
+"
+",Newline
+    ,Whitespace
+SessionState,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+CliSessionState,Identifier
+(,Punctuation
+conf,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+driver,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Driver,Identifier
+(,Punctuation
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Before,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setUp,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// 1) prepare hive,Comment
+"
+",Newline
+    ,Whitespace
+TxnDbUtil,Identifier
+.,Punctuation
+cleanDb,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+TxnDbUtil,Identifier
+.,Punctuation
+prepDb,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 1) Setup tables,Comment
+"
+",Newline
+    ,Whitespace
+TestUtil,Identifier
+.,Punctuation
+dropDB,Identifier
+(,Punctuation
+conf,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+dbLocation,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dbFolder,Identifier
+.,Punctuation
+newFolder,Identifier
+(,Punctuation
+dbName,Identifier
+),Punctuation
+.,Punctuation
+getCanonicalPath,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".db""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+dbLocation,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dbLocation,Identifier
+.,Punctuation
+replaceAll,Identifier
+(,Punctuation
+"""\\\\""",String
+",",Punctuation
+"""/""",String
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// for windows paths,Comment
+"
+",Newline
+    ,Whitespace
+TestUtil,Identifier
+.,Punctuation
+createDbAndTable,Identifier
+(,Punctuation
+driver,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals,Identifier
+",",Punctuation
+ ,Whitespace
+colNames,Identifier
+",",Punctuation
+ ,Whitespace
+colTypes,Identifier
+"
+",Newline
+            ,Whitespace
+",",Punctuation
+ ,Whitespace
+partNames,Identifier
+",",Punctuation
+ ,Whitespace
+dbLocation,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 2) Setup serializer,Comment
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+ctx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.fieldnames""",String
+",",Punctuation
+ ,Whitespace
+COL1,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""",,""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+COL2,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serializer,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+ctx,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testInstantiate,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveWriter,Identifier
+ ,Whitespace
+writer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveWriter,Identifier
+(,Punctuation
+endPoint,Identifier
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+"
+",Newline
+            ,Whitespace
+",",Punctuation
+ ,Whitespace
+callTimeoutPool,Identifier
+",",Punctuation
+ ,Whitespace
+"""flumetest""",String
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+",",Punctuation
+ ,Whitespace
+sinkCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testWriteBasic,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveWriter,Identifier
+ ,Whitespace
+writer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveWriter,Identifier
+(,Punctuation
+endPoint,Identifier
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+"
+",Newline
+            ,Whitespace
+",",Punctuation
+ ,Whitespace
+callTimeoutPool,Identifier
+",",Punctuation
+ ,Whitespace
+"""flumetest""",String
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+",",Punctuation
+ ,Whitespace
+sinkCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writeEvents,Identifier
+(,Punctuation
+writer,Identifier
+",",Punctuation
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testWriteMultiFlush,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+HiveWriter,Identifier
+ ,Whitespace
+writer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveWriter,Identifier
+(,Punctuation
+endPoint,Identifier
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+"
+",Newline
+            ,Whitespace
+",",Punctuation
+ ,Whitespace
+callTimeoutPool,Identifier
+",",Punctuation
+ ,Whitespace
+"""flumetest""",String
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+",",Punctuation
+ ,Whitespace
+sinkCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SimpleEvent,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SimpleEvent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+REC1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""1,xyz,Hello world,abc""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+REC1,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+REC2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""2,xyz,Hello world,abc""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+REC2,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+REC3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""3,xyz,Hello world,abc""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+REC3,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+checkRecordCountInTable,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+expectedCount,Identifier
+),Punctuation
+"
+",Newline
+          ,Whitespace
+throws,Keyword
+ ,Whitespace
+CommandNeedRetryException,Identifier
+",",Punctuation
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TestUtil,Identifier
+.,Punctuation
+listRecordsInTable,Identifier
+(,Punctuation
+driver,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+),Punctuation
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+expectedCount,Identifier
+",",Punctuation
+ ,Whitespace
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Sets up input fields to have same order as table columns,
+   * Also sets the separator on serde to be same as i/p field separator
+   * @throws Exception
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testInOrderWrite,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+timeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+5000,Literal
+;,Punctuation
+ ,Whitespace
+// msec,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+ ,Whitespace
+serializer2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+ctx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.fieldnames""",String
+",",Punctuation
+ ,Whitespace
+COL1,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""",""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+COL2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.serdeSeparator""",String
+",",Punctuation
+ ,Whitespace
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serializer2,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+ctx,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+HiveWriter,Identifier
+ ,Whitespace
+writer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveWriter,Identifier
+(,Punctuation
+endPoint,Identifier
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+",",Punctuation
+ ,Whitespace
+callTimeoutPool,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""flumetest""",String
+",",Punctuation
+ ,Whitespace
+serializer2,Identifier
+",",Punctuation
+ ,Whitespace
+sinkCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+SimpleEvent,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SimpleEvent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+"""1,Hello world 1""",String
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+"""2,Hello world 2""",String
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+"""3,Hello world 3""",String
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testSerdeSeparatorCharParsing,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+timeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+10000,Literal
+;,Punctuation
+ ,Whitespace
+// msec,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 1)  single character serdeSeparator,Comment
+"
+",Newline
+    ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+ ,Whitespace
+serializer1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Context,Identifier
+ ,Whitespace
+ctx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.fieldnames""",String
+",",Punctuation
+ ,Whitespace
+COL1,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""",""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+COL2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.serdeSeparator""",String
+",",Punctuation
+ ,Whitespace
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serializer1,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+ctx,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+// show not throw,Comment
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 2) special character as serdeSeparator,Comment
+"
+",Newline
+    ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+ ,Whitespace
+serializer2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.fieldnames""",String
+",",Punctuation
+ ,Whitespace
+COL1,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""",""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+COL2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.serdeSeparator""",String
+",",Punctuation
+ ,Whitespace
+"""'\t'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serializer2,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+ctx,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+// show not throw,Comment
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// 2) bad spec as serdeSeparator,Comment
+"
+",Newline
+    ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+ ,Whitespace
+serializer3,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveDelimitedTextSerializer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Context,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.fieldnames""",String
+",",Punctuation
+ ,Whitespace
+COL1,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""",""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+COL2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ctx,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""serializer.serdeSeparator""",String
+",",Punctuation
+ ,Whitespace
+"""ab""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+serializer3,Identifier
+.,Punctuation
+configure,Identifier
+(,Punctuation
+ctx,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertTrue,Identifier
+(,Punctuation
+"""Bad serdeSeparator character was accepted""",String
+ ,Whitespace
+",",Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// expect an exception,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testSecondWriterBeforeFirstCommits,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// here we open a new writer while the first is still writing (not committed),Comment
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+partVals2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+partVals2,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+PART1_VALUE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+partVals2,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""Nepal""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+HiveWriter,Identifier
+ ,Whitespace
+writer1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveWriter,Identifier
+(,Punctuation
+endPoint1,Identifier
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+"
+",Newline
+            ,Whitespace
+",",Punctuation
+ ,Whitespace
+callTimeoutPool,Identifier
+",",Punctuation
+ ,Whitespace
+"""flumetest""",String
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+",",Punctuation
+ ,Whitespace
+sinkCounter1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writeEvents,Identifier
+(,Punctuation
+writer1,Identifier
+",",Punctuation
+ ,Whitespace
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+HiveWriter,Identifier
+ ,Whitespace
+writer2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveWriter,Identifier
+(,Punctuation
+endPoint2,Identifier
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+"
+",Newline
+            ,Whitespace
+",",Punctuation
+ ,Whitespace
+callTimeoutPool,Identifier
+",",Punctuation
+ ,Whitespace
+"""flumetest""",String
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+",",Punctuation
+ ,Whitespace
+sinkCounter2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writeEvents,Identifier
+(,Punctuation
+writer2,Identifier
+",",Punctuation
+ ,Whitespace
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer2,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// commit,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writer1,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// commit,Comment
+"
+",Newline
+    ,Whitespace
+writer1,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writer2,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testSecondWriterAfterFirstCommits,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// here we open a new writer after the first writer has committed one txn,Comment
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+partVals2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+partVals2,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+PART1_VALUE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+partVals2,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""Nepal""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+HiveEndPoint,Identifier
+ ,Whitespace
+endPoint2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveEndPoint,Identifier
+(,Punctuation
+metaStoreURI,Identifier
+",",Punctuation
+ ,Whitespace
+dbName,Identifier
+",",Punctuation
+ ,Whitespace
+tblName,Identifier
+",",Punctuation
+ ,Whitespace
+partVals2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+SinkCounter,Identifier
+ ,Whitespace
+sinkCounter2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SinkCounter,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+HiveWriter,Identifier
+ ,Whitespace
+writer1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveWriter,Identifier
+(,Punctuation
+endPoint1,Identifier
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+"
+",Newline
+            ,Whitespace
+",",Punctuation
+ ,Whitespace
+callTimeoutPool,Identifier
+",",Punctuation
+ ,Whitespace
+"""flumetest""",String
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+",",Punctuation
+ ,Whitespace
+sinkCounter1,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writeEvents,Identifier
+(,Punctuation
+writer1,Identifier
+",",Punctuation
+ ,Whitespace
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writer1,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// commit,Comment
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+HiveWriter,Identifier
+ ,Whitespace
+writer2,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HiveWriter,Identifier
+(,Punctuation
+endPoint2,Identifier
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+"
+",Newline
+            ,Whitespace
+",",Punctuation
+ ,Whitespace
+callTimeoutPool,Identifier
+",",Punctuation
+ ,Whitespace
+"""flumetest""",String
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+",",Punctuation
+ ,Whitespace
+sinkCounter2,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writeEvents,Identifier
+(,Punctuation
+writer2,Identifier
+",",Punctuation
+ ,Whitespace
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer2,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// commit,Comment
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writer1,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer2,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+writeEvents,Identifier
+(,Punctuation
+HiveWriter,Identifier
+ ,Whitespace
+writer,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+count,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+",",Punctuation
+ ,Whitespace
+HiveWriter,Identifier
+.,Punctuation
+WriteException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+SimpleEvent,Identifier
+ ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SimpleEvent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+count,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+event,Identifier
+.,Punctuation
+setBody,Identifier
+(,Punctuation
+(,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""",xyz,Hello world,abc""",String
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+writer,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

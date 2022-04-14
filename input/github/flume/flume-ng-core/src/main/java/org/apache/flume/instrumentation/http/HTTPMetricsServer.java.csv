@@ -1,0 +1,1140 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+instrumentation,Identifier
+.,Punctuation
+http,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+gson,Identifier
+.,Punctuation
+Gson,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+gson,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+TypeToken,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+Type,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+servlet,Identifier
+.,Punctuation
+ServletException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+servlet,Identifier
+.,Punctuation
+http,Identifier
+.,Punctuation
+HttpServletRequest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+servlet,Identifier
+.,Punctuation
+http,Identifier
+.,Punctuation
+HttpServletResponse,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+instrumentation,Identifier
+.,Punctuation
+MonitorService,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+instrumentation,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+JMXPollUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mortbay,Identifier
+.,Punctuation
+jetty,Identifier
+.,Punctuation
+Connector,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mortbay,Identifier
+.,Punctuation
+jetty,Identifier
+.,Punctuation
+Request,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mortbay,Identifier
+.,Punctuation
+jetty,Identifier
+.,Punctuation
+Server,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mortbay,Identifier
+.,Punctuation
+jetty,Identifier
+.,Punctuation
+handler,Identifier
+.,Punctuation
+AbstractHandler,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+mortbay,Identifier
+.,Punctuation
+jetty,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+SelectChannelConnector,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A Monitor service implementation that runs a web server on a configurable
+ * port and returns the metrics for components in JSON format. <p> Optional
+ * parameters: <p> <tt>port</tt> : The port on which the server should listen
+ * to.<p> Returns metrics in the following format: <p>
+ *
+ * {<p> ""componentName1"":{""metric1"" : ""metricValue1"",""metric2"":""metricValue2""}
+ * <p> ""componentName1"":{""metric3"" : ""metricValue3"",""metric4"":""metricValue4""}
+ * <p> }
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HTTPMetricsServer,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+MonitorService,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Server,Identifier
+ ,Whitespace
+jettyServer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+HTTPMetricsServer,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+DEFAULT_PORT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+41414,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CONFIG_PORT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""port""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+start,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+jettyServer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Server,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"//We can use Contexts etc if we have many urls to handle. For one url,",Comment
+"
+",Newline
+    ,Whitespace
+//specifying a handler directly is the most efficient.,Comment
+"
+",Newline
+    ,Whitespace
+SelectChannelConnector,Identifier
+ ,Whitespace
+connector,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SelectChannelConnector,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+connector,Identifier
+.,Punctuation
+setReuseAddress,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+connector,Identifier
+.,Punctuation
+setPort,Identifier
+(,Punctuation
+port,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+jettyServer,Identifier
+.,Punctuation
+setConnectors,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Connector,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+connector,Identifier
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+jettyServer,Identifier
+.,Punctuation
+setHandler,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+HTTPMetricsHandler,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+jettyServer,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+jettyServer,Identifier
+.,Punctuation
+isStarted,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+500,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error starting Jetty. JSON Metrics may not be available.""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+jettyServer,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+jettyServer,Identifier
+.,Punctuation
+join,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error stopping Jetty. JSON Metrics may not be available.""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+CONFIG_PORT,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_PORT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HTTPMetricsHandler,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractHandler,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Type,Identifier
+ ,Whitespace
+mapType,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+TypeToken,Identifier
+<,Operator
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>>>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Gson,Identifier
+ ,Whitespace
+gson,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Gson,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+handle,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+target,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+HttpServletRequest,Identifier
+ ,Whitespace
+request,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+HttpServletResponse,Identifier
+ ,Whitespace
+response,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+dispatch,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+ServletException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// /metrics is the only place to pull metrics.,Comment
+"
+",Newline
+      ,Whitespace
+"//If we want to use any other url for something else, we should make sure",Comment
+"
+",Newline
+      ,Whitespace
+//that for metrics only /metrics is used to prevent backward,Comment
+"
+",Newline
+      ,Whitespace
+//compatibility issues.,Comment
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+request,Identifier
+.,Punctuation
+getMethod,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""TRACE""",String
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+request,Identifier
+.,Punctuation
+getMethod,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""OPTIONS""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+sendError,Identifier
+(,Punctuation
+HttpServletResponse,Identifier
+.,Punctuation
+SC_FORBIDDEN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+flushBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+(,Punctuation
+(,Punctuation
+Request,Identifier
+),Punctuation
+ ,Whitespace
+request,Identifier
+),Punctuation
+.,Punctuation
+setHandled,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+target,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""/""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+setContentType,Identifier
+(,Punctuation
+"""text/html;charset=utf-8""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+setStatus,Identifier
+(,Punctuation
+HttpServletResponse,Identifier
+.,Punctuation
+SC_OK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+getWriter,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+write,Identifier
+(,Punctuation
+"""For Flume metrics please click""",String
+"
+",Newline
+                ,Whitespace
++,Operator
+ ,Whitespace
+""" <a href = \""./metrics\""> here</a>.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+flushBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+(,Punctuation
+(,Punctuation
+Request,Identifier
+),Punctuation
+ ,Whitespace
+request,Identifier
+),Punctuation
+.,Punctuation
+setHandled,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+target,Identifier
+.,Punctuation
+equalsIgnoreCase,Identifier
+(,Punctuation
+"""/metrics""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+setContentType,Identifier
+(,Punctuation
+"""application/json;charset=utf-8""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+setStatus,Identifier
+(,Punctuation
+HttpServletResponse,Identifier
+.,Punctuation
+SC_OK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>>,Operator
+ ,Whitespace
+metricsMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+JMXPollUtil,Identifier
+.,Punctuation
+getAllMBeans,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+json,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+gson,Identifier
+.,Punctuation
+toJson,Identifier
+(,Punctuation
+metricsMap,Identifier
+",",Punctuation
+ ,Whitespace
+mapType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+getWriter,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+write,Identifier
+(,Punctuation
+json,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+response,Identifier
+.,Punctuation
+flushBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+(,Punctuation
+(,Punctuation
+Request,Identifier
+),Punctuation
+ ,Whitespace
+request,Identifier
+),Punctuation
+.,Punctuation
+setHandled,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+response,Identifier
+.,Punctuation
+sendError,Identifier
+(,Punctuation
+HttpServletResponse,Identifier
+.,Punctuation
+SC_NOT_FOUND,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+response,Identifier
+.,Punctuation
+flushBuffer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+//Not handling the request returns a Not found error page.,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

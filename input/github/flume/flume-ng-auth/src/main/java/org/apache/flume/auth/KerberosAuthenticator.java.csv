@@ -1,0 +1,1817 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+auth,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+PrivilegedAction,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+PrivilegedExceptionAction,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+Executors,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ScheduledExecutorService,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+TimeUnit,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configuration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+SecurityUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+UserGroupInformation,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+UserGroupInformation,Identifier
+.,Punctuation
+AuthenticationMethod,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+fs,Identifier
+.,Punctuation
+CommonConfigurationKeys,Identifier
+.,Punctuation
+HADOOP_SECURITY_AUTHENTICATION,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A kerberos authenticator, which authenticates using the supplied principal
+ * and keytab and executes with  authenticated privileges
+ */",Comment
+"
+",Newline
+class,Keyword
+ ,Whitespace
+KerberosAuthenticator,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+FlumeAuthenticator,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+          ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+KerberosAuthenticator,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+UserGroupInformation,Identifier
+ ,Whitespace
+ugi,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+PrivilegedExecutor,Identifier
+ ,Whitespace
+privilegedExecutor,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+PrivilegedExecutor,Identifier
+>,Operator
+ ,Whitespace
+proxyCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+PrivilegedExecutor,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+  ,Whitespace
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+T,Identifier
+ ,Whitespace
+execute,Identifier
+(,Punctuation
+PrivilegedAction,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+action,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+privilegedExecutor,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+action,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+T,Identifier
+ ,Whitespace
+execute,Identifier
+(,Punctuation
+PrivilegedExceptionAction,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+action,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+privilegedExecutor,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+action,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+PrivilegedExecutor,Identifier
+ ,Whitespace
+proxyAs,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+proxyUserName,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+proxyUserName,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+proxyUserName,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+proxyCache,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+proxyUserName,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+UserGroupInformation,Identifier
+ ,Whitespace
+proxyUgi,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+proxyUgi,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UserGroupInformation,Identifier
+.,Punctuation
+createProxyUser,Identifier
+(,Punctuation
+proxyUserName,Identifier
+",",Punctuation
+ ,Whitespace
+ugi,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+printUGI,Identifier
+(,Punctuation
+proxyUgi,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+proxyCache,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+proxyUserName,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UGIExecutor,Identifier
+(,Punctuation
+proxyUgi,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+proxyCache,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+proxyUserName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isAuthenticated,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * When valid principal and keytab are provided and if authentication has
+   * not yet been done for this object, this method authenticates the
+   * credentials and populates the ugi. In case of null or invalid credentials
+   * IllegalArgumentException is thrown. In case of failure to authenticate,
+   * SecurityException is thrown. If authentication has already happened on
+   * this KerberosAuthenticator object, then this method checks to see if the current
+   * credentials passed are same as the validated credentials. If not, it throws
+   * an exception as this authenticator can represent only one Principal.
+   *
+   * @param principal
+   * @param keytab
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+authenticate,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+principal,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+keytab,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// sanity checking,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+principal,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+principal,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Invalid Kerberos principal: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+principal,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+keytab,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+keytab,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Invalid Kerberos keytab: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+keytab,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+keytabFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+keytab,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+keytabFile,Identifier
+.,Punctuation
+isFile,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+keytabFile,Identifier
+.,Punctuation
+canRead,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Keytab is not a readable file: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+String,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+keytab,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// resolve the requested principal,Comment
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+resolvedPrincipal,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// resolves _HOST pattern using standard Hadoop search/replace,Comment
+"
+",Newline
+      ,Whitespace
+// via DNS lookup when 2nd argument is empty,Comment
+"
+",Newline
+      ,Whitespace
+resolvedPrincipal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SecurityUtil,Identifier
+.,Punctuation
+getServerPrincipal,Identifier
+(,Punctuation
+principal,Identifier
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Host lookup error resolving kerberos principal (""",String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+principal,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""). Exception follows.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+resolvedPrincipal,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Resolved Principal must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// be cruel and unusual when user tries to login as multiple principals,Comment
+"
+",Newline
+    ,Whitespace
+// this isn't really valid with a reconfigure but this should be rare,Comment
+"
+",Newline
+    ,Whitespace
+// enough to warrant a restart of the agent JVM,Comment
+"
+",Newline
+    ,Whitespace
+"// TODO: find a way to interrogate the entire current config state,",Comment
+"
+",Newline
+    ,Whitespace
+// since we don't have to be unnecessarily protective if they switch all,Comment
+"
+",Newline
+    ,Whitespace
+// HDFS sinks to use a different principal all at once.,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+ugi,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+ugi,Identifier
+.,Punctuation
+getUserName,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+resolvedPrincipal,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+"""Cannot use multiple kerberos principals in the same agent. """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+      ,Whitespace
+""" Must restart agent to use new principal or keytab. """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+      ,Whitespace
+"""Previous = %s, New = %s""",String
+",",Punctuation
+ ,Whitespace
+ugi,Identifier
+",",Punctuation
+ ,Whitespace
+resolvedPrincipal,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// enable the kerberos mode of UGI, before doing anything else",Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+UserGroupInformation,Identifier
+.,Punctuation
+isSecurityEnabled,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Configuration,Identifier
+ ,Whitespace
+conf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Configuration,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+conf,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+HADOOP_SECURITY_AUTHENTICATION,Identifier
+",",Punctuation
+ ,Whitespace
+"""kerberos""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+UserGroupInformation,Identifier
+.,Punctuation
+setConfiguration,Identifier
+(,Punctuation
+conf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// We are interested in currently logged in user with kerberos creds,Comment
+"
+",Newline
+    ,Whitespace
+UserGroupInformation,Identifier
+ ,Whitespace
+curUser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+curUser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UserGroupInformation,Identifier
+.,Punctuation
+getLoginUser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+curUser,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+curUser,Identifier
+.,Punctuation
+hasKerberosCredentials,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+curUser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""User unexpectedly had no active login. Continuing with """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+              ,Whitespace
+"""authentication""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/*
+     *  if ugi is not null,
+     *     if ugi matches currently logged in kerberos user, we are good
+     *     else we are logged out, so relogin our ugi
+     *  else if ugi is null, login and populate state
+     */",Comment
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ugi,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+curUser,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+curUser,Identifier
+.,Punctuation
+getUserName,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+ugi,Identifier
+.,Punctuation
+getUserName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LOG,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""Using existing principal login: {}""",String
+",",Punctuation
+ ,Whitespace
+ugi,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Attempting kerberos Re-login as principal ({}) """,String
+"
+",Newline
+                  ,Whitespace
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Object,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+ugi,Identifier
+.,Punctuation
+getUserName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+},Punctuation
+ ,Whitespace
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+ugi,Identifier
+.,Punctuation
+reloginFromKeytab,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Attempting kerberos login as principal ({}) from keytab """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+                ,Whitespace
+"""file ({})""",String
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Object,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+resolvedPrincipal,Identifier
+",",Punctuation
+ ,Whitespace
+keytab,Identifier
+ ,Whitespace
+},Punctuation
+ ,Whitespace
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+UserGroupInformation,Identifier
+.,Punctuation
+loginUserFromKeytab,Identifier
+(,Punctuation
+resolvedPrincipal,Identifier
+",",Punctuation
+ ,Whitespace
+keytab,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+ugi,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UserGroupInformation,Identifier
+.,Punctuation
+getLoginUser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+privilegedExecutor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UGIExecutor,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+ugi,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SecurityException,Identifier
+(,Punctuation
+"""Authentication error while attempting to """,String
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+"""login as kerberos principal (""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+resolvedPrincipal,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""") using """,String
+"
+",Newline
+        ,Whitespace
++,Operator
+ ,Whitespace
+"""keytab (""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+keytab,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""). Exception follows.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+printUGI,Identifier
+(,Punctuation
+this,Keyword
+.,Punctuation
+ugi,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+printUGI,Identifier
+(,Punctuation
+UserGroupInformation,Identifier
+ ,Whitespace
+ugi,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+ugi,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// dump login information,Comment
+"
+",Newline
+      ,Whitespace
+AuthenticationMethod,Identifier
+ ,Whitespace
+authMethod,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ugi,Identifier
+.,Punctuation
+getAuthenticationMethod,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""\n{} \nUser: {} \nAuth method: {} \nKeytab: {} \n""",String
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+Object,Identifier
+[,Punctuation
+],Punctuation
+{,Punctuation
+ ,Whitespace
+authMethod,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+AuthenticationMethod,Identifier
+.,Punctuation
+PROXY,Identifier
+),Punctuation
+ ,Whitespace
+?,Operator
+"
+",Newline
+        ,Whitespace
+"""Proxy as: """,String
+ ,Whitespace
+:,Operator
+ ,Whitespace
+"""Logged as: """,String
+",",Punctuation
+ ,Whitespace
+ugi,Identifier
+.,Punctuation
+getUserName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+authMethod,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+ugi,Identifier
+.,Punctuation
+isFromKeytab,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * startCredentialRefresher should be used only for long running
+   * methods like Thrift source. For all privileged methods that use a UGI, the
+   * credentials are checked automatically and refreshed before the
+   * privileged method is executed in the UGIExecutor
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+startCredentialRefresher,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+CHECK_TGT_INTERVAL,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+120,Literal
+;,Punctuation
+ ,Whitespace
+// seconds,Comment
+"
+",Newline
+    ,Whitespace
+ScheduledExecutorService,Identifier
+ ,Whitespace
+scheduler,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Executors,Identifier
+.,Punctuation
+newScheduledThreadPool,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+scheduler,Identifier
+.,Punctuation
+scheduleWithFixedDelay,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Runnable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+      ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+ugi,Identifier
+.,Punctuation
+checkTGTAndReloginFromKeytab,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error occured during checkTGTAndReloginFromKeytab() for user """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+                  ,Whitespace
+ugi,Identifier
+.,Punctuation
+getUserName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+",",Punctuation
+ ,Whitespace
+CHECK_TGT_INTERVAL,Identifier
+",",Punctuation
+ ,Whitespace
+CHECK_TGT_INTERVAL,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+String,Identifier
+ ,Whitespace
+getUserName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+ugi,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+ugi,Identifier
+.,Punctuation
+getUserName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+"
+",Newline

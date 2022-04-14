@@ -1,0 +1,393 @@
+///*,Comment
+"
+",Newline
+// * Licensed to the Apache Software Foundation (ASF) under one,Comment
+"
+",Newline
+// * or more contributor license agreements.  See the NOTICE file,Comment
+"
+",Newline
+// * distributed with this work for additional information,Comment
+"
+",Newline
+// * regarding copyright ownership.  The ASF licenses this file,Comment
+"
+",Newline
+"// * to you under the Apache License, Version 2.0 (the",Comment
+"
+",Newline
+"// * ""License""); you may not use this file except in compliance",Comment
+"
+",Newline
+// * with the License.  You may obtain a copy of the License at,Comment
+"
+",Newline
+// * ,Comment
+"
+",Newline
+// *     http://www.apache.org/licenses/LICENSE-2.0,Comment
+"
+",Newline
+// * ,Comment
+"
+",Newline
+"// * Unless required by applicable law or agreed to in writing, software",Comment
+"
+",Newline
+"// * distributed under the License is distributed on an ""AS IS"" BASIS,",Comment
+"
+",Newline
+"// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.",Comment
+"
+",Newline
+// * See the License for the specific language governing permissions and,Comment
+"
+",Newline
+// * limitations under the License.,Comment
+"
+",Newline
+//*/,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//package org.apache.kylin.storage.minicluster;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import java.io.File;,Comment
+"
+",Newline
+//import java.io.IOException;,Comment
+"
+",Newline
+//import java.sql.Connection;,Comment
+"
+",Newline
+//import java.sql.DriverManager;,Comment
+"
+",Newline
+//import java.sql.SQLException;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import org.apache.commons.io.FileUtils;,Comment
+"
+",Newline
+//import org.apache.hadoop.hdfs.MiniDFSCluster;,Comment
+"
+",Newline
+//import org.apache.hadoop.hive.conf.HiveConf;,Comment
+"
+",Newline
+//import org.apache.hadoop.hive.service.HiveInterface;,Comment
+"
+",Newline
+//import org.apache.hadoop.mapred.JobConf;,Comment
+"
+",Newline
+//import org.apache.hadoop.mapred.MiniMRCluster;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+///**,Comment
+"
+",Newline
+// * This is a test case to verify whether the query can be executed on Hive minicluster;,Comment
+"
+",Newline
+// * You need set $HADOOP_HOME environment parameter before run it;,Comment
+"
+",Newline
+// * @author shaoshi,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+// */,Comment
+"
+",Newline
+//public class HiveMiniClusterTest extends HiveJDBCClientTest {,Comment
+"
+",Newline
+"//    public static final File HIVE_BASE_DIR = new File(""target/hive"");",Comment
+"
+",Newline
+"//    public static final File HIVE_SCRATCH_DIR = new File(HIVE_BASE_DIR + ""/scratchdir"");",Comment
+"
+",Newline
+"//    public static final File HIVE_LOCAL_SCRATCH_DIR = new File(HIVE_BASE_DIR + ""/localscratchdir"");",Comment
+"
+",Newline
+"//    public static final File HIVE_METADB_DIR = new File(HIVE_BASE_DIR + ""/metastoredb"");",Comment
+"
+",Newline
+"//    public static final File HIVE_LOGS_DIR = new File(HIVE_BASE_DIR + ""/logs"");",Comment
+"
+",Newline
+"//    public static final File HIVE_TMP_DIR = new File(HIVE_BASE_DIR + ""/tmp"");",Comment
+"
+",Newline
+"//    public static final File HIVE_WAREHOUSE_DIR = new File(HIVE_BASE_DIR + ""/warehouse"");",Comment
+"
+",Newline
+"//    public static final File HIVE_TESTDATA_DIR = new File(HIVE_BASE_DIR + ""/testdata"");",Comment
+"
+",Newline
+"//    public static final File HIVE_HADOOP_TMP_DIR = new File(HIVE_BASE_DIR + ""/hadooptmp"");",Comment
+"
+",Newline
+//    protected HiveInterface client;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    protected MiniDFSCluster miniDFS;,Comment
+"
+",Newline
+//    protected MiniMRCluster miniMR;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    //@Before,Comment
+"
+",Newline
+//    public void setup() {,Comment
+"
+",Newline
+//        super.setup();,Comment
+"
+",Newline
+//        startHiveMiniCluster();,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    protected void startHiveMiniCluster() {,Comment
+"
+",Newline
+//        //Create and configure location for hive to dump junk in target folder,Comment
+"
+",Newline
+//        try {,Comment
+"
+",Newline
+//            FileUtils.forceMkdir(HIVE_BASE_DIR);,Comment
+"
+",Newline
+//            FileUtils.forceMkdir(HIVE_SCRATCH_DIR);,Comment
+"
+",Newline
+//            FileUtils.forceMkdir(HIVE_LOCAL_SCRATCH_DIR);,Comment
+"
+",Newline
+//            FileUtils.forceMkdir(HIVE_LOGS_DIR);,Comment
+"
+",Newline
+//            FileUtils.forceMkdir(HIVE_TMP_DIR);,Comment
+"
+",Newline
+//            FileUtils.forceMkdir(HIVE_WAREHOUSE_DIR);,Comment
+"
+",Newline
+//            FileUtils.forceMkdir(HIVE_HADOOP_TMP_DIR);,Comment
+"
+",Newline
+//            FileUtils.forceMkdir(HIVE_TESTDATA_DIR);,Comment
+"
+",Newline
+//        } catch (IOException e1) {,Comment
+"
+",Newline
+//            e1.printStackTrace();,Comment
+"
+",Newline
+//            System.exit(1);,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+"//        System.setProperty(""javax.jdo.option.ConnectionURL"", ""jdbc:derby:;databaseName="" + HIVE_METADB_DIR.getAbsolutePath() + "";create=true"");",Comment
+"
+",Newline
+"//        System.setProperty(""hive.metastore.warehouse.dir"", HIVE_WAREHOUSE_DIR.getAbsolutePath());",Comment
+"
+",Newline
+"//        System.setProperty(""hive.exec.scratchdir"", HIVE_SCRATCH_DIR.getAbsolutePath());",Comment
+"
+",Newline
+"//        System.setProperty(""hive.exec.local.scratchdir"", HIVE_LOCAL_SCRATCH_DIR.getAbsolutePath());",Comment
+"
+",Newline
+"//        System.setProperty(""hive.metastore.metadb.dir"", HIVE_METADB_DIR.getAbsolutePath());",Comment
+"
+",Newline
+"//        System.setProperty(""test.log.dir"", HIVE_LOGS_DIR.getAbsolutePath());",Comment
+"
+",Newline
+"//        System.setProperty(""hive.querylog.location"", HIVE_TMP_DIR.getAbsolutePath());",Comment
+"
+",Newline
+"//        System.setProperty(""hadoop.tmp.dir"", HIVE_HADOOP_TMP_DIR.getAbsolutePath());",Comment
+"
+",Newline
+"//        System.setProperty(""derby.stream.error.file"", HIVE_BASE_DIR.getAbsolutePath() + ""/derby.log"");",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        // custom properties,Comment
+"
+",Newline
+"//        System.setProperty(""hive.server2.long.polling.timeout"", ""5000"");",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        HiveConf conf = new HiveConf();,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        /* Build MiniDFSCluster */,Comment
+"
+",Newline
+//        try {,Comment
+"
+",Newline
+//            miniDFS = new MiniDFSCluster.Builder(conf).build();,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            /* Build MiniMR Cluster */,Comment
+"
+",Newline
+//            int numTaskTrackers = 1;,Comment
+"
+",Newline
+//            int numTaskTrackerDirectories = 1;,Comment
+"
+",Newline
+//            String[] racks = null;,Comment
+"
+",Newline
+//            String[] hosts = null;,Comment
+"
+",Newline
+"//            miniMR = new MiniMRCluster(numTaskTrackers, miniDFS.getFileSystem().getUri().toString(), numTaskTrackerDirectories, racks, hosts, new JobConf(conf));",Comment
+"
+",Newline
+//            JobConf jobConf = miniMR.createJobConf(new JobConf(conf));,Comment
+"
+",Newline
+"//            System.out.println(""-------"" + jobConf.get(""fs.defaultFS""));",Comment
+"
+",Newline
+"//            System.out.println(""-------"" + miniDFS.getFileSystem().getUri().toString());",Comment
+"
+",Newline
+"//            System.setProperty(""mapred.job.tracker"", jobConf.get(""mapred.job.tracker""));",Comment
+"
+",Newline
+//        } catch (IOException e) {,Comment
+"
+",Newline
+//            e.printStackTrace();,Comment
+"
+",Newline
+//            System.exit(1);,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    //@After,Comment
+"
+",Newline
+//    public void tearDown() {,Comment
+"
+",Newline
+//        if (miniMR != null),Comment
+"
+",Newline
+//            miniMR.shutdown();,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        if (miniDFS != null),Comment
+"
+",Newline
+//            miniDFS.shutdown();,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        super.tearDown();,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    protected Connection getHiveConnection() throws SQLException {,Comment
+"
+",Newline
+"//        return DriverManager.getConnection(""jdbc:hive2:///"", """", """");",Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    public static void main(String[] args) throws SQLException {,Comment
+"
+",Newline
+//        HiveMiniClusterTest test = new HiveMiniClusterTest();,Comment
+"
+",Newline
+//        test.runTests();,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//},Comment
+"
+",Newline

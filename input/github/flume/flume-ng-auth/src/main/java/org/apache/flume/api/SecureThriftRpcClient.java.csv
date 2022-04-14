@@ -1,0 +1,1037 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+api,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+FlumeException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+auth,Identifier
+.,Punctuation
+FlumeAuthenticationUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+auth,Identifier
+.,Punctuation
+FlumeAuthenticator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+auth,Identifier
+.,Punctuation
+PrivilegedExecutor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+thrift,Identifier
+.,Punctuation
+transport,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+auth,Identifier
+.,Punctuation
+callback,Identifier
+.,Punctuation
+CallbackHandler,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+sasl,Identifier
+.,Punctuation
+Sasl,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+PrivilegedExceptionAction,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SecureThriftRpcClient,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+ThriftRpcClient,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CLIENT_PRINCIPAL,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""client-principal""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+CLIENT_KEYTAB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""client-keytab""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+SERVER_PRINCIPAL,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""server-principal""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+serverPrincipal,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+FlumeAuthenticator,Identifier
+ ,Whitespace
+privilegedExecutor,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Properties,Identifier
+ ,Whitespace
+properties,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+configure,Identifier
+(,Punctuation
+properties,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+serverPrincipal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+properties,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+SERVER_PRINCIPAL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+serverPrincipal,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+serverPrincipal,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Flume in secure mode, but Flume config doesn't """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""specify a server principal to use for Kerberos auth.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+clientPrincipal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+properties,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+CLIENT_PRINCIPAL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+keytab,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+properties,Identifier
+.,Punctuation
+getProperty,Identifier
+(,Punctuation
+CLIENT_KEYTAB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+privilegedExecutor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FlumeAuthenticationUtil,Identifier
+.,Punctuation
+getAuthenticator,Identifier
+(,Punctuation
+clientPrincipal,Identifier
+",",Punctuation
+ ,Whitespace
+keytab,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+privilegedExecutor,Identifier
+.,Punctuation
+isAuthenticated,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Authentication failed in Kerberos mode for """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+              ,Whitespace
+"""principal """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+clientPrincipal,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" keytab """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+keytab,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+TTransport,Identifier
+ ,Whitespace
+getTransport,Identifier
+(,Punctuation
+TSocket,Identifier
+ ,Whitespace
+tsocket,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+saslProperties,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+saslProperties,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+Sasl,Identifier
+.,Punctuation
+QOP,Identifier
+",",Punctuation
+ ,Whitespace
+"""auth""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+names,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+names,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FlumeAuthenticationUtil,Identifier
+.,Punctuation
+splitKerberosName,Identifier
+(,Punctuation
+serverPrincipal,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"
+",Newline
+              ,Whitespace
+"""Error while trying to resolve Principal name - """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+serverPrincipal,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UgiSaslClientTransport,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+"""GSSAPI""",String
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+names,Identifier
+[,Punctuation
+0,Literal
+],Punctuation
+",",Punctuation
+ ,Whitespace
+names,Identifier
+[,Punctuation
+1,Literal
+],Punctuation
+",",Punctuation
+ ,Whitespace
+saslProperties,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+tsocket,Identifier
+",",Punctuation
+ ,Whitespace
+privilegedExecutor,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * This transport wraps the Sasl transports to set up the right UGI context for open().
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+UgiSaslClientTransport,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TSaslClientTransport,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+PrivilegedExecutor,Identifier
+ ,Whitespace
+privilegedExecutor,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+UgiSaslClientTransport,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+mechanism,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+authorizationId,Identifier
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+String,Identifier
+ ,Whitespace
+protocol,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+serverName,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+props,Identifier
+",",Punctuation
+"
+",Newline
+                ,Whitespace
+CallbackHandler,Identifier
+ ,Whitespace
+cbh,Identifier
+",",Punctuation
+ ,Whitespace
+TTransport,Identifier
+ ,Whitespace
+transport,Identifier
+",",Punctuation
+ ,Whitespace
+PrivilegedExecutor,Identifier
+ ,Whitespace
+privilegedExecutor,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+super,Keyword
+(,Punctuation
+mechanism,Identifier
+",",Punctuation
+ ,Whitespace
+authorizationId,Identifier
+",",Punctuation
+ ,Whitespace
+protocol,Identifier
+",",Punctuation
+ ,Whitespace
+serverName,Identifier
+",",Punctuation
+ ,Whitespace
+props,Identifier
+",",Punctuation
+ ,Whitespace
+cbh,Identifier
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+transport,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+privilegedExecutor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+privilegedExecutor,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// open the SASL transport with using the current UserGroupInformation,Comment
+"
+",Newline
+    ,Whitespace
+// This is needed to get the current login context stored,Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+open,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+privilegedExecutor,Identifier
+.,Punctuation
+execute,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+new,Keyword
+ ,Whitespace
+PrivilegedExceptionAction,Identifier
+<,Operator
+Void,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+Void,Identifier
+ ,Whitespace
+run,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+// this is a workaround to using UgiSaslClientTransport.super.open(),Comment
+"
+",Newline
+              ,Whitespace
+// which results in IllegalAccessError,Comment
+"
+",Newline
+              ,Whitespace
+callSuperClassOpen,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"
+",Newline
+                ,Whitespace
+"""Interrupted while opening underlying transport""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Failed to open SASL transport""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+callSuperClassOpen,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+FlumeException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+.,Punctuation
+open,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+TTransportException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeException,Identifier
+(,Punctuation
+"""Failed to open SASL transport""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,1855 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+steps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+*,Operator
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Option,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+OptionBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Options,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ToolRunner,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+persistence,Identifier
+.,Punctuation
+ResourceStore,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+CubeManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+AbstractHadoopJob,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+job,Identifier
+.,Punctuation
+constant,Identifier
+.,Punctuation
+JobStatusEnum,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+job,Identifier
+.,Punctuation
+dao,Identifier
+.,Punctuation
+ExecutableDao,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+job,Identifier
+.,Punctuation
+dao,Identifier
+.,Punctuation
+ExecutableOutputPO,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+job,Identifier
+.,Punctuation
+dao,Identifier
+.,Punctuation
+ExecutablePO,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MetadataCleanupJob,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+AbstractHadoopJob,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""static-access""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Option,Identifier
+ ,Whitespace
+OPTION_DELETE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+OptionBuilder,Identifier
+.,Punctuation
+withArgName,Identifier
+(,Punctuation
+"""delete""",String
+),Punctuation
+.,Punctuation
+hasArg,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+isRequired,Identifier
+(,Punctuation
+false,Keyword
+),Punctuation
+.,Punctuation
+withDescription,Identifier
+(,Punctuation
+"""Delete the unused metadata""",String
+),Punctuation
+.,Punctuation
+create,Identifier
+(,Punctuation
+"""delete""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+MetadataCleanupJob,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+delete,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+TIME_THREADSHOLD,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+2,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+24,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+3600,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1000l,Literal
+;,Punctuation
+ ,Whitespace
+// 2 days,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+TIME_THREADSHOLD_FOR_JOB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+30,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+24,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+3600,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1000l,Literal
+;,Punctuation
+ ,Whitespace
+// 30 days,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.hadoop.util.Tool#run(java.lang.String[])
+     */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Options,Identifier
+ ,Whitespace
+options,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Options,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""jobs args: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+args,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+OPTION_DELETE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+parseOptions,Identifier
+(,Punctuation
+options,Identifier
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""options: '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getOptionsAsString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""delete option value: '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getOptionValue,Identifier
+(,Punctuation
+OPTION_DELETE,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+delete,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+OPTION_DELETE,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+cleanup,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+printUsage,Identifier
+(,Punctuation
+options,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+e,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ResourceStore,Identifier
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+ResourceStore,Identifier
+.,Punctuation
+getStore,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isOlderThanThreshold,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+resourceTime,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+currentTime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+currentTime,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+resourceTime,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+TIME_THREADSHOLD,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+cleanup,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+CubeManager,Identifier
+ ,Whitespace
+cubeManager,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+CubeManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+activeResourceList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+CubeInstance,Identifier
+ ,Whitespace
+cube,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+cubeManager,Identifier
+.,Punctuation
+listAllCubes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+CubeSegment,Identifier
+ ,Whitespace
+segment,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+cube,Identifier
+.,Punctuation
+getSegments,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+activeResourceList,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+segment,Identifier
+.,Punctuation
+getSnapshotPaths,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+activeResourceList,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+segment,Identifier
+.,Punctuation
+getDictionaryPaths,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+activeResourceList,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+segment,Identifier
+.,Punctuation
+getStatisticsResourcePath,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+toDeleteResource,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// two level resources, snapshot tables and cube statistics",Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+resourceRoot,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+ResourceStore,Identifier
+.,Punctuation
+SNAPSHOT_RESOURCE_ROOT,Identifier
+",",Punctuation
+ ,Whitespace
+ResourceStore,Identifier
+.,Punctuation
+CUBE_STATISTICS_ROOT,Identifier
+ ,Whitespace
+},Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+NavigableSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+snapshotTables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+listResources,Identifier
+(,Punctuation
+resourceRoot,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+snapshotTables,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+snapshotTable,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+snapshotTables,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+NavigableSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+snapshotNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+listResources,Identifier
+(,Punctuation
+snapshotTable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+snapshotNames,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+snapshot,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+snapshotNames,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+activeResourceList,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+snapshot,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isOlderThanThreshold,Identifier
+(,Punctuation
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getResourceTimestamp,Identifier
+(,Punctuation
+snapshot,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                                    ,Whitespace
+toDeleteResource,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+snapshot,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                            ,Whitespace
+},Punctuation
+"
+",Newline
+                        ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// three level resources, only dictionaries",Comment
+"
+",Newline
+        ,Whitespace
+NavigableSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+dictTables,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+listResources,Identifier
+(,Punctuation
+ResourceStore,Identifier
+.,Punctuation
+DICT_RESOURCE_ROOT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+table,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+dictTables,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+NavigableSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+tableColNames,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+listResources,Identifier
+(,Punctuation
+table,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tableColNames,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableCol,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tableColNames,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+NavigableSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+dictionaries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+listResources,Identifier
+(,Punctuation
+tableCol,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dictionaries,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+dict,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+dictionaries,Identifier
+),Punctuation
+"
+",Newline
+                            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+activeResourceList,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+dict,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isOlderThanThreshold,Identifier
+(,Punctuation
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getResourceTimestamp,Identifier
+(,Punctuation
+dict,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                                    ,Whitespace
+toDeleteResource,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+dict,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                            ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+// delete old and completed jobs,Comment
+"
+",Newline
+        ,Whitespace
+ExecutableDao,Identifier
+ ,Whitespace
+executableDao,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ExecutableDao,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+ExecutablePO,Identifier
+>,Operator
+ ,Whitespace
+allExecutable,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+executableDao,Identifier
+.,Punctuation
+getJobs,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ExecutablePO,Identifier
+ ,Whitespace
+executable,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+allExecutable,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+lastModified,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+executable,Identifier
+.,Punctuation
+getLastModified,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+ExecutableOutputPO,Identifier
+ ,Whitespace
+output,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+executableDao,Identifier
+.,Punctuation
+getJobOutput,Identifier
+(,Punctuation
+executable,Identifier
+.,Punctuation
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+lastModified,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+TIME_THREADSHOLD_FOR_JOB,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+(,Punctuation
+output,Identifier
+.,Punctuation
+getStatus,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+JobStatusEnum,Identifier
+.,Punctuation
+FINISHED,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+output,Identifier
+.,Punctuation
+getStatus,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+JobStatusEnum,Identifier
+.,Punctuation
+DISCARDED,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+toDeleteResource,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+ResourceStore,Identifier
+.,Punctuation
+EXECUTE_RESOURCE_ROOT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+executable,Identifier
+.,Punctuation
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+toDeleteResource,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+ResourceStore,Identifier
+.,Punctuation
+EXECUTE_OUTPUT_RESOURCE_ROOT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+executable,Identifier
+.,Punctuation
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ExecutablePO,Identifier
+ ,Whitespace
+task,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+executable,Identifier
+.,Punctuation
+getTasks,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+toDeleteResource,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+ResourceStore,Identifier
+.,Punctuation
+EXECUTE_RESOURCE_ROOT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+task,Identifier
+.,Punctuation
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+toDeleteResource,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+ResourceStore,Identifier
+.,Punctuation
+EXECUTE_OUTPUT_RESOURCE_ROOT,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+task,Identifier
+.,Punctuation
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+toDeleteResource,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""The following resources have no reference or is too old, will be cleaned from metadata store: \n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+toDeleteResource,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+s,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+delete,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+deleteResource,Identifier
+(,Punctuation
+s,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""No resource to be cleaned up from metadata store;""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+main,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+exitCode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ToolRunner,Identifier
+.,Punctuation
+run,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+MetadataCleanupJob,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+System,Identifier
+.,Punctuation
+exit,Identifier
+(,Punctuation
+exitCode,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

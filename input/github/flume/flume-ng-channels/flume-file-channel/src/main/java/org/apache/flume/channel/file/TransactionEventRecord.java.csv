@@ -1,0 +1,2217 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+ByteArrayInputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+ByteArrayOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DataInput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DataOutput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DataOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+InputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+OutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+Constructor,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+protobuf,Identifier
+.,Punctuation
+InvalidProtocolBufferException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceAudience,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceStability,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+.,Punctuation
+proto,Identifier
+.,Punctuation
+ProtosFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Throwables,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+ImmutableMap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Base class for records in data file: Put, Take, Rollback, Commit
+ */",Comment
+"
+",Newline
+@,Punctuation
+InterfaceAudience,Identifier
+.,Punctuation
+Private,Identifier
+"
+",Newline
+@,Punctuation
+InterfaceStability,Identifier
+.,Punctuation
+Unstable,Identifier
+"
+",Newline
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Writable,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+TransactionEventRecord,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+logWriteOrderID,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+logWriteOrderID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+transactionID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+transactionID,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+logWriteOrderID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+logWriteOrderID,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+readFields,Identifier
+(,Punctuation
+DataInput,Identifier
+ ,Whitespace
+in,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+write,Identifier
+(,Punctuation
+DataOutput,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+abstract,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+writeProtos,Identifier
+(,Punctuation
+OutputStream,Identifier
+ ,Whitespace
+out,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+abstract,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+readProtos,Identifier
+(,Punctuation
+InputStream,Identifier
+ ,Whitespace
+in,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+CorruptEventException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+long,Keyword
+ ,Whitespace
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+logWriteOrderID,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+long,Keyword
+ ,Whitespace
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+transactionID,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+abstract,Keyword
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+getRecordType,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Provides a minimum guarantee we are not reading complete junk
+   */",Comment
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+MAGIC_HEADER,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0xdeadbeef,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+enum,Identifier
+ ,Whitespace
+Type,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+PUT,Identifier
+(,Punctuation
+(,Punctuation
+short,Keyword
+),Punctuation
+1,Literal
+),Punctuation
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+TAKE,Identifier
+(,Punctuation
+(,Punctuation
+short,Keyword
+),Punctuation
+2,Literal
+),Punctuation
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+ROLLBACK,Identifier
+(,Punctuation
+(,Punctuation
+short,Keyword
+),Punctuation
+3,Literal
+),Punctuation
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+COMMIT,Identifier
+(,Punctuation
+(,Punctuation
+short,Keyword
+),Punctuation
+4,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+id,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Type,Identifier
+(,Punctuation
+short,Keyword
+ ,Whitespace
+id,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+id,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+id,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+get,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+id,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ImmutableMap,Identifier
+<,Operator
+Short,Identifier
+",",Punctuation
+ ,Whitespace
+Constructor,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+>>,Operator
+ ,Whitespace
+TYPES,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ImmutableMap,Identifier
+.,Punctuation
+Builder,Identifier
+<,Operator
+Short,Identifier
+",",Punctuation
+ ,Whitespace
+Constructor,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+>>,Operator
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+ImmutableMap,Identifier
+.,Punctuation
+<,Operator
+Short,Identifier
+",",Punctuation
+ ,Whitespace
+Constructor,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+>>,Operator
+builder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+Type,Identifier
+.,Punctuation
+PUT,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+Put,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getDeclaredConstructor,Identifier
+(,Punctuation
+Long,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+Type,Identifier
+.,Punctuation
+TAKE,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+Take,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getDeclaredConstructor,Identifier
+(,Punctuation
+Long,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+Type,Identifier
+.,Punctuation
+ROLLBACK,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+Rollback,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getDeclaredConstructor,Identifier
+(,Punctuation
+Long,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+Type,Identifier
+.,Punctuation
+COMMIT,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+Commit,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getDeclaredConstructor,Identifier
+(,Punctuation
+Long,Identifier
+.,Punctuation
+class,Keyword
+",",Punctuation
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Throwables,Identifier
+.,Punctuation
+propagate,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+TYPES,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+builder,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+toByteBufferV2,Identifier
+(,Punctuation
+TransactionEventRecord,Identifier
+ ,Whitespace
+record,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ByteArrayOutputStream,Identifier
+ ,Whitespace
+byteOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ByteArrayOutputStream,Identifier
+(,Punctuation
+512,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+DataOutputStream,Identifier
+ ,Whitespace
+dataOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DataOutputStream,Identifier
+(,Punctuation
+byteOutput,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+dataOutput,Identifier
+.,Punctuation
+writeInt,Identifier
+(,Punctuation
+MAGIC_HEADER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+dataOutput,Identifier
+.,Punctuation
+writeShort,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getRecordType,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+dataOutput,Identifier
+.,Punctuation
+writeLong,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+dataOutput,Identifier
+.,Punctuation
+writeLong,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+record,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+dataOutput,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+dataOutput,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+// TODO toByteArray does an unneeded copy,Comment
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+wrap,Identifier
+(,Punctuation
+byteOutput,Identifier
+.,Punctuation
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// near impossible,Comment
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+Throwables,Identifier
+.,Punctuation
+propagate,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+dataOutput,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+dataOutput,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error closing byte array output stream""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Deprecated,Identifier
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+ ,Whitespace
+fromDataInputV2,Identifier
+(,Punctuation
+DataInput,Identifier
+ ,Whitespace
+in,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+header,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+in,Identifier
+.,Punctuation
+readInt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+header,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+MAGIC_HEADER,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""Header """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+toHexString,Identifier
+(,Punctuation
+header,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+""" is not the required value: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+toHexString,Identifier
+(,Punctuation
+MAGIC_HEADER,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+short,Keyword
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+in,Identifier
+.,Punctuation
+readShort,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+in,Identifier
+.,Punctuation
+readLong,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+writeOrderID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+in,Identifier
+.,Punctuation
+readLong,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+TransactionEventRecord,Identifier
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newRecordForType,Identifier
+(,Punctuation
+type,Identifier
+",",Punctuation
+ ,Whitespace
+transactionID,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+writeOrderID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+entry,Identifier
+.,Punctuation
+readFields,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+entry,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+toByteBuffer,Identifier
+(,Punctuation
+TransactionEventRecord,Identifier
+ ,Whitespace
+record,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ByteArrayOutputStream,Identifier
+ ,Whitespace
+byteOutput,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ByteArrayOutputStream,Identifier
+(,Punctuation
+512,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+TransactionEventHeader,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+headerBuilder,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+TransactionEventHeader,Identifier
+.,Punctuation
+newBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+headerBuilder,Identifier
+.,Punctuation
+setType,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getRecordType,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+headerBuilder,Identifier
+.,Punctuation
+setTransactionID,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+headerBuilder,Identifier
+.,Punctuation
+setWriteOrderID,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+headerBuilder,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+writeDelimitedTo,Identifier
+(,Punctuation
+byteOutput,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+record,Identifier
+.,Punctuation
+writeProtos,Identifier
+(,Punctuation
+byteOutput,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+TransactionEventFooter,Identifier
+ ,Whitespace
+footer,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+TransactionEventFooter,Identifier
+.,Punctuation
+newBuilder,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+footer,Identifier
+.,Punctuation
+writeDelimitedTo,Identifier
+(,Punctuation
+byteOutput,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+wrap,Identifier
+(,Punctuation
+byteOutput,Identifier
+.,Punctuation
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+Throwables,Identifier
+.,Punctuation
+propagate,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+byteOutput,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+byteOutput,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error closing byte array output stream""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+ ,Whitespace
+fromByteArray,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+buffer,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+CorruptEventException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+ByteArrayInputStream,Identifier
+ ,Whitespace
+in,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ByteArrayInputStream,Identifier
+(,Punctuation
+buffer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+TransactionEventHeader,Identifier
+ ,Whitespace
+header,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+"
+",Newline
+          ,Whitespace
+checkNotNull,Identifier
+(,Punctuation
+ProtosFactory,Identifier
+.,Punctuation
+TransactionEventHeader,Identifier
+.,Punctuation
+"
+",Newline
+              ,Whitespace
+parseDelimitedFrom,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""Header cannot be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+short,Keyword
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+short,Keyword
+),Punctuation
+header,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+header,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+writeOrderID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+header,Identifier
+.,Punctuation
+getWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+TransactionEventRecord,Identifier
+ ,Whitespace
+transactionEvent,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+newRecordForType,Identifier
+(,Punctuation
+type,Identifier
+",",Punctuation
+ ,Whitespace
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+writeOrderID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+transactionEvent,Identifier
+.,Punctuation
+readProtos,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unused""",String
+),Punctuation
+"
+",Newline
+      ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+TransactionEventFooter,Identifier
+ ,Whitespace
+footer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+ProtosFactory,Identifier
+.,Punctuation
+TransactionEventFooter,Identifier
+.,Punctuation
+"
+",Newline
+          ,Whitespace
+parseDelimitedFrom,Identifier
+(,Punctuation
+in,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""Footer cannot be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+transactionEvent,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InvalidProtocolBufferException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CorruptEventException,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+"""Could not parse event from data file.""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+in,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error closing byte array input stream""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getName,Identifier
+(,Punctuation
+short,Keyword
+ ,Whitespace
+type,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Constructor,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+>,Operator
+ ,Whitespace
+constructor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TYPES,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+constructor,Identifier
+",",Punctuation
+ ,Whitespace
+"""Unknown action """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+Integer,Identifier
+.,Punctuation
+toHexString,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+constructor,Identifier
+.,Punctuation
+getDeclaringClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getSimpleName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+ ,Whitespace
+newRecordForType,Identifier
+(,Punctuation
+short,Keyword
+ ,Whitespace
+type,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+writeOrderID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Constructor,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TransactionEventRecord,Identifier
+>,Operator
+ ,Whitespace
+constructor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TYPES,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+constructor,Identifier
+",",Punctuation
+ ,Whitespace
+"""Unknown action """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+Integer,Identifier
+.,Punctuation
+toHexString,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+constructor,Identifier
+.,Punctuation
+newInstance,Identifier
+(,Punctuation
+transactionID,Identifier
+",",Punctuation
+ ,Whitespace
+writeOrderID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+Throwables,Identifier
+.,Punctuation
+propagate,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,828 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+common,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+SimpleDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Date,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang3,Identifier
+.,Punctuation
+tuple,Identifier
+.,Punctuation
+Pair,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+yarn,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+records,Identifier
+.,Punctuation
+FinalApplicationStatus,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+yarn,Identifier
+.,Punctuation
+server,Identifier
+.,Punctuation
+resourcemanager,Identifier
+.,Punctuation
+rmapp,Identifier
+.,Punctuation
+RMAppState,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+job,Identifier
+.,Punctuation
+constant,Identifier
+.,Punctuation
+JobStepStatusEnum,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author xduo
+ * 
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+HadoopStatusChecker,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+HadoopStatusChecker,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+yarnUrl,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+mrJobID,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+output,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+useKerberosAuth,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+HadoopStatusChecker,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+yarnUrl,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+mrJobID,Identifier
+",",Punctuation
+ ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+output,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+useKerberosAuth,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+yarnUrl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+yarnUrl,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+mrJobID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mrJobID,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+output,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+output,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+useKerberosAuth,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+useKerberosAuth,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+JobStepStatusEnum,Identifier
+ ,Whitespace
+checkStatus,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+null,Keyword
+ ,Whitespace
+==,Operator
+ ,Whitespace
+mrJobID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+output,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""Skip status check with empty job id..\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+JobStepStatusEnum,Identifier
+.,Punctuation
+WAITING,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+JobStepStatusEnum,Identifier
+ ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+Pair,Identifier
+<,Operator
+RMAppState,Identifier
+",",Punctuation
+ ,Whitespace
+FinalApplicationStatus,Identifier
+>,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HadoopStatusGetter,Identifier
+(,Punctuation
+yarnUrl,Identifier
+",",Punctuation
+ ,Whitespace
+mrJobID,Identifier
+),Punctuation
+.,Punctuation
+get,Identifier
+(,Punctuation
+useKerberosAuth,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+"""State of Hadoop job: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mrJobID,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""":""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+result,Identifier
+.,Punctuation
+getLeft,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""-""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+result,Identifier
+.,Punctuation
+getRight,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+output,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+SimpleDateFormat,Identifier
+(,Punctuation
+"""yyyy-MM-dd HH:mm:ss.S""",String
+),Punctuation
+.,Punctuation
+format,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Date,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" - State of Hadoop job: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+mrJobID,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""":""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+result,Identifier
+.,Punctuation
+getLeft,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" - """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+result,Identifier
+.,Punctuation
+getRight,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+result,Identifier
+.,Punctuation
+getRight,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+SUCCEEDED,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+JobStepStatusEnum,Identifier
+.,Punctuation
+FINISHED,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+FAILED,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+JobStepStatusEnum,Identifier
+.,Punctuation
+ERROR,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+KILLED,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+JobStepStatusEnum,Identifier
+.,Punctuation
+KILLED,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+case,Keyword
+ ,Whitespace
+UNDEFINED,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+result,Identifier
+.,Punctuation
+getLeft,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+NEW,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+NEW_SAVING,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+SUBMITTED,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+ACCEPTED,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+JobStepStatusEnum,Identifier
+.,Punctuation
+WAITING,Identifier
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+RUNNING,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+JobStepStatusEnum,Identifier
+.,Punctuation
+RUNNING,Identifier
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+FINAL_SAVING,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+FINISHING,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+FINISHED,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+FAILED,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+KILLING,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+KILLED,Identifier
+:,Operator
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""error check status""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+output,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""Exception: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+getLocalizedMessage,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+status,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+JobStepStatusEnum,Identifier
+.,Punctuation
+ERROR,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+status,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

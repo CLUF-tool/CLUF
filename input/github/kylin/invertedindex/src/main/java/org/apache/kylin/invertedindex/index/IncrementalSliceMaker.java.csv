@@ -1,0 +1,947 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+invertedindex,Identifier
+.,Punctuation
+index,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+ImmutableBytesWritable,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+IncrementalSliceMaker,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+TableRecordInfo,Identifier
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nColumns,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+nRecordsCap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+short,Keyword
+ ,Whitespace
+shard,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+sliceTimestamp,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+nRecords,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ColumnValueContainer,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+containers,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+transient,Keyword
+ ,Whitespace
+ImmutableBytesWritable,Identifier
+ ,Whitespace
+temp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ImmutableBytesWritable,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IncrementalSliceMaker,Identifier
+(,Punctuation
+TableRecordInfo,Identifier
+ ,Whitespace
+info,Identifier
+",",Punctuation
+ ,Whitespace
+short,Keyword
+ ,Whitespace
+shard,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+info,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+nColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+info,Identifier
+.,Punctuation
+getDigest,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getColumnCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+nRecordsCap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+1,Literal
+",",Punctuation
+ ,Whitespace
+info,Identifier
+.,Punctuation
+getDescriptor,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getSliceSize,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+shard,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+shard,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+sliceTimestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+MIN_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+nRecords,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+containers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+doneSlice,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// init containers,Comment
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+Slice,Identifier
+ ,Whitespace
+doneSlice,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Slice,Identifier
+ ,Whitespace
+r,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nRecords,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nColumns,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+containers,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+closeForChange,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+r,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Slice,Identifier
+(,Punctuation
+info,Identifier
+.,Punctuation
+getDigest,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+shard,Identifier
+",",Punctuation
+ ,Whitespace
+sliceTimestamp,Identifier
+",",Punctuation
+ ,Whitespace
+containers,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// reset for next slice,Comment
+"
+",Newline
+        ,Whitespace
+nRecords,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+containers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ColumnValueContainer,Identifier
+[,Punctuation
+nColumns,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+//        for (int i : info.getDescriptor().getBitmapColumns()) {,Comment
+"
+",Newline
+        ,Whitespace
+"//            containers[i] = new CompressedValueContainer(info.getDigest(), i,",Comment
+"
+",Newline
+        ,Whitespace
+//                    nRecordsCap);,Comment
+"
+",Newline
+        ,Whitespace
+//        },Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+info,Identifier
+.,Punctuation
+getDescriptor,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getValueColumns,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+containers,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CompressedValueContainer,Identifier
+(,Punctuation
+info,Identifier
+.,Punctuation
+getDigest,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+i,Identifier
+",",Punctuation
+ ,Whitespace
+nRecordsCap,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+info,Identifier
+.,Punctuation
+getDescriptor,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getMetricsColumns,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+containers,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CompressedValueContainer,Identifier
+(,Punctuation
+info,Identifier
+.,Punctuation
+getDigest,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+i,Identifier
+",",Punctuation
+ ,Whitespace
+nRecordsCap,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+r,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// NOTE: record must be appended in time order,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Slice,Identifier
+ ,Whitespace
+append,Identifier
+(,Punctuation
+TableRecord,Identifier
+ ,Whitespace
+rec,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+rec,Identifier
+.,Punctuation
+getShard,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+shard,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Slice,Identifier
+ ,Whitespace
+doneSlice,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isFull,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+doneSlice,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+doneSlice,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nRecords,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+sliceTimestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+increaseSliceTimestamp,Identifier
+(,Punctuation
+rec,Identifier
+.,Punctuation
+getTimestamp,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+nRecords,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nColumns,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+rec,Identifier
+.,Punctuation
+getValueBytes,Identifier
+(,Punctuation
+i,Identifier
+",",Punctuation
+ ,Whitespace
+temp,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+containers,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+temp,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+doneSlice,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+increaseSliceTimestamp,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+timestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+timestamp,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+sliceTimestamp,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+timestamp,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+sliceTimestamp,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+++,Operator
+timestamp,Identifier
+;,Punctuation
+ ,Whitespace
+// ensure slice timestamp increases,Comment
+"
+",Newline
+        ,Whitespace
+else,Keyword
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+timestamp,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Slice,Identifier
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Slice,Identifier
+ ,Whitespace
+doneSlice,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+doneSlice,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+sliceTimestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+MIN_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+nRecords,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+doneSlice,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isFull,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+nRecords,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+nRecordsCap,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

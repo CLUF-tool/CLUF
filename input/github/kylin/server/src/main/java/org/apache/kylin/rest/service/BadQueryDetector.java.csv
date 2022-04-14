@@ -1,0 +1,2629 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+service,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+InetAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+UnknownHostException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collections,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Comparator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+NavigableSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TreeSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ConcurrentMap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Pair,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+badquery,Identifier
+.,Punctuation
+BadQueryHistoryManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+request,Identifier
+.,Punctuation
+SQLRequest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+BadQueryDetector,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+Thread,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+BadQueryDetector,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ConcurrentMap,Identifier
+<,Operator
+Thread,Identifier
+",",Punctuation
+ ,Whitespace
+Entry,Identifier
+>,Operator
+ ,Whitespace
+runningQueries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newConcurrentMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+detectionInterval,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+alertMB,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+alertRunningSec,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+kylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Notifier,Identifier
+>,Operator
+ ,Whitespace
+notifiers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Notifier,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+BadQueryDetector,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+(,Punctuation
+"""BadQueryDetector""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+setDaemon,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+kylinConfig,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+detectionInterval,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kylinConfig,Identifier
+.,Punctuation
+getBadQueryDefaultDetectIntervalSeconds,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1000,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+alertMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+100,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+alertRunningSec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kylinConfig,Identifier
+.,Punctuation
+getBadQueryDefaultAlertingSeconds,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+initNotifiers,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+BadQueryDetector,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+detectionInterval,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+alertMB,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+alertRunningSec,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+(,Punctuation
+"""BadQueryDetector""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+setDaemon,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+detectionInterval,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+detectionInterval,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+alertMB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+alertMB,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+alertRunningSec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+alertRunningSec,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+kylinConfig,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+initNotifiers,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initNotifiers,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+notifiers,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+LoggerNotifier,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+kylinConfig,Identifier
+.,Punctuation
+getBadQueryPersistentEnabled,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+notifiers,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+PersistenceNotifier,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+registerNotifier,Identifier
+(,Punctuation
+Notifier,Identifier
+ ,Whitespace
+notifier,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+notifiers,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+notifier,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+notify,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+adj,Identifier
+",",Punctuation
+ ,Whitespace
+float,Keyword
+ ,Whitespace
+runningSec,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+Thread,Identifier
+ ,Whitespace
+t,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Notifier,Identifier
+ ,Whitespace
+notifier,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+notifiers,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+notifier,Identifier
+.,Punctuation
+badQueryFound,Identifier
+(,Punctuation
+adj,Identifier
+",",Punctuation
+ ,Whitespace
+runningSec,Identifier
+",",Punctuation
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+Notifier,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+void,Keyword
+ ,Whitespace
+badQueryFound,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+adj,Identifier
+",",Punctuation
+ ,Whitespace
+float,Keyword
+ ,Whitespace
+runningSec,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+Thread,Identifier
+ ,Whitespace
+t,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+LoggerNotifier,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Notifier,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+badQueryFound,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+adj,Identifier
+",",Punctuation
+ ,Whitespace
+float,Keyword
+ ,Whitespace
+runningSec,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+Thread,Identifier
+ ,Whitespace
+t,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+adj,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" query has been running """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+runningSec,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" seconds (project:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+project,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", thread: 0x""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+toHexString,Identifier
+(,Punctuation
+t,Identifier
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""") -- """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+PersistenceNotifier,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Notifier,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+BadQueryHistoryManager,Identifier
+ ,Whitespace
+badQueryManager,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BadQueryHistoryManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+kylinConfig,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+serverHostname,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+NavigableSet,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>>,Operator
+ ,Whitespace
+cacheQueue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Comparator,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+compare,Identifier
+(,Punctuation
+Pair,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+o1,Identifier
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+o2,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+o1,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+o2,Identifier
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+o1,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+o2,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+o2,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+compareTo,Identifier
+(,Punctuation
+o2,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+(,Punctuation
+o1,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+o2,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+PersistenceNotifier,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+serverHostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+InetAddress,Identifier
+.,Punctuation
+getLocalHost,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getHostName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+UnknownHostException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+serverHostname,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""Unknow""",String
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error in get current hostname.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+badQueryFound,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+adj,Identifier
+",",Punctuation
+ ,Whitespace
+float,Keyword
+ ,Whitespace
+runningSec,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+project,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+Thread,Identifier
+ ,Whitespace
+t,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+long,Keyword
+ ,Whitespace
+cachingSeconds,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+kylinConfig,Identifier
+.,Punctuation
+getBadQueryDefaultAlertingSeconds,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+30,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+Pair,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+sqlPair,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Pair,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+cacheQueue,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+sqlPair,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+badQueryManager,Identifier
+.,Punctuation
+addEntryToProject,Identifier
+(,Punctuation
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+adj,Identifier
+",",Punctuation
+ ,Whitespace
+runningSec,Identifier
+",",Punctuation
+ ,Whitespace
+serverHostname,Identifier
+",",Punctuation
+ ,Whitespace
+t,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+cacheQueue,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+sqlPair,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+cacheQueue,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+(,Punctuation
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+cacheQueue,Identifier
+.,Punctuation
+first,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+cachingSeconds,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1000,Literal
+ ,Whitespace
+||,Operator
+ ,Whitespace
+cacheQueue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+kylinConfig,Identifier
+.,Punctuation
+getBadQueryHistoryNum,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+3,Literal
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+cacheQueue,Identifier
+.,Punctuation
+pollFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+badQueryManager,Identifier
+.,Punctuation
+updateEntryToProject,Identifier
+(,Punctuation
+sql,Identifier
+",",Punctuation
+ ,Whitespace
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+adj,Identifier
+",",Punctuation
+ ,Whitespace
+runningSec,Identifier
+",",Punctuation
+ ,Whitespace
+serverHostname,Identifier
+",",Punctuation
+ ,Whitespace
+t,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+project,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error in bad query persistence.""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+queryStart,Identifier
+(,Punctuation
+Thread,Identifier
+ ,Whitespace
+thread,Identifier
+",",Punctuation
+ ,Whitespace
+SQLRequest,Identifier
+ ,Whitespace
+sqlRequest,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+runningQueries,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+thread,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Entry,Identifier
+(,Punctuation
+sqlRequest,Identifier
+",",Punctuation
+ ,Whitespace
+thread,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+queryEnd,Identifier
+(,Punctuation
+Thread,Identifier
+ ,Whitespace
+thread,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+runningQueries,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+thread,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Entry,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+Comparable,Identifier
+<,Operator
+Entry,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+SQLRequest,Identifier
+ ,Whitespace
+sqlRequest,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+startTime,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+Thread,Identifier
+ ,Whitespace
+thread,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Entry,Identifier
+(,Punctuation
+SQLRequest,Identifier
+ ,Whitespace
+sqlRequest,Identifier
+",",Punctuation
+ ,Whitespace
+Thread,Identifier
+ ,Whitespace
+thread,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+sqlRequest,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlRequest,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+startTime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+thread,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+thread,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+compareTo,Identifier
+(,Punctuation
+Entry,Identifier
+ ,Whitespace
+o,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+this,Keyword
+.,Punctuation
+startTime,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+o,Identifier
+.,Punctuation
+startTime,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+run,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Thread,Identifier
+.,Punctuation
+sleep,Identifier
+(,Punctuation
+detectionInterval,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// stop detection and exit,Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+detectBadQuery,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""""",String
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+detectBadQuery,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+now,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+System,Identifier
+.,Punctuation
+currentTimeMillis,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ArrayList,Identifier
+<,Operator
+Entry,Identifier
+>,Operator
+ ,Whitespace
+entries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Entry,Identifier
+>,Operator
+(,Punctuation
+runningQueries,Identifier
+.,Punctuation
+values,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Collections,Identifier
+.,Punctuation
+sort,Identifier
+(,Punctuation
+entries,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// report if query running long,Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Entry,Identifier
+ ,Whitespace
+e,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+entries,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+float,Keyword
+ ,Whitespace
+runningSec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+float,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+now,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+startTime,Identifier
+),Punctuation
+ ,Whitespace
+/,Operator
+ ,Whitespace
+1000,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+runningSec,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+alertRunningSec,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+notify,Identifier
+(,Punctuation
+"""Slow""",String
+",",Punctuation
+ ,Whitespace
+runningSec,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+.,Punctuation
+startTime,Identifier
+",",Punctuation
+ ,Whitespace
+e,Identifier
+.,Punctuation
+sqlRequest,Identifier
+.,Punctuation
+getProject,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+.,Punctuation
+sqlRequest,Identifier
+.,Punctuation
+getSql,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+.,Punctuation
+thread,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+dumpStackTrace,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+thread,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+ ,Whitespace
+// entries are sorted by startTime,Comment
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// report if low memory,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+alertMB,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""System free memory less than """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+alertMB,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" MB. """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+entries,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" queries running.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// log the stack trace of bad query thread for further analysis,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+dumpStackTrace,Identifier
+(,Punctuation
+Thread,Identifier
+ ,Whitespace
+t,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+maxStackTraceDepth,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kylinConfig,Identifier
+.,Punctuation
+getBadQueryStackTraceDepth,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+current,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+StackTraceElement,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+stackTrace,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+t,Identifier
+.,Punctuation
+getStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+buf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+"""Problematic thread 0x""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+toHexString,Identifier
+(,Punctuation
+t,Identifier
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+StackTraceElement,Identifier
+ ,Whitespace
+e,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+stackTrace,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+++,Operator
+current,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+maxStackTraceDepth,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+buf,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\t""",String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""at """,String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+buf,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+ONE_MB,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1024,Literal
+ ,Whitespace
+*,Operator
+ ,Whitespace
+1024,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getSystemAvailBytes,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Runtime,Identifier
+ ,Whitespace
+runtime,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Runtime,Identifier
+.,Punctuation
+getRuntime,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+totalMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+runtime,Identifier
+.,Punctuation
+totalMemory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// current heap allocated to the VM process,Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+freeMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+runtime,Identifier
+.,Punctuation
+freeMemory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+"// out of the current heap, how much is free",Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+maxMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+runtime,Identifier
+.,Punctuation
+maxMemory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// Max heap VM can use e.g. Xmx setting,Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+usedMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+totalMemory,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+freeMemory,Identifier
+;,Punctuation
+ ,Whitespace
+// how much of the current heap the VM is using,Comment
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+availableMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+maxMemory,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+usedMemory,Identifier
+;,Punctuation
+ ,Whitespace
+// available memory i.e. Maximum heap size minus the current amount used,Comment
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+availableMemory,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getSystemAvailMB,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+getSystemAvailBytes,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+/,Operator
+ ,Whitespace
+ONE_MB,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

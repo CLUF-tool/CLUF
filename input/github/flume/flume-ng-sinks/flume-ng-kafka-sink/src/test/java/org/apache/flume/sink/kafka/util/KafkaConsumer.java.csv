@@ -1,0 +1,780 @@
+"/**
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the ""License""); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an ""AS IS"" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+kafka,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+consumer,Identifier
+.,Punctuation
+ConsumerConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+consumer,Identifier
+.,Punctuation
+ConsumerIterator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+consumer,Identifier
+.,Punctuation
+ConsumerTimeoutException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+consumer,Identifier
+.,Punctuation
+KafkaStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+javaapi,Identifier
+.,Punctuation
+consumer,Identifier
+.,Punctuation
+ConsumerConnector,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+message,Identifier
+.,Punctuation
+MessageAndMetadata,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Properties,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A Kafka Consumer implementation. This uses the current thread to fetch the
+ * next message from the queue and doesn't use a multi threaded implementation.
+ * So this implements a synchronous blocking call.
+ * To avoid infinite waiting, a timeout is implemented to wait only for
+ * 10 seconds before concluding that the message will not be available.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+KafkaConsumer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+KafkaConsumer,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ConsumerConnector,Identifier
+ ,Whitespace
+consumer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+KafkaStream,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>>,Operator
+ ,Whitespace
+consumerMap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+KafkaConsumer,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+consumer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+kafka,Identifier
+.,Punctuation
+consumer,Identifier
+.,Punctuation
+Consumer,Identifier
+.,Punctuation
+createJavaConsumerConnector,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+createConsumerConfig,Identifier
+(,Punctuation
+TestUtil,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getZkUrl,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""group_1""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+ConsumerConfig,Identifier
+ ,Whitespace
+createConsumerConfig,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+zkUrl,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+groupId,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Properties,Identifier
+ ,Whitespace
+props,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Properties,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""zookeeper.connect""",String
+",",Punctuation
+ ,Whitespace
+zkUrl,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""group.id""",String
+",",Punctuation
+ ,Whitespace
+groupId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""zookeeper.session.timeout.ms""",String
+",",Punctuation
+ ,Whitespace
+"""1000""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""zookeeper.sync.time.ms""",String
+",",Punctuation
+ ,Whitespace
+"""200""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""auto.commit.interval.ms""",String
+",",Punctuation
+ ,Whitespace
+"""1000""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""auto.offset.reset""",String
+",",Punctuation
+ ,Whitespace
+"""smallest""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+props,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""consumer.timeout.ms""",String
+",",Punctuation
+"""1000""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConsumerConfig,Identifier
+(,Punctuation
+props,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initTopicList,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+topics,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>,Operator
+ ,Whitespace
+topicCountMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+Integer,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+topic,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+topics,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// we need only single threaded consumers,Comment
+"
+",Newline
+      ,Whitespace
+topicCountMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+topic,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Integer,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+consumerMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+consumer,Identifier
+.,Punctuation
+createMessageStreams,Identifier
+(,Punctuation
+topicCountMap,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+MessageAndMetadata,Identifier
+ ,Whitespace
+getNextMessage,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+topic,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+KafkaStream,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+streams,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+consumerMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+topic,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"// it has only a single stream, because there is only one consumer",Comment
+"
+",Newline
+    ,Whitespace
+KafkaStream,Identifier
+ ,Whitespace
+stream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+streams,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+final,Keyword
+ ,Whitespace
+ConsumerIterator,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+it,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stream,Identifier
+.,Punctuation
+iterator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+counter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+it,Identifier
+.,Punctuation
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+it,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ConsumerTimeoutException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""0 messages available to fetch for the topic """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+topic,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+shutdown,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+consumer,Identifier
+.,Punctuation
+shutdown,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,2241 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dict,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ * 
+ */",Comment
+"
+",Newline
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""serial""",String
+),Punctuation
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+NumberDictionary,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+TrieDictionary,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+MAX_DIGITS_BEFORE_DECIMAL_POINT_LEGACY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+16,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+MAX_DIGITS_BEFORE_DECIMAL_POINT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+19,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// encode a number into an order preserving byte sequence,Comment
+"
+",Newline
+    ,Whitespace
+// for positives -- padding '0',Comment
+"
+",Newline
+    ,Whitespace
+"// for negatives -- '-' sign, padding '9', invert digits, and terminate by ';'",Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+NumberBytesCodec,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+maxDigitsBeforeDecimalPoint,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+buf,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+bufOffset,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+bufLen,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+NumberBytesCodec,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+maxDigitsBeforeDecimalPoint,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+maxDigitsBeforeDecimalPoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+maxDigitsBeforeDecimalPoint,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+buf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+maxDigitsBeforeDecimalPoint,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+2,Literal
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+bufOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+bufLen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+void,Keyword
+ ,Whitespace
+encodeNumber,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+len,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+bufOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+bufLen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+len,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Too many digits for NumberDictionary: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+len,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". Internal buffer is only """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" bytes""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+boolean,Keyword
+ ,Whitespace
+negative,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+value,Identifier
+[,Punctuation
+offset,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'-',String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// terminate negative ';',Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+start,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+end,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+negative,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+start,Identifier
+--,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+end,Identifier
+--,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+[,Punctuation
+end,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+';',String
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// copy & find decimal point,Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+decimalPoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+end,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+start,Identifier
+",",Punctuation
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+offset,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+end,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+",",Punctuation
+ ,Whitespace
+j,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+value,Identifier
+[,Punctuation
+j,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'.',String
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+decimalPoint,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+decimalPoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+// remove '-' sign,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+negative,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+start,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// prepend '0',Comment
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+nZeroPadding,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+maxDigitsBeforeDecimalPoint,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+(,Punctuation
+decimalPoint,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+start,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nZeroPadding,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+||,Operator
+ ,Whitespace
+nZeroPadding,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+ ,Whitespace
+>,Operator
+ ,Whitespace
+start,Identifier
+),Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Too many digits for NumberDictionary: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+len,Identifier
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""". Expect """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+maxDigitsBeforeDecimalPoint,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" digits before decimal point at max.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nZeroPadding,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+[,Punctuation
+--,Operator
+start,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+'0',String
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// consider negative,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+negative,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+[,Punctuation
+--,Operator
+start,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+'-',String
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+start,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+int,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+'0',String
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+'9',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+buf,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+'9',String
+ ,Whitespace
+-,Operator
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+'0',String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+buf,Identifier
+[,Punctuation
+--,Operator
+start,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+'0',String
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+bufOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+start,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+bufLen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+start,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+decodeNumber,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+returnValue,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+bufLen,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+in,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bufOffset,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+end,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+bufOffset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+bufLen,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+offset,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// sign,Comment
+"
+",Newline
+            ,Whitespace
+boolean,Keyword
+ ,Whitespace
+negative,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+[,Punctuation
+in,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'-',String
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+negative,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+returnValue,Identifier
+[,Punctuation
+out,Identifier
+++,Operator
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+'-',String
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+in,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+end,Identifier
+--,Operator
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// remove padding,Comment
+"
+",Newline
+            ,Whitespace
+byte,Keyword
+ ,Whitespace
+padding,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+negative,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+'9',String
+ ,Whitespace
+:,Operator
+ ,Whitespace
+'0',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+;,Punctuation
+ ,Whitespace
+in,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+end,Identifier
+;,Punctuation
+ ,Whitespace
+in,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+buf,Identifier
+[,Punctuation
+in,Identifier
+],Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+padding,Identifier
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+"// all paddings before '.', special case for '0'",Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+in,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+end,Identifier
+ ,Whitespace
+||,Operator
+ ,Whitespace
+!,Operator
+(,Punctuation
+buf,Identifier
+[,Punctuation
+in,Identifier
+],Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+'0',String
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+buf,Identifier
+[,Punctuation
+in,Identifier
+],Punctuation
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+'9',String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+returnValue,Identifier
+[,Punctuation
+out,Identifier
+++,Operator
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+'0',String
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+// copy the rest,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+negative,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+;,Punctuation
+ ,Whitespace
+in,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+end,Identifier
+;,Punctuation
+ ,Whitespace
+in,Identifier
+++,Operator
+",",Punctuation
+ ,Whitespace
+out,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+int,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buf,Identifier
+[,Punctuation
+in,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+'0',String
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+'9',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+'9',String
+ ,Whitespace
+-,Operator
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+'0',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+returnValue,Identifier
+[,Punctuation
+out,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+c,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+in,Identifier
+",",Punctuation
+ ,Whitespace
+returnValue,Identifier
+",",Punctuation
+ ,Whitespace
+out,Identifier
+",",Punctuation
+ ,Whitespace
+end,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+in,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+out,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+end,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+in,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+out,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+offset,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+NumberBytesCodec,Identifier
+>,Operator
+ ,Whitespace
+localCodec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+NumberBytesCodec,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+NumberDictionary,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+// default constructor for Writable interface,Comment
+"
+",Newline
+        ,Whitespace
+super,Keyword
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+NumberDictionary,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+trieBytes,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+(,Punctuation
+trieBytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+NumberBytesCodec,Identifier
+ ,Whitespace
+getCodec,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+NumberBytesCodec,Identifier
+ ,Whitespace
+codec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+localCodec,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+codec,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+codec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NumberBytesCodec,Identifier
+(,Punctuation
+MAX_DIGITS_BEFORE_DECIMAL_POINT_LEGACY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+localCodec,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+codec,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+codec,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getIdFromValueBytesImpl,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+value,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+roundingFlag,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+NumberBytesCodec,Identifier
+ ,Whitespace
+codec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCodec,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+codec,Identifier
+.,Punctuation
+encodeNumber,Identifier
+(,Punctuation
+value,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+len,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+super,Keyword
+.,Punctuation
+getIdFromValueBytesImpl,Identifier
+(,Punctuation
+codec,Identifier
+.,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+codec,Identifier
+.,Punctuation
+bufOffset,Identifier
+",",Punctuation
+ ,Whitespace
+codec,Identifier
+.,Punctuation
+bufLen,Identifier
+",",Punctuation
+ ,Whitespace
+roundingFlag,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isNullObjectForm,Identifier
+(,Punctuation
+T,Identifier
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+value,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getValueBytesFromIdImpl,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+id,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+returnValue,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+NumberBytesCodec,Identifier
+ ,Whitespace
+codec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCodec,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+codec,Identifier
+.,Punctuation
+bufOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+codec,Identifier
+.,Punctuation
+bufLen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+super,Keyword
+.,Punctuation
+getValueBytesFromIdImpl,Identifier
+(,Punctuation
+id,Identifier
+",",Punctuation
+ ,Whitespace
+codec,Identifier
+.,Punctuation
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+codec,Identifier
+.,Punctuation
+decodeNumber,Identifier
+(,Punctuation
+returnValue,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+enableIdToValueBytesCache,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+enableIdToValueBytesCache,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+EnableIdToValueBytesCacheVisitor,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+NumberBytesCodec,Identifier
+ ,Whitespace
+codec,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getCodec,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+tmp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+getSizeOfValue,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getBuffer,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+codec,Identifier
+.,Punctuation
+buf,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+makeValueBytes,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+buf,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+"// the given buf is the codec buf, which we returned in getBuffer()",Comment
+"
+",Newline
+                ,Whitespace
+codec,Identifier
+.,Punctuation
+bufOffset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+codec,Identifier
+.,Punctuation
+bufLen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+length,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+numLen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+codec,Identifier
+.,Punctuation
+decodeNumber,Identifier
+(,Punctuation
+tmp,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+numLen,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+System,Identifier
+.,Punctuation
+arraycopy,Identifier
+(,Punctuation
+tmp,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+result,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+numLen,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+main,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+NumberDictionaryBuilder,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+b,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NumberDictionaryBuilder,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+new,Keyword
+ ,Whitespace
+StringBytesConverter,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+b,Identifier
+.,Punctuation
+addValue,Identifier
+(,Punctuation
+"""10""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+b,Identifier
+.,Punctuation
+addValue,Identifier
+(,Punctuation
+"""100""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+b,Identifier
+.,Punctuation
+addValue,Identifier
+(,Punctuation
+"""40""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+b,Identifier
+.,Punctuation
+addValue,Identifier
+(,Punctuation
+"""7""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+TrieDictionary,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+dict,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+b,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+dict,Identifier
+.,Punctuation
+enableIdToValueBytesCache,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getMaxId,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+System,Identifier
+.,Punctuation
+out,Identifier
+.,Punctuation
+println,Identifier
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+dict,Identifier
+.,Punctuation
+getValueBytesFromId,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

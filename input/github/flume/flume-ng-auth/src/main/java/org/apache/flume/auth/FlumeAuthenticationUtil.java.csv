@@ -1,0 +1,458 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+auth,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+SaslRpcServer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+SecurityUtil,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+security,Identifier
+.,Punctuation
+auth,Identifier
+.,Punctuation
+callback,Identifier
+.,Punctuation
+CallbackHandler,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * FlumeAuthentication utility class that provides methods to get an
+ * Authenticator. If proper credentials are provided KerberosAuthenticator is
+ * returned which can be used to execute as the authenticated principal ,
+ * or else a SimpleAuthenticator which executes without any authentication
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+FlumeAuthenticationUtil,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+FlumeAuthenticationUtil,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+KerberosAuthenticator,Identifier
+ ,Whitespace
+kerbAuthenticator,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * If principal and keytab are null, this method returns a SimpleAuthenticator
+   * which executes without authentication. If valid credentials are
+   * provided KerberosAuthenitcator is returned which can be used to execute as
+   * the authenticated principal. Invalid credentials result in
+   * IllegalArgumentException and Failure to authenticate results in SecurityException
+   *
+   * @param principal
+   * @param keytab
+   * @return FlumeAuthenticator
+   *
+   * @throws org.apache.flume.auth.SecurityException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+FlumeAuthenticator,Identifier
+ ,Whitespace
+getAuthenticator,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+String,Identifier
+ ,Whitespace
+principal,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+keytab,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SecurityException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+principal,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+keytab,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+SimpleAuthenticator,Identifier
+.,Punctuation
+getSimpleAuthenticator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+principal,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Principal can not be null when keytab is provided""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+keytab,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""Keytab can not be null when Principal is provided""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+kerbAuthenticator,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+kerbAuthenticator,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+KerberosAuthenticator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+kerbAuthenticator,Identifier
+.,Punctuation
+authenticate,Identifier
+(,Punctuation
+principal,Identifier
+",",Punctuation
+ ,Whitespace
+keytab,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+kerbAuthenticator,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Returns the standard SaslGssCallbackHandler from the hadoop common module
+   *
+   * @return CallbackHandler
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+CallbackHandler,Identifier
+ ,Whitespace
+getSaslGssCallbackHandler,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SaslRpcServer,Identifier
+.,Punctuation
+SaslGssCallbackHandler,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Resolves the principal using Hadoop common's SecurityUtil and splits
+   * the kerberos principal into three parts user name, host and kerberos realm
+   *
+   * @param principal
+   * @return String[] of username, hostname and kerberos realm
+   * @throws IOException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+splitKerberosName,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+principal,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+resolvedPrinc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SecurityUtil,Identifier
+.,Punctuation
+getServerPrincipal,Identifier
+(,Punctuation
+principal,Identifier
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+SaslRpcServer,Identifier
+.,Punctuation
+splitKerberosName,Identifier
+(,Punctuation
+resolvedPrinc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+"
+",Newline
+"
+",Newline
+"
+",Newline
+"
+",Newline

@@ -1,0 +1,1909 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+steps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+Text,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+hllc,Identifier
+.,Punctuation
+HyperLogLogPlusCounter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ByteArray,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+cuboid,Identifier
+.,Punctuation
+CuboidScheduler,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+kv,Identifier
+.,Punctuation
+RowConstants,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+BatchConstants,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+hash,Identifier
+.,Punctuation
+HashFunction,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+hash,Identifier
+.,Punctuation
+Hasher,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+hash,Identifier
+.,Punctuation
+Hashing,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+FactDistinctHiveColumnsMapper,Identifier
+<,Operator
+KEYIN,Identifier
+>,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+FactDistinctColumnsMapperBase,Identifier
+<,Operator
+KEYIN,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+collectStatistics,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+CuboidScheduler,Identifier
+ ,Whitespace
+cuboidScheduler,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+nRowKey,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+Integer,Identifier
+[,Punctuation
+],Punctuation
+[,Punctuation
+],Punctuation
+ ,Whitespace
+allCuboidsBitSet,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+HyperLogLogPlusCounter,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+allCuboidsHLL,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+Long,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+cuboidIds,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+HashFunction,Identifier
+ ,Whitespace
+hf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rowCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+samplingPercentage,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ByteArray,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row_hashcodes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+keyBuffer,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Text,Identifier
+ ,Whitespace
+EMPTY_TEXT,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Text,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+setup,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+.,Punctuation
+setup,Identifier
+(,Punctuation
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+keyBuffer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+allocate,Identifier
+(,Punctuation
+4096,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+collectStatistics,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+parseBoolean,Identifier
+(,Punctuation
+context,Identifier
+.,Punctuation
+getConfiguration,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+get,Identifier
+(,Punctuation
+BatchConstants,Identifier
+.,Punctuation
+CFG_STATISTICS_ENABLED,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+collectStatistics,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+samplingPercentage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+context,Identifier
+.,Punctuation
+getConfiguration,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+get,Identifier
+(,Punctuation
+BatchConstants,Identifier
+.,Punctuation
+CFG_STATISTICS_SAMPLING_PERCENT,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+cuboidScheduler,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CuboidScheduler,Identifier
+(,Punctuation
+cubeDesc,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+nRowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cubeDesc,Identifier
+.,Punctuation
+getRowkey,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getRowKeyColumns,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+cuboidIdList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+Integer,Identifier
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+allCuboidsBitSetList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+addCuboidBitSet,Identifier
+(,Punctuation
+baseCuboidId,Identifier
+",",Punctuation
+ ,Whitespace
+allCuboidsBitSetList,Identifier
+",",Punctuation
+ ,Whitespace
+cuboidIdList,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+allCuboidsBitSet,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+allCuboidsBitSetList,Identifier
+.,Punctuation
+toArray,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Integer,Identifier
+[,Punctuation
+cuboidIdList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+[,Punctuation
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+cuboidIds,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cuboidIdList,Identifier
+.,Punctuation
+toArray,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Long,Identifier
+[,Punctuation
+cuboidIdList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+allCuboidsHLL,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HyperLogLogPlusCounter,Identifier
+[,Punctuation
+cuboidIds,Identifier
+.,Punctuation
+length,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+cuboidIds,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+allCuboidsHLL,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HyperLogLogPlusCounter,Identifier
+(,Punctuation
+14,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+hf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Hashing,Identifier
+.,Punctuation
+murmur3_32,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+row_hashcodes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ByteArray,Identifier
+[,Punctuation
+nRowKey,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nRowKey,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+row_hashcodes,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ByteArray,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+addCuboidBitSet,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+cuboidId,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+Integer,Identifier
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+allCuboidsBitSet,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+allCuboids,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+allCuboids,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+cuboidId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Integer,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+indice,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Integer,Identifier
+[,Punctuation
+Long,Identifier
+.,Punctuation
+bitCount,Identifier
+(,Punctuation
+cuboidId,Identifier
+),Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+mask,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+highestOneBit,Identifier
+(,Punctuation
+baseCuboidId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+position,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nRowKey,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+mask,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+cuboidId,Identifier
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+indice,Identifier
+[,Punctuation
+position,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+position,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+mask,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mask,Identifier
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+allCuboidsBitSet,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+indice,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Collection,Identifier
+<,Operator
+Long,Identifier
+>,Operator
+ ,Whitespace
+children,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cuboidScheduler,Identifier
+.,Punctuation
+getSpanningCuboid,Identifier
+(,Punctuation
+cuboidId,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Long,Identifier
+ ,Whitespace
+childId,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+children,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+addCuboidBitSet,Identifier
+(,Punctuation
+childId,Identifier
+",",Punctuation
+ ,Whitespace
+allCuboidsBitSet,Identifier
+",",Punctuation
+ ,Whitespace
+allCuboids,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+map,Identifier
+(,Punctuation
+KEYIN,Identifier
+ ,Whitespace
+key,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+record,Identifier
+",",Punctuation
+ ,Whitespace
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+flatTableInputFormat,Identifier
+.,Punctuation
+parseMapperInput,Identifier
+(,Punctuation
+record,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+factDictCols,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+String,Identifier
+ ,Whitespace
+fieldValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+row,Identifier
+[,Punctuation
+dictionaryColumnIndex,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+fieldValue,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+keyBuffer,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+keyBuffer,Identifier
+.,Punctuation
+putLong,Identifier
+(,Punctuation
+(,Punctuation
+long,Keyword
+),Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+keyBuffer,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+toBytes,Identifier
+(,Punctuation
+fieldValue,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+outputKey,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+keyBuffer,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+keyBuffer,Identifier
+.,Punctuation
+position,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+outputKey,Identifier
+",",Punctuation
+ ,Whitespace
+EMPTY_TEXT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+handleErrorRecord,Identifier
+(,Punctuation
+row,Identifier
+",",Punctuation
+ ,Whitespace
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+collectStatistics,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+rowCount,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+samplingPercentage,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+putRowKeyToHLL,Identifier
+(,Punctuation
+row,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+rowCount,Identifier
+++,Operator
+ ,Whitespace
+==,Operator
+ ,Whitespace
+100,Literal
+),Punctuation
+"
+",Newline
+            ,Whitespace
+rowCount,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+putRowKeyToHLL,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+//generate hash for each row key column,Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+nRowKey,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Hasher,Identifier
+ ,Whitespace
+hc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hf,Identifier
+.,Punctuation
+newHasher,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+colValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+row,Identifier
+[,Punctuation
+intermediateTableDesc,Identifier
+.,Punctuation
+getRowKeyColumnIndexes,Identifier
+(,Punctuation
+),Punctuation
+[,Punctuation
+i,Identifier
+],Punctuation
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+colValue,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+row_hashcodes,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+set,Identifier
+(,Punctuation
+hc,Identifier
+.,Punctuation
+putString,Identifier
+(,Punctuation
+colValue,Identifier
+),Punctuation
+.,Punctuation
+hash,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+asBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+row_hashcodes,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+set,Identifier
+(,Punctuation
+hc,Identifier
+.,Punctuation
+putInt,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+.,Punctuation
+hash,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+asBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// user the row key column hash to get a consolidated hash for each cuboid,Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+n,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+allCuboidsBitSet,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+n,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Hasher,Identifier
+ ,Whitespace
+hc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+hf,Identifier
+.,Punctuation
+newHasher,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+position,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+position,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+allCuboidsBitSet,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+position,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+hc,Identifier
+.,Punctuation
+putBytes,Identifier
+(,Punctuation
+row_hashcodes,Identifier
+[,Punctuation
+allCuboidsBitSet,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+[,Punctuation
+position,Identifier
+],Punctuation
+],Punctuation
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+allCuboidsHLL,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+.,Punctuation
+add,Identifier
+(,Punctuation
+hc,Identifier
+.,Punctuation
+hash,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+asBytes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+cleanup,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+collectStatistics,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+hllBuf,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+allocate,Identifier
+(,Punctuation
+RowConstants,Identifier
+.,Punctuation
+ROWVALUE_BUFFER_SIZE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+"// output each cuboid's hll to reducer, key is 0 - cuboidId",Comment
+"
+",Newline
+            ,Whitespace
+HyperLogLogPlusCounter,Identifier
+ ,Whitespace
+hll,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+cuboidIds,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+hll,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+allCuboidsHLL,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+outputKey,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+toBytes,Identifier
+(,Punctuation
+0,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+cuboidIds,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+hllBuf,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+hll,Identifier
+.,Punctuation
+writeRegisters,Identifier
+(,Punctuation
+hllBuf,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+outputValue,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+hllBuf,Identifier
+.,Punctuation
+array,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+hllBuf,Identifier
+.,Punctuation
+position,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+write,Identifier
+(,Punctuation
+outputKey,Identifier
+",",Punctuation
+ ,Whitespace
+outputValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

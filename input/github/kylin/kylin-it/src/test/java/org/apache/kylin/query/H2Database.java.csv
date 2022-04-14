@@ -1,0 +1,1229 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+query,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+FileOutputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+InputStream,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+Connection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+SQLException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+sql,Identifier
+.,Punctuation
+Statement,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+MetadataManager,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+ColumnDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TableDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+H2Database,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unused""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+H2Database,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+ALL_TABLES,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+"""edw.test_cal_dt""",String
+",",Punctuation
+ ,Whitespace
+"""default.test_category_groupings""",String
+",",Punctuation
+ ,Whitespace
+"""default.test_kylin_fact""",String
+",",Punctuation
+ ,Whitespace
+"""edw.test_seller_type_dim""",String
+",",Punctuation
+ ,Whitespace
+"""edw.test_sites""",String
+",",Punctuation
+ ,Whitespace
+"""default.streaming_table""",String
+ ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+javaToH2DataTypeMapping,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+javaToH2DataTypeMapping,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""short""",String
+",",Punctuation
+ ,Whitespace
+"""smallint""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+javaToH2DataTypeMapping,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""long""",String
+",",Punctuation
+ ,Whitespace
+"""bigint""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+javaToH2DataTypeMapping,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""byte""",String
+",",Punctuation
+ ,Whitespace
+"""tinyint""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+javaToH2DataTypeMapping,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+"""string""",String
+",",Punctuation
+ ,Whitespace
+"""varchar""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Connection,Identifier
+ ,Whitespace
+h2Connection,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+H2Database,Identifier
+(,Punctuation
+Connection,Identifier
+ ,Whitespace
+h2Connection,Identifier
+",",Punctuation
+ ,Whitespace
+KylinConfig,Identifier
+ ,Whitespace
+config,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+h2Connection,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+h2Connection,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+config,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+config,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+loadAllTables,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SQLException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+ALL_TABLES,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+loadH2Table,Identifier
+(,Punctuation
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+loadH2Table,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+SQLException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+MetadataManager,Identifier
+ ,Whitespace
+metaMgr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MetadataManager,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+TableDesc,Identifier
+ ,Whitespace
+tableDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+getTableDesc,Identifier
+(,Punctuation
+tableName,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+File,Identifier
+ ,Whitespace
+tempFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+tempFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+File,Identifier
+.,Punctuation
+createTempFile,Identifier
+(,Punctuation
+"""tmp_h2""",String
+",",Punctuation
+ ,Whitespace
+""".csv""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+FileOutputStream,Identifier
+ ,Whitespace
+tempFileStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FileOutputStream,Identifier
+(,Punctuation
+tempFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+normalPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""/data/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+getIdentity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".csv""",String
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+InputStream,Identifier
+ ,Whitespace
+csvStream,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+metaMgr,Identifier
+.,Punctuation
+getStore,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getResource,Identifier
+(,Punctuation
+normalPath,Identifier
+),Punctuation
+.,Punctuation
+inputStream,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOUtils,Identifier
+.,Punctuation
+copy,Identifier
+(,Punctuation
+csvStream,Identifier
+",",Punctuation
+ ,Whitespace
+tempFileStream,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+csvStream,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+tempFileStream,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+IOException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+e,Identifier
+.,Punctuation
+printStackTrace,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+cvsFilePath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tempFile,Identifier
+.,Punctuation
+getPath,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Statement,Identifier
+ ,Whitespace
+stmt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+h2Connection,Identifier
+.,Punctuation
+createStatement,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+createDBSql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE SCHEMA IF NOT EXISTS DEFAULT;\nCREATE SCHEMA IF NOT EXISTS EDW;\nSET SCHEMA DEFAULT;\n""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+stmt,Identifier
+.,Punctuation
+executeUpdate,Identifier
+(,Punctuation
+createDBSql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+generateCreateH2TableSql,Identifier
+(,Punctuation
+tableDesc,Identifier
+",",Punctuation
+ ,Whitespace
+cvsFilePath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+stmt,Identifier
+.,Punctuation
+executeUpdate,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tempFile,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+tempFile,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+generateCreateH2TableSql,Identifier
+(,Punctuation
+TableDesc,Identifier
+ ,Whitespace
+tableDesc,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+csvFilePath,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+ddl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+csvColumns,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+ddl,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""CREATE TABLE """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+getIdentity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ddl,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""(""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+getColumns,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+ColumnDesc,Identifier
+ ,Whitespace
+col,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tableDesc,Identifier
+.,Punctuation
+getColumns,Identifier
+(,Punctuation
+),Punctuation
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+ddl,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+csvColumns,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+ddl,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+getH2DataType,Identifier
+(,Punctuation
+(,Punctuation
+col,Identifier
+.,Punctuation
+getDatatype,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+csvColumns,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+col,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+ddl,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""")""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ddl,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""AS SELECT * FROM CSVREAD('""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+csvFilePath,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""', '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+csvColumns,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""', 'charset=UTF-8 fieldSeparator=,');""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+ddl,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getH2DataType,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+javaDataType,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+hiveDataType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+javaToH2DataTypeMapping,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+javaDataType,Identifier
+.,Punctuation
+toLowerCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+hiveDataType,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+hiveDataType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+javaDataType,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+hiveDataType,Identifier
+.,Punctuation
+toLowerCase,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

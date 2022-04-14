@@ -1,0 +1,692 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+time,Identifier
+.,Punctuation
+FastDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+ComponentConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+Configurable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+ConfigurableComponent,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+formatter,Identifier
+.,Punctuation
+output,Identifier
+.,Punctuation
+BucketPath,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+action,Identifier
+.,Punctuation
+index,Identifier
+.,Punctuation
+IndexRequestBuilder,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+client,Identifier
+.,Punctuation
+Client,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Abstract base class for custom implementations of
+ * {@link ElasticSearchIndexRequestBuilderFactory}.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+AbstractElasticSearchIndexRequestBuilderFactory,Identifier
+"
+",Newline
+    ,Whitespace
+implements,Keyword
+ ,Whitespace
+ElasticSearchIndexRequestBuilderFactory,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * {@link FastDateFormat} to use for index names
+   *   in {@link #getIndexName(String, long)}
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+FastDateFormat,Identifier
+ ,Whitespace
+fastDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Constructor for subclasses
+   * @param fastDateFormat {@link FastDateFormat} to use for index names
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+AbstractElasticSearchIndexRequestBuilderFactory,Identifier
+(,Punctuation
+"
+",Newline
+    ,Whitespace
+FastDateFormat,Identifier
+ ,Whitespace
+fastDateFormat,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+fastDateFormat,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fastDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * @see Configurable
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+arg0,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * @see ConfigurableComponent
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+ComponentConfiguration,Identifier
+ ,Whitespace
+arg0,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Creates and prepares an {@link IndexRequestBuilder} from the supplied
+   * {@link Client} via delegation to the subclass-hook template methods
+   * {@link #getIndexName(String, long)} and
+   * {@link #prepareIndexRequest(IndexRequestBuilder, String, String, Event)}
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+IndexRequestBuilder,Identifier
+ ,Whitespace
+createIndexRequest,Identifier
+(,Punctuation
+Client,Identifier
+ ,Whitespace
+client,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+indexPrefix,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+indexType,Identifier
+",",Punctuation
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+IndexRequestBuilder,Identifier
+ ,Whitespace
+request,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+prepareIndex,Identifier
+(,Punctuation
+client,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+realIndexPrefix,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BucketPath,Identifier
+.,Punctuation
+escapeString,Identifier
+(,Punctuation
+indexPrefix,Identifier
+",",Punctuation
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+realIndexType,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+BucketPath,Identifier
+.,Punctuation
+escapeString,Identifier
+(,Punctuation
+indexType,Identifier
+",",Punctuation
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+TimestampedEvent,Identifier
+ ,Whitespace
+timestampedEvent,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TimestampedEvent,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+timestampedEvent,Identifier
+.,Punctuation
+getTimestamp,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+indexName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getIndexName,Identifier
+(,Punctuation
+realIndexPrefix,Identifier
+",",Punctuation
+ ,Whitespace
+timestamp,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+prepareIndexRequest,Identifier
+(,Punctuation
+request,Identifier
+",",Punctuation
+ ,Whitespace
+indexName,Identifier
+",",Punctuation
+ ,Whitespace
+realIndexType,Identifier
+",",Punctuation
+ ,Whitespace
+timestampedEvent,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+request,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+  ,Whitespace
+IndexRequestBuilder,Identifier
+ ,Whitespace
+prepareIndex,Identifier
+(,Punctuation
+Client,Identifier
+ ,Whitespace
+client,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+client,Identifier
+.,Punctuation
+prepareIndex,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Gets the name of the index to use for an index request
+   * @return index name of the form 'indexPrefix-formattedTimestamp'
+   * @param indexPrefix
+   *          Prefix of index name to use -- as configured on the sink
+   * @param timestamp
+   *          timestamp (millis) to format / use
+   */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getIndexName,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+indexPrefix,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+timestamp,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+indexPrefix,Identifier
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+'-',String
+),Punctuation
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+append,Identifier
+(,Punctuation
+fastDateFormat,Identifier
+.,Punctuation
+format,Identifier
+(,Punctuation
+timestamp,Identifier
+),Punctuation
+),Punctuation
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Prepares an ElasticSearch {@link IndexRequestBuilder} instance
+   * @param indexRequest
+   *          The (empty) ElasticSearch {@link IndexRequestBuilder} to prepare
+   * @param indexName
+   *          Index name to use -- as per {@link #getIndexName(String, long)}
+   * @param indexType
+   *          Index type to use -- as configured on the sink
+   * @param event
+   *          Flume event to serialize and add to index request
+   * @throws IOException
+   *           If an error occurs e.g. during serialization
+  */",Comment
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+prepareIndexRequest,Identifier
+(,Punctuation
+"
+",Newline
+      ,Whitespace
+IndexRequestBuilder,Identifier
+ ,Whitespace
+indexRequest,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+indexName,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+indexType,Identifier
+",",Punctuation
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

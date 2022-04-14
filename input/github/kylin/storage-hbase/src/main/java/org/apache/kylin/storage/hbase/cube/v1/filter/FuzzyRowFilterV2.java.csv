@@ -1,0 +1,5909 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+v1,Identifier
+.,Punctuation
+filter,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Comparator,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+PriorityQueue,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+classification,Identifier
+.,Punctuation
+InterfaceAudience,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+classification,Identifier
+.,Punctuation
+InterfaceStability,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+Cell,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+KeyValue,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+exceptions,Identifier
+.,Punctuation
+DeserializationException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+Filter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+FilterBase,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ByteStringer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+hadoop,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Pair,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+storage,Identifier
+.,Punctuation
+hbase,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+v1,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+generated,Identifier
+.,Punctuation
+FilterProtosExt,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+VisibleForTesting,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+protobuf,Identifier
+.,Punctuation
+InvalidProtocolBufferException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * This is optimized version of a standard FuzzyRowFilter Filters data based on fuzzy row key.
+ * Performs fast-forwards during scanning. It takes pairs (row key, fuzzy info) to match row keys.
+ * Where fuzzy info is a byte array with 0 or 1 as its values:
+ * <ul>
+ * <li>0 - means that this byte in provided row key is fixed, i.e. row key's byte at same position
+ * must match</li>
+ * <li>1 - means that this byte in provided row key is NOT fixed, i.e. row key's byte at this
+ * position can be different from the one in provided row key</li>
+ * </ul>
+ * Example: Let's assume row key format is userId_actionId_year_month. Length of userId is fixed and
+ * is 4, length of actionId is 2 and year and month are 4 and 2 bytes long respectively. Let's
+ * assume that we need to fetch all users that performed certain action (encoded as ""99"") in Jan of
+ * any year. Then the pair (row key, fuzzy info) would be the following: row key = ""????_99_????_01""
+ * (one can use any value instead of ""?"") fuzzy info =
+ * ""\x01\x01\x01\x01\x00\x00\x00\x00\x01\x01\x01\x01\x00\x00\x00"" I.e. fuzzy info tells the matching
+ * mask is ""????_99_????_01"", where at ? can be any value.
+ */",Comment
+"
+",Newline
+@,Punctuation
+InterfaceAudience,Identifier
+.,Punctuation
+Public,Identifier
+"
+",Newline
+@,Punctuation
+InterfaceStability,Identifier
+.,Punctuation
+Evolving,Identifier
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+FuzzyRowFilterV2,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+FilterBase,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+done,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * The index of a last successfully found matching fuzzy string (in fuzzyKeysData). We will start
+     * matching next KV with this one. If they do not match then we will return back to the one-by-one
+     * iteration over fuzzyKeysData.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+lastFoundIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Row tracker (keeps all next rows after SEEK_NEXT_USING_HINT was returned)
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+RowTracker,Identifier
+ ,Whitespace
+tracker,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+FuzzyRowFilterV2,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+p,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+p,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+p,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+length,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+p,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Pair,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+readable,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pair,Identifier
+.,Punctuation
+newPair,Identifier
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+toStringBinary,Identifier
+(,Punctuation
+p,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toStringBinary,Identifier
+(,Punctuation
+p,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Fuzzy pair lengths do not match: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+readable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+"// update mask ( 0 -> -1 (0xff), 1 -> 0)",Comment
+"
+",Newline
+            ,Whitespace
+p,Identifier
+.,Punctuation
+setSecond,Identifier
+(,Punctuation
+preprocessMask,Identifier
+(,Punctuation
+p,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+preprocessSearchKey,Identifier
+(,Punctuation
+p,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+fuzzyKeysData,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+tracker,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RowTracker,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+preprocessSearchKey,Identifier
+(,Punctuation
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+p,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+UnsafeAccess,Identifier
+.,Punctuation
+isAvailable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// do nothing,Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+key,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+p,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+mask,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+p,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+mask,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// set non-fixed part of a search key to 0.,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+mask,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+key,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * We need to preprocess mask array, as since we treat 0's as unfixed positions and -1 (0xff) as
+     * fixed positions
+     * @param mask
+     * @return mask array
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+preprocessMask,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+mask,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+UnsafeAccess,Identifier
+.,Punctuation
+isAvailable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// do nothing,Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+mask,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isPreprocessedMask,Identifier
+(,Punctuation
+mask,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+mask,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+mask,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+mask,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+mask,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+ ,Whitespace
+// 0 -> -1,Comment
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+mask,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+mask,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+// 1 -> 0,Comment
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+mask,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isPreprocessedMask,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+mask,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+mask,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+mask,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+mask,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ReturnCode,Identifier
+ ,Whitespace
+filterKeyValue,Identifier
+(,Punctuation
+Cell,Identifier
+ ,Whitespace
+c,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+startIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+lastFoundIndex,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+?,Operator
+ ,Whitespace
+lastFoundIndex,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+size,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+startIndex,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+size,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+startIndex,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+%,Operator
+ ,Whitespace
+size,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+fuzzyData,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+index,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+SatisfiesCode,Identifier
+ ,Whitespace
+satisfiesCode,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+satisfies,Identifier
+(,Punctuation
+isReversed,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+c,Identifier
+.,Punctuation
+getRowArray,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+c,Identifier
+.,Punctuation
+getRowOffset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+c,Identifier
+.,Punctuation
+getRowLength,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+fuzzyData,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+fuzzyData,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+satisfiesCode,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+YES,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+lastFoundIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+index,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+ReturnCode,Identifier
+.,Punctuation
+INCLUDE,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+// NOT FOUND -> seek next using hint,Comment
+"
+",Newline
+        ,Whitespace
+lastFoundIndex,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+ReturnCode,Identifier
+.,Punctuation
+SEEK_NEXT_USING_HINT,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Cell,Identifier
+ ,Whitespace
+getNextCellHint,Identifier
+(,Punctuation
+Cell,Identifier
+ ,Whitespace
+currentCell,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tracker,Identifier
+.,Punctuation
+updateTracker,Identifier
+(,Punctuation
+currentCell,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+result,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+done,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+nextRowKey,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tracker,Identifier
+.,Punctuation
+nextRow,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+KeyValue,Identifier
+.,Punctuation
+createFirstOnRow,Identifier
+(,Punctuation
+nextRowKey,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * If we have multiple fuzzy keys, row tracker should improve overall performance. It calculates
+     * all next rows (one per every fuzzy key) and put them (the fuzzy key is bundled) into a priority
+     * queue so that the smallest row key always appears at queue head, which helps to decide the
+     * ""Next Cell Hint"". As scanning going on, the number of candidate rows in the RowTracker will
+     * remain the size of fuzzy keys until some of the fuzzy keys won't possibly have matches any
+     * more.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+RowTracker,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+PriorityQueue,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>>,Operator
+ ,Whitespace
+nextRows,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+initialized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+RowTracker,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+nextRows,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+PriorityQueue,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>>,Operator
+(,Punctuation
+fuzzyKeysData,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Comparator,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+                ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+compare,Identifier
+(,Punctuation
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+o1,Identifier
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+o2,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+int,Keyword
+ ,Whitespace
+compare,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+compareTo,Identifier
+(,Punctuation
+o1,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+o2,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+isReversed,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+return,Keyword
+ ,Whitespace
+compare,Identifier
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+return,Keyword
+ ,Whitespace
+-,Operator
+compare,Identifier
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+nextRow,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nextRows,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""NextRows should not be empty, make sure to call nextRow() after updateTracker() return true""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+nextRows,Identifier
+.,Punctuation
+peek,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+updateTracker,Identifier
+(,Punctuation
+Cell,Identifier
+ ,Whitespace
+currentCell,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+initialized,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+fuzzyData,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+updateWith,Identifier
+(,Punctuation
+currentCell,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyData,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+initialized,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+nextRows,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+lessThan,Identifier
+(,Punctuation
+currentCell,Identifier
+",",Punctuation
+ ,Whitespace
+nextRows,Identifier
+.,Punctuation
+peek,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+head,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+nextRows,Identifier
+.,Punctuation
+poll,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+fuzzyData,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+head,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+updateWith,Identifier
+(,Punctuation
+currentCell,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyData,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+!,Operator
+nextRows,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+lessThan,Identifier
+(,Punctuation
+Cell,Identifier
+ ,Whitespace
+currentCell,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+nextRowKey,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+compareResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+compareTo,Identifier
+(,Punctuation
+currentCell,Identifier
+.,Punctuation
+getRowArray,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+currentCell,Identifier
+.,Punctuation
+getRowOffset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+currentCell,Identifier
+.,Punctuation
+getRowLength,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+nextRowKey,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+nextRowKey,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+isReversed,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+compareResult,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+(,Punctuation
+isReversed,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+compareResult,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+void,Keyword
+ ,Whitespace
+updateWith,Identifier
+(,Punctuation
+Cell,Identifier
+ ,Whitespace
+currentCell,Identifier
+",",Punctuation
+ ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+fuzzyData,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+nextRowKeyCandidate,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getNextForFuzzyRule,Identifier
+(,Punctuation
+isReversed,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+currentCell,Identifier
+.,Punctuation
+getRowArray,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+currentCell,Identifier
+.,Punctuation
+getRowOffset,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+currentCell,Identifier
+.,Punctuation
+getRowLength,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+fuzzyData,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+fuzzyData,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nextRowKeyCandidate,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+nextRows,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+Pair,Identifier
+.,Punctuation
+newPair,Identifier
+(,Punctuation
+nextRowKeyCandidate,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyData,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+filterAllRemaining,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+done,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @return The filter serialized using pb
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+FilterProtosExt,Identifier
+.,Punctuation
+FuzzyRowFilterV2,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FilterProtosExt,Identifier
+.,Punctuation
+FuzzyRowFilterV2,Identifier
+.,Punctuation
+newBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+fuzzyData,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+FilterProtosExt,Identifier
+.,Punctuation
+BytesBytesPair,Identifier
+.,Punctuation
+Builder,Identifier
+ ,Whitespace
+bbpBuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FilterProtosExt,Identifier
+.,Punctuation
+BytesBytesPair,Identifier
+.,Punctuation
+newBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+bbpBuilder,Identifier
+.,Punctuation
+setFirst,Identifier
+(,Punctuation
+ByteStringer,Identifier
+.,Punctuation
+wrap,Identifier
+(,Punctuation
+fuzzyData,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+bbpBuilder,Identifier
+.,Punctuation
+setSecond,Identifier
+(,Punctuation
+ByteStringer,Identifier
+.,Punctuation
+wrap,Identifier
+(,Punctuation
+fuzzyData,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+builder,Identifier
+.,Punctuation
+addFuzzyKeysData,Identifier
+(,Punctuation
+bbpBuilder,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+builder,Identifier
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+FuzzyRowFilterV2,Identifier
+ ,Whitespace
+parseFrom,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+pbBytes,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+DeserializationException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+FilterProtosExt,Identifier
+.,Punctuation
+FuzzyRowFilterV2,Identifier
+ ,Whitespace
+proto,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+proto,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+FilterProtosExt,Identifier
+.,Punctuation
+FuzzyRowFilterV2,Identifier
+.,Punctuation
+parseFrom,Identifier
+(,Punctuation
+pbBytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InvalidProtocolBufferException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DeserializationException,Identifier
+(,Punctuation
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+proto,Identifier
+.,Punctuation
+getFuzzyKeysDataCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+ArrayList,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>>,Operator
+(,Punctuation
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+count,Identifier
+;,Punctuation
+ ,Whitespace
+++,Operator
+i,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+FilterProtosExt,Identifier
+.,Punctuation
+BytesBytesPair,Identifier
+ ,Whitespace
+current,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+proto,Identifier
+.,Punctuation
+getFuzzyKeysData,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+keyBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+current,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+keyMeta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+current,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+toByteArray,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+fuzzyKeysData,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+Pair,Identifier
+.,Punctuation
+newPair,Identifier
+(,Punctuation
+keyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+keyMeta,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FuzzyRowFilterV2,Identifier
+(,Punctuation
+fuzzyKeysData,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+toString,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+sb,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""FuzzyRowFilter""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""{fuzzyKeysData=""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+fuzzyData,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'{',String
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+toStringBinary,Identifier
+(,Punctuation
+fuzzyData,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+""":""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+toStringBinary,Identifier
+(,Punctuation
+fuzzyData,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+.,Punctuation
+append,Identifier
+(,Punctuation
+'}',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+sb,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""}, """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+sb,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// Utility methods,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+enum,Identifier
+ ,Whitespace
+SatisfiesCode,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+/** row satisfies fuzzy rule */,Comment
+"
+",Newline
+        ,Whitespace
+YES,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"/** row doesn't satisfy fuzzy rule, but there's possible greater row that does */",Comment
+"
+",Newline
+        ,Whitespace
+NEXT_EXISTS,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+/** row doesn't satisfy fuzzy rule and there's no greater row that does */,Comment
+"
+",Newline
+        ,Whitespace
+NO_NEXT,Identifier
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+ ,Whitespace
+satisfies,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+reverse,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+satisfies,Identifier
+(,Punctuation
+reverse,Identifier
+",",Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+row,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+ ,Whitespace
+satisfies,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+reverse,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+length,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+UnsafeAccess,Identifier
+.,Punctuation
+isAvailable,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+satisfiesNoUnsafe,Identifier
+(,Punctuation
+reverse,Identifier
+",",Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+length,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+row,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// do nothing, let scan to proceed",Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+YES,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+length,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+min,Identifier
+(,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+numWords,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+length,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_LONG,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+numWords,Identifier
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+3,Literal
+;,Punctuation
+ ,Whitespace
+// numWords * SIZEOF_LONG;,Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+j,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_LONG,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+fuzzyBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toLong,Identifier
+(,Punctuation
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+fuzzyMeta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toLong,Identifier
+(,Punctuation
+fuzzyKeyMeta,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+long,Keyword
+ ,Whitespace
+rowValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toLong,Identifier
+(,Punctuation
+row,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+rowValue,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+fuzzyMeta,Identifier
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+(,Punctuation
+fuzzyBytes,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// We always return NEXT_EXISTS,Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+NEXT_EXISTS,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+off,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+j,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+length,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+off,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_INT,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+fuzzyBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toInt,Identifier
+(,Punctuation
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+off,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+fuzzyMeta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toInt,Identifier
+(,Punctuation
+fuzzyKeyMeta,Identifier
+",",Punctuation
+ ,Whitespace
+off,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+rowValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toInt,Identifier
+(,Punctuation
+row,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+off,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+rowValue,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+fuzzyMeta,Identifier
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+(,Punctuation
+fuzzyBytes,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// We always return NEXT_EXISTS,Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+NEXT_EXISTS,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+off,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_INT,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+length,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+off,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_SHORT,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+short,Keyword
+ ,Whitespace
+fuzzyBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toShort,Identifier
+(,Punctuation
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+off,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+short,Keyword
+ ,Whitespace
+fuzzyMeta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toShort,Identifier
+(,Punctuation
+fuzzyKeyMeta,Identifier
+",",Punctuation
+ ,Whitespace
+off,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+short,Keyword
+ ,Whitespace
+rowValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+UnsafeAccess,Identifier
+.,Punctuation
+toShort,Identifier
+(,Punctuation
+row,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+off,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+rowValue,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+fuzzyMeta,Identifier
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+(,Punctuation
+fuzzyBytes,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// We always return NEXT_EXISTS,Comment
+"
+",Newline
+                ,Whitespace
+// even if it does not (in this case getNextForFuzzyRule,Comment
+"
+",Newline
+                ,Whitespace
+// will return null),Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+NEXT_EXISTS,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+off,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_SHORT,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+length,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+off,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+SIZEOF_BYTE,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+fuzzyBytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+[,Punctuation
+off,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xff,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+fuzzyMeta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+[,Punctuation
+off,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xff,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+rowValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+row,Identifier
+[,Punctuation
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+off,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xff,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+rowValue,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+fuzzyMeta,Identifier
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+(,Punctuation
+fuzzyBytes,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// We always return NEXT_EXISTS,Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+NEXT_EXISTS,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+YES,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+ ,Whitespace
+satisfiesNoUnsafe,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+reverse,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+length,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+row,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// do nothing, let scan to proceed",Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+YES,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+Order,Identifier
+ ,Whitespace
+order,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Order,Identifier
+.,Punctuation
+orderFor,Identifier
+(,Punctuation
+reverse,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+nextRowKeyCandidateExists,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"// First, checking if this position is fixed and not equals the given one",Comment
+"
+",Newline
+            ,Whitespace
+boolean,Keyword
+ ,Whitespace
+byteAtPositionFixed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+boolean,Keyword
+ ,Whitespace
+fixedByteIncorrect,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+byteAtPositionFixed,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+row,Identifier
+[,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+fixedByteIncorrect,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// in this case there's another row that satisfies fuzzy rule and bigger than this row,Comment
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nextRowKeyCandidateExists,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+NEXT_EXISTS,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+// If this row byte is less than fixed then there's a byte array bigger than,Comment
+"
+",Newline
+                ,Whitespace
+// this row and which satisfies the fuzzy rule. Otherwise there's no such byte array:,Comment
+"
+",Newline
+                ,Whitespace
+// this row is simply bigger than any byte array that satisfies the fuzzy rule,Comment
+"
+",Newline
+                ,Whitespace
+boolean,Keyword
+ ,Whitespace
+rowByteLessThanFixed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+row,Identifier
+[,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xFF,Literal
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+(,Punctuation
+fuzzyKeyBytes,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xFF,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+rowByteLessThanFixed,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+reverse,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+NEXT_EXISTS,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+rowByteLessThanFixed,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+reverse,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+NEXT_EXISTS,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+NO_NEXT,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+"// Second, checking if this position is not fixed and byte value is not the biggest. In this",Comment
+"
+",Newline
+            ,Whitespace
+// case there's a byte array bigger than this row and which satisfies the fuzzy rule. To get,Comment
+"
+",Newline
+            ,Whitespace
+// bigger byte array that satisfies the rule we need to just increase this byte,Comment
+"
+",Newline
+            ,Whitespace
+// (see the code of getNextForFuzzyRule below) by one.,Comment
+"
+",Newline
+            ,Whitespace
+"// Note: if non-fixed byte is already at biggest value, this doesn't allow us to say there's",Comment
+"
+",Newline
+            ,Whitespace
+// bigger one that satisfies the rule as it can't be increased.,Comment
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+fuzzyKeyMeta,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+order,Identifier
+.,Punctuation
+isMax,Identifier
+(,Punctuation
+fuzzyKeyBytes,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+nextRowKeyCandidateExists,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+SatisfiesCode,Identifier
+.,Punctuation
+YES,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getNextForFuzzyRule,Identifier
+(,Punctuation
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getNextForFuzzyRule,Identifier
+(,Punctuation
+false,Keyword
+",",Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+row,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getNextForFuzzyRule,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+reverse,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getNextForFuzzyRule,Identifier
+(,Punctuation
+reverse,Identifier
+",",Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+row,Identifier
+.,Punctuation
+length,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** Abstracts directional comparisons based on scan direction. */,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+enum,Identifier
+ ,Whitespace
+Order,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ASC,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+lt,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+lhs,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rhs,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+lhs,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+rhs,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+gt,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+lhs,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rhs,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+lhs,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+rhs,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+ ,Whitespace
+inc,Identifier
+(,Punctuation
+byte,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// TODO: what about over/underflow?,Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+val,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isMax,Identifier
+(,Punctuation
+byte,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+val,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+0xff,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+ ,Whitespace
+min,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+DESC,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+lt,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+lhs,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rhs,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+lhs,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+rhs,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+gt,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+lhs,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rhs,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+lhs,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+rhs,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+ ,Whitespace
+inc,Identifier
+(,Punctuation
+byte,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+// TODO: what about over/underflow?,Comment
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+(,Punctuation
+val,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isMax,Identifier
+(,Punctuation
+byte,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+val,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+public,Keyword
+ ,Whitespace
+byte,Keyword
+ ,Whitespace
+min,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+0xFF,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Order,Identifier
+ ,Whitespace
+orderFor,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+reverse,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+reverse,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+DESC,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+ASC,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Returns true when {@code lhs < rhs}. */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+lt,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+lhs,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rhs,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Returns true when {@code lhs > rhs}. */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+gt,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+lhs,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+rhs,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Returns {@code val} incremented by 1. */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+byte,Keyword
+ ,Whitespace
+inc,Identifier
+(,Punctuation
+byte,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Return true when {@code val} is the maximum value */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isMax,Identifier
+(,Punctuation
+byte,Keyword
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+/** Return the minimum value according to this ordering scheme. */,Comment
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+abstract,Keyword
+ ,Whitespace
+byte,Keyword
+ ,Whitespace
+min,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @return greater byte array than given (row) which satisfies the fuzzy rule if it exists, null
+     *         otherwise
+     */",Comment
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+VisibleForTesting,Identifier
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+getNextForFuzzyRule,Identifier
+(,Punctuation
+boolean,Keyword
+ ,Whitespace
+reverse,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+row,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+length,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+"// To find out the next ""smallest"" byte array that satisfies fuzzy rule and ""greater"" than",Comment
+"
+",Newline
+        ,Whitespace
+// the given one we do the following:,Comment
+"
+",Newline
+        ,Whitespace
+"// 1. setting values on all ""fixed"" positions to the values from fuzzyKeyBytes",Comment
+"
+",Newline
+        ,Whitespace
+"// 2. if during the first step given row did not increase, then we increase the value at",Comment
+"
+",Newline
+        ,Whitespace
+"// the first ""non-fixed"" position (where it is not maximum already)",Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// It is easier to perform this by using fuzzyKeyBytes copy and setting ""non-fixed"" position",Comment
+"
+",Newline
+        ,Whitespace
+// values than otherwise.,Comment
+"
+",Newline
+        ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+copyOf,Identifier
+(,Punctuation
+fuzzyKeyBytes,Identifier
+",",Punctuation
+ ,Whitespace
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+?,Operator
+ ,Whitespace
+length,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+reverse,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+.,Punctuation
+length,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// we need trailing 0xff's instead of trailing 0x00's,Comment
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fuzzyKeyBytes,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+result,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+result,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+byte,Keyword
+),Punctuation
+ ,Whitespace
+0xFF,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+toInc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+Order,Identifier
+ ,Whitespace
+order,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Order,Identifier
+.,Punctuation
+orderFor,Identifier
+(,Punctuation
+reverse,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+increased,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+result,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+||,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+/* non-fixed */,Comment
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+result,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+row,Identifier
+[,Punctuation
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+order,Identifier
+.,Punctuation
+isMax,Identifier
+(,Punctuation
+row,Identifier
+[,Punctuation
+offset,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+i,Identifier
+],Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+"// this is ""non-fixed"" position and is not at max value, hence we can increase it",Comment
+"
+",Newline
+                    ,Whitespace
+toInc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+-,Operator
+1,Literal
+ ,Whitespace
+/* fixed */,Comment
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+order,Identifier
+.,Punctuation
+lt,Identifier
+(,Punctuation
+(,Punctuation
+row,Identifier
+[,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xFF,Literal
+),Punctuation
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+fuzzyKeyBytes,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xFF,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+"// if setting value for any fixed position increased the original array,",Comment
+"
+",Newline
+                    ,Whitespace
+// we are OK,Comment
+"
+",Newline
+                    ,Whitespace
+increased,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+order,Identifier
+.,Punctuation
+gt,Identifier
+(,Punctuation
+(,Punctuation
+row,Identifier
+[,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xFF,Literal
+),Punctuation
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+fuzzyKeyBytes,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xFF,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+"// if setting value for any fixed position makes array ""smaller"", then just stop:",Comment
+"
+",Newline
+                    ,Whitespace
+"// in case we found some non-fixed position to increase we will do it, otherwise",Comment
+"
+",Newline
+                    ,Whitespace
+"// there's no ""next"" row key that satisfies fuzzy rule and ""greater"" than given row",Comment
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+increased,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+toInc,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+result,Identifier
+[,Punctuation
+toInc,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+order,Identifier
+.,Punctuation
+inc,Identifier
+(,Punctuation
+result,Identifier
+[,Punctuation
+toInc,Identifier
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+"// Setting all ""non-fixed"" positions to zeroes to the right of the one we increased so",Comment
+"
+",Newline
+            ,Whitespace
+"// that found ""next"" row key is the smallest possible",Comment
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+toInc,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+result,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+||,Operator
+ ,Whitespace
+fuzzyKeyMeta,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+/* non-fixed */,Comment
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+result,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+ ,Whitespace
+=,Operator
+ ,Whitespace
+order,Identifier
+.,Punctuation
+min,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @return true if and only if the fields of the filter that are serialized are equal to the
+     *         corresponding fields in other. Used for testing.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+boolean,Keyword
+ ,Whitespace
+areSerializedFieldsEqual,Identifier
+(,Punctuation
+Filter,Identifier
+ ,Whitespace
+o,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+o,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+this,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+(,Punctuation
+o,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+FuzzyRowFilterV2,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+FuzzyRowFilterV2,Identifier
+ ,Whitespace
+other,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+FuzzyRowFilterV2,Identifier
+),Punctuation
+ ,Whitespace
+o,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+.,Punctuation
+fuzzyKeysData,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+other,Identifier
+.,Punctuation
+fuzzyKeysData,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+fuzzyKeysData,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+++,Operator
+i,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+thisData,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+fuzzyKeysData,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Pair,Identifier
+<,Operator
+byte,Keyword
+[,Punctuation
+],Punctuation
+",",Punctuation
+ ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+>,Operator
+ ,Whitespace
+otherData,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+other,Identifier
+.,Punctuation
+fuzzyKeysData,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+(,Punctuation
+Bytes,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+thisData,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+otherData,Identifier
+.,Punctuation
+getFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+thisData,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+otherData,Identifier
+.,Punctuation
+getSecond,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

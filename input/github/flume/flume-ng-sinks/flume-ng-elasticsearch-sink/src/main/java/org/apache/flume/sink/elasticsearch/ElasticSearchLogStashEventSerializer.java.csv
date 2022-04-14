@@ -1,0 +1,978 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+elasticsearch,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentFactory,Identifier
+.,Punctuation
+jsonBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+UnsupportedEncodingException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Date,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+StringUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+conf,Identifier
+.,Punctuation
+ComponentConfiguration,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+elasticsearch,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+xcontent,Identifier
+.,Punctuation
+XContentBuilder,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Serialize flume events into the same format LogStash uses</p>
+ *
+ * This can be used to send events to ElasticSearch and use clients such as
+ * Kabana which expect Logstash formated indexes
+ *
+ * <pre>
+ * {
+ *    ""@timestamp"": ""2010-12-21T21:48:33.309258Z"",
+ *    ""@tags"": [ ""array"", ""of"", ""tags"" ],
+ *    ""@type"": ""string"",
+ *    ""@source"": ""source of the event, usually a URL.""
+ *    ""@source_host"": """"
+ *    ""@source_path"": """"
+ *    ""@fields"":{
+ *       # a set of fields for this event
+ *       ""user"": ""jordan"",
+ *       ""command"": ""shutdown -r"":
+ *     }
+ *     ""@message"": ""the original plain-text message""
+ *   }
+ * </pre>
+ *
+ * If the following headers are present, they will map to the above logstash
+ * output as long as the logstash fields are not already present.</p>
+ *
+ * <pre>
+ *  timestamp: long -> @timestamp:Date
+ *  host: String -> @source_host: String
+ *  src_path: String -> @source_path: String
+ *  type: String -> @type: String
+ *  source: String -> @source: String
+ * </pre>
+ *
+ * @see https
+ *      ://github.com/logstash/logstash/wiki/logstash%27s-internal-message-
+ *      format
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ElasticSearchLogStashEventSerializer,Identifier
+ ,Whitespace
+implements,Keyword
+"
+",Newline
+    ,Whitespace
+ElasticSearchEventSerializer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+XContentBuilder,Identifier
+ ,Whitespace
+getContentBuilder,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+jsonBuilder,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+startObject,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+appendBody,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+appendHeaders,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+builder,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+appendBody,Identifier
+(,Punctuation
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+UnsupportedEncodingException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+body,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+ContentBuilderUtil,Identifier
+.,Punctuation
+appendField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+"""@message""",String
+",",Punctuation
+ ,Whitespace
+body,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+appendHeaders,Identifier
+(,Punctuation
+XContentBuilder,Identifier
+ ,Whitespace
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+headers,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+timestamp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""timestamp""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+timestamp,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+&&,Operator
+ ,Whitespace
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""@timestamp""",String
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+timestampMs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+parseLong,Identifier
+(,Punctuation
+timestamp,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+builder,Identifier
+.,Punctuation
+field,Identifier
+(,Punctuation
+"""@timestamp""",String
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Date,Identifier
+(,Punctuation
+timestampMs,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+source,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""source""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+source,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+&&,Operator
+ ,Whitespace
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""@source""",String
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ContentBuilderUtil,Identifier
+.,Punctuation
+appendField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+"""@source""",String
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+source,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+type,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""type""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+type,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+&&,Operator
+ ,Whitespace
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""@type""",String
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ContentBuilderUtil,Identifier
+.,Punctuation
+appendField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+"""@type""",String
+",",Punctuation
+ ,Whitespace
+type,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+host,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""host""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+host,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+&&,Operator
+ ,Whitespace
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""@source_host""",String
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ContentBuilderUtil,Identifier
+.,Punctuation
+appendField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+"""@source_host""",String
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+host,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+srcPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""src_path""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+srcPath,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+&&,Operator
+ ,Whitespace
+StringUtils,Identifier
+.,Punctuation
+isBlank,Identifier
+(,Punctuation
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""@source_path""",String
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ContentBuilderUtil,Identifier
+.,Punctuation
+appendField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+"""@source_path""",String
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+srcPath,Identifier
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+startObject,Identifier
+(,Punctuation
+"""@fields""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+key,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+keySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+val,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+headers,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+key,Identifier
+),Punctuation
+.,Punctuation
+getBytes,Identifier
+(,Punctuation
+charset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+ContentBuilderUtil,Identifier
+.,Punctuation
+appendField,Identifier
+(,Punctuation
+builder,Identifier
+",",Punctuation
+ ,Whitespace
+key,Identifier
+",",Punctuation
+ ,Whitespace
+val,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+builder,Identifier
+.,Punctuation
+endObject,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// NO-OP...,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+ComponentConfiguration,Identifier
+ ,Whitespace
+conf,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+// NO-OP...,Comment
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

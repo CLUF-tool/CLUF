@@ -1,0 +1,1205 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+tools,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+management,Identifier
+.,Punctuation
+ManagementFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+management,Identifier
+.,Punctuation
+RuntimeMXBean,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+lang,Identifier
+.,Punctuation
+reflect,Identifier
+.,Punctuation
+Method,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+nio,Identifier
+.,Punctuation
+ByteBuffer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Locale,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+atomic,Identifier
+.,Punctuation
+AtomicInteger,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+DirectMemoryUtils,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+"
+",Newline
+      ,Whitespace
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+DirectMemoryUtils,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+MAX_DIRECT_MEMORY_PARAM,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+      ,Whitespace
+"""-XX:MaxDirectMemorySize=""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+DEFAULT_SIZE,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDefaultDirectMemorySize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+ ,Whitespace
+allocated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+AtomicInteger,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+allocate,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+size,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+size,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+"""Size must be greater than zero""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+maxDirectMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDirectMemorySize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+allocatedCurrently,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+allocated,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Direct Memory Allocation: """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+""" Allocation = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+size,Identifier
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+""", Allocated = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+allocatedCurrently,Identifier
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+""", MaxDirectMemorySize = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+maxDirectMemory,Identifier
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+""", Remaining = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+(,Punctuation
+maxDirectMemory,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+allocatedCurrently,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+ByteBuffer,Identifier
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ByteBuffer,Identifier
+.,Punctuation
+allocateDirect,Identifier
+(,Punctuation
+size,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+allocated,Identifier
+.,Punctuation
+addAndGet,Identifier
+(,Punctuation
+size,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+OutOfMemoryError,Identifier
+ ,Whitespace
+error,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Error allocating """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+size,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""", you likely want""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+""" to increase """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+MAX_DIRECT_MEMORY_PARAM,Identifier
+",",Punctuation
+ ,Whitespace
+error,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+error,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+clean,Identifier
+(,Punctuation
+ByteBuffer,Identifier
+ ,Whitespace
+buffer,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkArgument,Identifier
+(,Punctuation
+buffer,Identifier
+.,Punctuation
+isDirect,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""buffer isn't direct!""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Method,Identifier
+ ,Whitespace
+cleanerMethod,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buffer,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getMethod,Identifier
+(,Punctuation
+"""cleaner""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+cleanerMethod,Identifier
+.,Punctuation
+setAccessible,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Object,Identifier
+ ,Whitespace
+cleaner,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cleanerMethod,Identifier
+.,Punctuation
+invoke,Identifier
+(,Punctuation
+buffer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Method,Identifier
+ ,Whitespace
+cleanMethod,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cleaner,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getMethod,Identifier
+(,Punctuation
+"""clean""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+cleanMethod,Identifier
+.,Punctuation
+setAccessible,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+cleanMethod,Identifier
+.,Punctuation
+invoke,Identifier
+(,Punctuation
+cleaner,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+allocated,Identifier
+.,Punctuation
+getAndAdd,Identifier
+(,Punctuation
+-,Operator
+buffer,Identifier
+.,Punctuation
+capacity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+maxDirectMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDirectMemorySize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Direct Memory Deallocation: """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+""", Allocated = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+allocated,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+""", MaxDirectMemorySize = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+maxDirectMemory,Identifier
+ ,Whitespace
++,Operator
+"
+",Newline
+        ,Whitespace
+""", Remaining = """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+maxDirectMemory,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+allocated,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getDirectMemorySize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+RuntimeMXBean,Identifier
+ ,Whitespace
+RuntimemxBean,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ManagementFactory,Identifier
+.,Punctuation
+getRuntimeMXBean,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+arguments,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+reverse,Identifier
+(,Punctuation
+RuntimemxBean,Identifier
+.,Punctuation
+getInputArguments,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+multiplier,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+//for the byte case.,Comment
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+arguments,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+s,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+MAX_DIRECT_MEMORY_PARAM,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+memSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+s,Identifier
+.,Punctuation
+toLowerCase,Identifier
+(,Punctuation
+Locale,Identifier
+.,Punctuation
+ENGLISH,Identifier
+),Punctuation
+"
+",Newline
+            ,Whitespace
+.,Punctuation
+replace,Identifier
+(,Punctuation
+MAX_DIRECT_MEMORY_PARAM,Identifier
+.,Punctuation
+toLowerCase,Identifier
+(,Punctuation
+Locale,Identifier
+.,Punctuation
+ENGLISH,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memSize,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""k""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+multiplier,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1024,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memSize,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""m""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+multiplier,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1048576,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+memSize,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""g""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+multiplier,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+1073741824,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+memSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+memSize,Identifier
+.,Punctuation
+replaceAll,Identifier
+(,Punctuation
+"""[^\\d]""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+long,Keyword
+ ,Whitespace
+retValue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+parseLong,Identifier
+(,Punctuation
+memSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+retValue,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+multiplier,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+DEFAULT_SIZE,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getDefaultDirectMemorySize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+VM,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Class,Identifier
+.,Punctuation
+forName,Identifier
+(,Punctuation
+"""sun.misc.VM""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Method,Identifier
+ ,Whitespace
+maxDirectMemory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+VM,Identifier
+.,Punctuation
+getDeclaredMethod,Identifier
+(,Punctuation
+"""maxDirectMemory""",String
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+Class,Identifier
+<,Operator
+?,Operator
+>,Operator
+),Punctuation
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+Object,Identifier
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+maxDirectMemory,Identifier
+.,Punctuation
+invoke,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+(,Punctuation
+Object,Identifier
+[,Punctuation
+],Punctuation
+),Punctuation
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+result,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+Long,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+Long,Identifier
+),Punctuation
+result,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Unable to get maxDirectMemory from VM: """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+e,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getSimpleName,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""": """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+// default according to VM.maxDirectMemory(),Comment
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+Runtime,Identifier
+.,Punctuation
+getRuntime,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+maxMemory,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

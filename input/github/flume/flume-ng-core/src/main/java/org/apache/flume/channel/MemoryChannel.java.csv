@@ -1,0 +1,3222 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+LinkedBlockingDeque,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+Semaphore,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+TimeUnit,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+annotation,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+GuardedBy,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+ChannelFullException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceAudience,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceStability,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+Recyclable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+instrumentation,Identifier
+.,Punctuation
+ChannelCounter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * <p>
+ * MemoryChannel is the recommended channel to use when speeds which
+ * writing to disk is impractical is required or durability of data is not
+ * required.
+ * </p>
+ * <p>
+ * Additionally, MemoryChannel should be used when a channel is required for
+ * unit testing purposes.
+ * </p>
+ */",Comment
+"
+",Newline
+@,Punctuation
+InterfaceAudience,Identifier
+.,Punctuation
+Public,Identifier
+"
+",Newline
+@,Punctuation
+InterfaceStability,Identifier
+.,Punctuation
+Stable,Identifier
+"
+",Newline
+@,Punctuation
+Recyclable,Identifier
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MemoryChannel,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+BasicChannelSemantics,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOGGER,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+MemoryChannel,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+defaultCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+100,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+defaultTransCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+100,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+double,Keyword
+ ,Whitespace
+byteCapacitySlotSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+100,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Long,Identifier
+ ,Whitespace
+defaultByteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+long,Keyword
+),Punctuation
+(,Punctuation
+Runtime,Identifier
+.,Punctuation
+getRuntime,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+maxMemory,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+.80,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+defaultByteCapacityBufferPercentage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+20,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+defaultKeepAlive,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+3,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MemoryTransaction,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+takeList,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+putList,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+ChannelCounter,Identifier
+ ,Whitespace
+channelCounter,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+putByteCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+takeByteCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+MemoryTransaction,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+transCapacity,Identifier
+",",Punctuation
+ ,Whitespace
+ChannelCounter,Identifier
+ ,Whitespace
+counter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+putList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+transCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+takeList,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+transCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+counter,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doPut,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+incrementEventPutAttemptCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+eventByteSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+Math,Identifier
+.,Punctuation
+ceil,Identifier
+(,Punctuation
+estimateEventSize,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+/,Operator
+byteCapacitySlotSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+putList,Identifier
+.,Punctuation
+offer,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+"""Put queue for MemoryTransaction of capacity """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" full, consider committing more frequently, """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""increasing capacity or increasing thread count""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+putByteCounter,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+eventByteSize,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+Event,Identifier
+ ,Whitespace
+doTake,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+incrementEventTakeAttemptCount,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+takeList,Identifier
+.,Punctuation
+remainingCapacity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+"""Take list for MemoryTransaction, capacity """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+takeList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" full, consider committing more frequently, """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""increasing capacity, or increasing thread count""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+queueStored,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+keepAlive,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+Event,Identifier
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+event,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+poll,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+event,Identifier
+",",Punctuation
+ ,Whitespace
+"""Queue.poll returned NULL despite semaphore """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+"""signalling existence of entry""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+takeList,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+eventByteSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+Math,Identifier
+.,Punctuation
+ceil,Identifier
+(,Punctuation
+estimateEventSize,Identifier
+(,Punctuation
+event,Identifier
+),Punctuation
+/,Operator
+byteCapacitySlotSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+takeByteCounter,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+eventByteSize,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+event,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doCommit,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+remainingChange,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+takeList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+remainingChange,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+bytesRemaining,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+putByteCounter,Identifier
+",",Punctuation
+ ,Whitespace
+keepAlive,Identifier
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelException,Identifier
+(,Punctuation
+"""Cannot commit transaction. Byte capacity """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""allocated to store event body """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+byteCapacity,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+byteCapacitySlotSize,Identifier
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""reached. Please increase heap space/byte capacity allocated to """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""the channel as the sinks may not be keeping up with the sources""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+queueRemaining,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+-,Operator
+remainingChange,Identifier
+",",Punctuation
+ ,Whitespace
+keepAlive,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+bytesRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+putByteCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelFullException,Identifier
+(,Punctuation
+"""Space for commit to queue couldn't be acquired.""",String
+ ,Whitespace
++,Operator
+"
+",Newline
+              ,Whitespace
+""" Sinks are likely not keeping up with sources, or the buffer size is too tight""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+puts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+putList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+takes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+takeList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+(,Punctuation
+puts,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+while,Keyword
+(,Punctuation
+!,Operator
+putList,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+queue,Identifier
+.,Punctuation
+offer,Identifier
+(,Punctuation
+putList,Identifier
+.,Punctuation
+removeFirst,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"""Queue add failed, this shouldn't be able to happen""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+putList,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+takeList,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+bytesRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+takeByteCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+takeByteCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+putByteCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+queueStored,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+puts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+remainingChange,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queueRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+remainingChange,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+puts,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+addToEventPutSuccessCount,Identifier
+(,Punctuation
+puts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+takes,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+addToEventTakeSuccessCount,Identifier
+(,Punctuation
+takes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+queue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+doRollback,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+takes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+takeList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+queue,Identifier
+.,Punctuation
+remainingCapacity,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+takeList,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"""Not enough space in memory channel """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""queue to rollback takes. This should never happen, please report""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+(,Punctuation
+!,Operator
+takeList,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+queue,Identifier
+.,Punctuation
+addFirst,Identifier
+(,Punctuation
+takeList,Identifier
+.,Punctuation
+removeLast,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+putList,Identifier
+.,Punctuation
+clear,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+bytesRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+putByteCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+putByteCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+takeByteCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+queueStored,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+takes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+queue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"// lock to guard queue, mainly needed to keep it locked down during resizes",Comment
+"
+",Newline
+  ,Whitespace
+// it should never be held through a blocking operation,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+queueLock,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Object,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+GuardedBy,Identifier
+(,Punctuation
+value,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""queueLock""",String
+),Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+queue,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// invariant that tracks the amount of space remaining in the queue(with all uncommitted takeLists deducted),Comment
+"
+",Newline
+  ,Whitespace
+// we maintain the remaining permits = queue.remaining - takeList.size(),Comment
+"
+",Newline
+  ,Whitespace
+// this allows local threads waiting for space in the queue to commit without denying access to the,Comment
+"
+",Newline
+  ,Whitespace
+// shared lock to threads that would make more space on the queue,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Semaphore,Identifier
+ ,Whitespace
+queueRemaining,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+"// used to make ""reservations"" to grab data from the queue.",Comment
+"
+",Newline
+  ,Whitespace
+// by using this we can block for a while to get data without locking all other threads out,Comment
+"
+",Newline
+  ,Whitespace
+// like we would if we tried to use a blocking call on queue,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Semaphore,Identifier
+ ,Whitespace
+queueStored,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+// maximum items in a transaction queue,Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+Integer,Identifier
+ ,Whitespace
+transCapacity,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+keepAlive,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+byteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+lastByteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+volatile,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+byteCapacityBufferPercentage,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Semaphore,Identifier
+ ,Whitespace
+bytesRemaining,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+ChannelCounter,Identifier
+ ,Whitespace
+channelCounter,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+MemoryChannel,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Read parameters from context
+   * <li>capacity = type long that defines the total number of events allowed at one time in the queue.
+   * <li>transactionCapacity = type long that defines the total number of events allowed in one transaction.
+   * <li>byteCapacity = type long that defines the max number of bytes used for events in the queue.
+   * <li>byteCapacityBufferPercentage = type int that defines the percent of buffer between byteCapacity and the estimated event size.
+   * <li>keep-alive = type int that defines the number of second to wait for a queue permit
+   */",Comment
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Integer,Identifier
+ ,Whitespace
+capacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+capacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+"""capacity""",String
+",",Punctuation
+ ,Whitespace
+defaultCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+capacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Invalid capacity specified, initializing channel to """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""default capacity of {}""",String
+",",Punctuation
+ ,Whitespace
+defaultCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+capacity,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+capacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Invalid capacity specified, initializing channel to """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""default capacity of {}""",String
+",",Punctuation
+ ,Whitespace
+defaultCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+"""transactionCapacity""",String
+",",Punctuation
+ ,Whitespace
+defaultTransCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultTransCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Invalid transation capacity specified, initializing channel""",String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+""" to default capacity of {}""",String
+",",Punctuation
+ ,Whitespace
+defaultTransCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+transCapacity,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+transCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultTransCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Invalid transation capacity specified, initializing channel""",String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+""" to default capacity of {}""",String
+",",Punctuation
+ ,Whitespace
+defaultTransCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkState,Identifier
+(,Punctuation
+transCapacity,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+capacity,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+"""Transaction Capacity of Memory Channel cannot be higher than """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+"""the capacity.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byteCapacityBufferPercentage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+"""byteCapacityBufferPercentage""",String
+",",Punctuation
+ ,Whitespace
+defaultByteCapacityBufferPercentage,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byteCapacityBufferPercentage,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultByteCapacityBufferPercentage,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+(,Punctuation
+(,Punctuation
+context,Identifier
+.,Punctuation
+getLong,Identifier
+(,Punctuation
+"""byteCapacity""",String
+",",Punctuation
+ ,Whitespace
+defaultByteCapacity,Identifier
+),Punctuation
+.,Punctuation
+longValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+1,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+byteCapacityBufferPercentage,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+.01,Literal
+ ,Whitespace
+),Punctuation
+),Punctuation
+ ,Whitespace
+/,Operator
+byteCapacitySlotSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+byteCapacity,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+byteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+(,Punctuation
+(,Punctuation
+defaultByteCapacity,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+(,Punctuation
+1,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+byteCapacityBufferPercentage,Identifier
+ ,Whitespace
+*,Operator
+ ,Whitespace
+.01,Literal
+ ,Whitespace
+),Punctuation
+),Punctuation
+ ,Whitespace
+/,Operator
+byteCapacitySlotSize,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+keepAlive,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getInteger,Identifier
+(,Punctuation
+"""keep-alive""",String
+",",Punctuation
+ ,Whitespace
+defaultKeepAlive,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+NumberFormatException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+keepAlive,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultKeepAlive,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+queue,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+resizeQueue,Identifier
+(,Punctuation
+capacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+capacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+queueRemaining,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Semaphore,Identifier
+(,Punctuation
+capacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+queueStored,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Semaphore,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+bytesRemaining,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+bytesRemaining,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Semaphore,Identifier
+(,Punctuation
+byteCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+lastByteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+byteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+byteCapacity,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+lastByteCapacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+bytesRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+byteCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+lastByteCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+lastByteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+byteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+bytesRemaining,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+lastByteCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+byteCapacity,Identifier
+",",Punctuation
+ ,Whitespace
+keepAlive,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Couldn't acquire permits to downsize the byte capacity, resizing has been aborted""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+lastByteCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+byteCapacity,Identifier
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+InterruptedException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+Thread,Identifier
+.,Punctuation
+currentThread,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+interrupt,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+channelCounter,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+channelCounter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ChannelCounter,Identifier
+(,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+resizeQueue,Identifier
+(,Punctuation
+int,Keyword
+ ,Whitespace
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+InterruptedException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+oldCapacity,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+oldCapacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+remainingCapacity,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+oldCapacity,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+oldCapacity,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+capacity,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+!,Operator
+queueRemaining,Identifier
+.,Punctuation
+tryAcquire,Identifier
+(,Punctuation
+oldCapacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+capacity,Identifier
+",",Punctuation
+ ,Whitespace
+keepAlive,Identifier
+",",Punctuation
+ ,Whitespace
+TimeUnit,Identifier
+.,Punctuation
+SECONDS,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOGGER,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Couldn't acquire permits to downsize the queue, resizing has been aborted""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+newQueue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+capacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+newQueue,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+queue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+queue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newQueue,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+synchronized,Keyword
+(,Punctuation
+queueLock,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+ ,Whitespace
+newQueue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedBlockingDeque,Identifier
+<,Operator
+Event,Identifier
+>,Operator
+(,Punctuation
+capacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+newQueue,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+queue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+newQueue,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+queueRemaining,Identifier
+.,Punctuation
+release,Identifier
+(,Punctuation
+capacity,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+oldCapacity,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+start,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+queue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelCapacity,Identifier
+(,Punctuation
+Long,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+queue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+remainingCapacity,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+setChannelSize,Identifier
+(,Punctuation
+queue,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+channelCounter,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+super,Keyword
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+protected,Keyword
+ ,Whitespace
+BasicTransactionSemantics,Identifier
+ ,Whitespace
+createTransaction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MemoryTransaction,Identifier
+(,Punctuation
+transCapacity,Identifier
+",",Punctuation
+ ,Whitespace
+channelCounter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+estimateEventSize,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+"
+",Newline
+  ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+body,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+body,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+body,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+body,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"//Each event occupies at least 1 slot, so return 1.",Comment
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,450 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+steps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+///*,Comment
+"
+",Newline
+// * Copyright 2013-2014 eBay Software Foundation,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+"// * Licensed under the Apache License, Version 2.0 (the ""License"");",Comment
+"
+",Newline
+// * you may not use this file except in compliance with the License.,Comment
+"
+",Newline
+// * You may obtain a copy of the License at,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+// *   http://www.apache.org/licenses/LICENSE-2.0,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+"// * Unless required by applicable law or agreed to in writing, software",Comment
+"
+",Newline
+"// * distributed under the License is distributed on an ""AS IS"" BASIS,",Comment
+"
+",Newline
+"// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.",Comment
+"
+",Newline
+// * See the License for the specific language governing permissions and,Comment
+"
+",Newline
+// * limitations under the License.,Comment
+"
+",Newline
+// */,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//package org.apache.kylin.index.cube;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import org.apache.commons.cli.Options;,Comment
+"
+",Newline
+//import org.apache.hadoop.fs.FileSystem;,Comment
+"
+",Newline
+//import org.apache.hadoop.fs.Path;,Comment
+"
+",Newline
+//import org.apache.hadoop.io.LongWritable;,Comment
+"
+",Newline
+//import org.apache.hadoop.io.Text;,Comment
+"
+",Newline
+//import org.apache.hadoop.mapreduce.Job;,Comment
+"
+",Newline
+//import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;,Comment
+"
+",Newline
+//import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;,Comment
+"
+",Newline
+//import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;,Comment
+"
+",Newline
+//import org.apache.hadoop.util.ToolRunner;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//import org.apache.kylin.cube.CubeInstance;,Comment
+"
+",Newline
+//import org.apache.kylin.cube.CubeManager;,Comment
+"
+",Newline
+//import org.apache.kylin.cube.cuboid.Cuboid;,Comment
+"
+",Newline
+//import org.apache.kylin.cube.kv.AbstractRowKeyEncoder;,Comment
+"
+",Newline
+//import org.apache.kylin.cube.kv.RowKeyEncoder;,Comment
+"
+",Newline
+//import org.apache.kylin.index.AbstractHadoopJob;,Comment
+"
+",Newline
+//import org.apache.kylin.metadata.model.cube.CubeDesc;,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+///**,Comment
+"
+",Newline
+// * @author xjiang,Comment
+"
+",Newline
+// *,Comment
+"
+",Newline
+// */,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//public class KeyDistributionJob extends AbstractHadoopJob {,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+"//    public static final String JOB_TITLE = ""Kylin Row Key Distribution Job"";",Comment
+"
+",Newline
+"//    public static final String KEY_HEADER_LENGTH = ""key_header_length"";",Comment
+"
+",Newline
+"//    public static final String KEY_COLUMN_PERCENTAGE = ""key_column_percentage"";",Comment
+"
+",Newline
+"//    public static final String KEY_SPLIT_NUMBER = ""key_split_number"";",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    /* (non-Javadoc),Comment
+"
+",Newline
+//     * @see org.apache.hadoop.util.Tool#run(java.lang.String[]),Comment
+"
+",Newline
+//     */,Comment
+"
+",Newline
+//    @Override,Comment
+"
+",Newline
+//    public int run(String[] args) throws Exception {,Comment
+"
+",Newline
+//        Options options = new Options();,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        try {,Comment
+"
+",Newline
+//            options.addOption(OPTION_INPUT_PATH);,Comment
+"
+",Newline
+//            options.addOption(OPTION_OUTPUT_PATH);,Comment
+"
+",Newline
+//            options.addOption(OPTION_METADATA_URL);,Comment
+"
+",Newline
+//            options.addOption(OPTION_CUBE_NAME);,Comment
+"
+",Newline
+//            options.addOption(OPTION_KEY_COLUMN_PERCENTAGE);,Comment
+"
+",Newline
+//            options.addOption(OPTION_KEY_SPLIT_NUMBER);,Comment
+"
+",Newline
+"//            parseOptions(options, args);",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            // start job,Comment
+"
+",Newline
+//            String jobName = JOB_TITLE + getOptionsAsString();,Comment
+"
+",Newline
+"//            System.out.println(""Starting: "" + jobName);",Comment
+"
+",Newline
+"//            Job job = Job.getInstanceFromEnv(getConf(), jobName);",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            // set job configuration - basic ,Comment
+"
+",Newline
+//            setJobClasspath(job);,Comment
+"
+",Newline
+"//            addInputDirs(getOptionValue(OPTION_INPUT_PATH), job);",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            Path output = new Path(getOptionValue(OPTION_OUTPUT_PATH));,Comment
+"
+",Newline
+"//            FileOutputFormat.setOutputPath(job, output);",Comment
+"
+",Newline
+"//            //job.getConfiguration().set(""dfs.block.size"", ""67108864"");",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            // set job configuration - key prefix size & key split number,Comment
+"
+",Newline
+//            String keyColumnPercentage = getOptionValue(OPTION_KEY_COLUMN_PERCENTAGE);,Comment
+"
+",Newline
+"//            job.getConfiguration().set(KEY_COLUMN_PERCENTAGE, keyColumnPercentage);",Comment
+"
+",Newline
+//            String metadataUrl = validateMetadataUrl(getOptionValue(OPTION_METADATA_URL));,Comment
+"
+",Newline
+//            String cubeName = getOptionValue(OPTION_CUBE_NAME).toUpperCase();,Comment
+"
+",Newline
+"//            int keyHeaderLen = getKeyHeaderLength(metadataUrl, cubeName);",Comment
+"
+",Newline
+"//            job.getConfiguration().set(KEY_HEADER_LENGTH, String.valueOf(keyHeaderLen));",Comment
+"
+",Newline
+"//            job.getConfiguration().set(KEY_SPLIT_NUMBER, getOptionValue(OPTION_KEY_SPLIT_NUMBER));",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            // Mapper,Comment
+"
+",Newline
+//            job.setInputFormatClass(SequenceFileInputFormat.class);,Comment
+"
+",Newline
+//            job.setMapperClass(KeyDistributionMapper.class);,Comment
+"
+",Newline
+//            job.setMapOutputKeyClass(Text.class);,Comment
+"
+",Newline
+//            job.setMapOutputValueClass(LongWritable.class);,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+"//            // Combiner, not needed any more as mapper now does the groping",Comment
+"
+",Newline
+//            //job.setCombinerClass(KeyDistributionCombiner.class);,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            // Reducer - only one,Comment
+"
+",Newline
+//            job.setReducerClass(KeyDistributionReducer.class);,Comment
+"
+",Newline
+//            // use sequence file as output,Comment
+"
+",Newline
+//            job.setOutputFormatClass(SequenceFileOutputFormat.class);,Comment
+"
+",Newline
+//            // key is text,Comment
+"
+",Newline
+//            job.setOutputKeyClass(Text.class);,Comment
+"
+",Newline
+//            // value is long,Comment
+"
+",Newline
+//            job.setOutputValueClass(LongWritable.class);,Comment
+"
+",Newline
+//            job.setNumReduceTasks(1);,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            FileSystem fs = FileSystem.get(job.getConfiguration());,Comment
+"
+",Newline
+//            if (fs.exists(output)),Comment
+"
+",Newline
+"//                fs.delete(output, true);",Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//            return waitForCompletion(job);,Comment
+"
+",Newline
+//        } catch (Exception e) {,Comment
+"
+",Newline
+//            printUsage(options);,Comment
+"
+",Newline
+//            e.printStackTrace(System.err);,Comment
+"
+",Newline
+//            return 2;,Comment
+"
+",Newline
+//        },Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+"//    private int getKeyHeaderLength(String metadataUrl, String cubeName) {",Comment
+"
+",Newline
+//        CubeManager cubeMgr = CubeManager.getInstanceFromEnv(metadataUrl);,Comment
+"
+",Newline
+//        CubeInstance cubeInstance = cubeMgr.getCube(cubeName);,Comment
+"
+",Newline
+//        CubeDesc cubeDesc = cubeInstance.getDescriptor();,Comment
+"
+",Newline
+//        long baseCuboidId = Cuboid.getBaseCuboidId(cubeDesc);,Comment
+"
+",Newline
+"//        Cuboid baseCuboid = Cuboid.findById(cubeDesc, baseCuboidId);",Comment
+"
+",Newline
+//        RowKeyEncoder rowKeyEncoder =,Comment
+"
+",Newline
+"//                (RowKeyEncoder) AbstractRowKeyEncoder.createInstance(cubeInstance.getTheOnlySegment(),",Comment
+"
+",Newline
+//                        baseCuboid);,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//        return rowKeyEncoder.getHeaderLength();,Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+//,Comment
+"
+",Newline
+//    public static void main(String[] args) throws Exception {,Comment
+"
+",Newline
+"//        int exitCode = ToolRunner.run(new KeyDistributionJob(), args);",Comment
+"
+",Newline
+//        System.exit(exitCode);,Comment
+"
+",Newline
+//    },Comment
+"
+",Newline
+// },Comment
+"
+",Newline

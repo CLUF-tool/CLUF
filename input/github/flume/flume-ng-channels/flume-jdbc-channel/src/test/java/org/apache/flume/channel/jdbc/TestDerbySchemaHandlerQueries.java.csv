@@ -1,0 +1,1564 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+jdbc,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+jdbc,Identifier
+.,Punctuation
+impl,Identifier
+.,Punctuation
+DerbySchemaHandler,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Assert,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+junit,Identifier
+.,Punctuation
+Test,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+TestDerbySchemaHandlerQueries,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_SCHEMA_FLUME,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE SCHEMA FLUME""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_EVENT,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_EVENT ( FLE_ID BIGINT GENERATED ALWAYS AS """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, FLE_PAYLOAD """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""VARCHAR(16384) FOR BIT DATA, FLE_CHANNEL VARCHAR(64), """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FLE_SPILL BOOLEAN)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLE_CHANNEL,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE INDEX FLUME.IDX_FLE_CHANNEL ON FLUME.FL_EVENT (FLE_CHANNEL)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_PLSPILL_FK,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_PLSPILL ( FLP_EVENT BIGINT, FLP_SPILL BLOB, """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FOREIGN KEY (FLP_EVENT) REFERENCES FLUME.FL_EVENT (FLE_ID))""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_PLSPILL_NOFK,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_PLSPILL ( FLP_EVENT BIGINT, FLP_SPILL BLOB)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLP_EVENT,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE INDEX FLUME.IDX_FLP_EVENT ON FLUME.FL_PLSPILL (FLP_EVENT)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_HEADER_FK,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_HEADER ( FLH_ID BIGINT GENERATED ALWAYS AS """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FLH_EVENT BIGINT, FLH_NAME VARCHAR(251), """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FLH_VALUE VARCHAR(251), FLH_NMSPILL BOOLEAN, """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FLH_VLSPILL BOOLEAN, FOREIGN KEY (FLH_EVENT) """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""REFERENCES FLUME.FL_EVENT (FLE_ID))""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_HEADER_NOFK,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_HEADER ( FLH_ID BIGINT GENERATED ALWAYS AS """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FLH_EVENT BIGINT, FLH_NAME VARCHAR(251), """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FLH_VALUE VARCHAR(251), FLH_NMSPILL BOOLEAN, """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FLH_VLSPILL BOOLEAN)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLH_EVENT,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE INDEX FLUME.IDX_FLH_EVENT ON FLUME.FL_HEADER (FLH_EVENT)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_NMSPILL_FK,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_NMSPILL ( FLN_HEADER BIGINT, FLN_SPILL """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""VARCHAR(32517), FOREIGN KEY (FLN_HEADER) REFERENCES """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""FLUME.FL_HEADER (FLH_ID))""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_NMSPILL_NOFK,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_NMSPILL ( FLN_HEADER BIGINT, FLN_SPILL """,String
+"
+",Newline
+           ,Whitespace
++,Operator
+ ,Whitespace
+"""VARCHAR(32517))""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLN_HEADER,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE INDEX FLUME.IDX_FLN_HEADER ON FLUME.FL_NMSPILL (FLN_HEADER)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_VLSPILL_FK,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_VLSPILL ( FLV_HEADER BIGINT, FLV_SPILL """,String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+"""VARCHAR(32517), FOREIGN KEY (FLV_HEADER) REFERENCES """,String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+"""FLUME.FL_HEADER (FLH_ID))""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_VLSPILL_NOFK,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE TABLE FLUME.FL_VLSPILL ( FLV_HEADER BIGINT, FLV_SPILL """,String
+"
+",Newline
+            ,Whitespace
++,Operator
+ ,Whitespace
+"""VARCHAR(32517))""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLV_HEADER,Identifier
+"
+",Newline
+       ,Whitespace
+=,Operator
+ ,Whitespace
+"""CREATE INDEX FLUME.IDX_FLV_HEADER ON FLUME.FL_VLSPILL (FLV_HEADER)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_COLUMN_LOOKUP_QUERY,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""SELECT COLUMNNAME from SYS.SYSCOLUMNS where REFERENCEID = """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""(SELECT TABLEID FROM SYS.SYSTABLES WHERE TABLENAME = ? AND """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""SCHEMAID = (SELECT SCHEMAID FROM SYS.SYSSCHEMAS WHERE """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""SCHEMANAME = ? ))""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_QUERY_CHANNEL_SIZE,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""SELECT COUNT(*) FROM FLUME.FL_EVENT""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_INSERT_EVENT_BASE,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""INSERT INTO FLUME.FL_EVENT (FLE_PAYLOAD, FLE_CHANNEL, FLE_SPILL) """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""VALUES ( ?, ?, ?)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_INSERT_EVENT_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""INSERT INTO FLUME.FL_PLSPILL (FLP_EVENT, FLP_SPILL) VALUES ( ?, ?)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_INSERT_HEADER_BASE,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""INSERT INTO FLUME.FL_HEADER (FLH_EVENT, FLH_NAME, FLH_VALUE, """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""FLH_NMSPILL, FLH_VLSPILL) VALUES ( ?, ?, ?, ?, ?)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_INSERT_HEADER_NAME_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""INSERT INTO FLUME.FL_NMSPILL (FLN_HEADER, FLN_SPILL) VALUES ( ?, ?)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_INSERT_HEADER_VALUE_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""INSERT INTO FLUME.FL_VLSPILL (FLV_HEADER, FLV_SPILL) VALUES ( ?, ?)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_FETCH_PAYLOAD_BASE,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""SELECT FLE_ID, FLE_PAYLOAD, FLE_SPILL FROM FLUME.FL_EVENT WHERE """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""FLE_ID = (SELECT MIN(FLE_ID) FROM FLUME.FL_EVENT WHERE """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""FLE_CHANNEL = ?)""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_FETCH_PAYLOAD_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""SELECT FLP_SPILL FROM FLUME.FL_PLSPILL WHERE FLP_EVENT = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_FETCH_HEADER_BASE,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""SELECT FLH_ID, FLH_NAME, FLH_VALUE, FLH_NMSPILL, FLH_VLSPILL FROM """,String
+"
+",Newline
+          ,Whitespace
++,Operator
+ ,Whitespace
+"""FLUME.FL_HEADER WHERE FLH_EVENT = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_FETCH_HEADER_NAME_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""SELECT FLN_SPILL FROM FLUME.FL_NMSPILL WHERE FLN_HEADER = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_FETCH_HEADER_VALUE_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""SELECT FLV_SPILL FROM FLUME.FL_VLSPILL WHERE FLV_HEADER = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_DELETE_HEADER_VALUE_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""DELETE FROM FLUME.FL_VLSPILL WHERE FLV_HEADER = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_DELETE_HEADER_NAME_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""DELETE FROM FLUME.FL_NMSPILL WHERE FLN_HEADER = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_DELETE_EVENT_SPILL,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""DELETE FROM FLUME.FL_PLSPILL WHERE FLP_EVENT = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_DELETE_HEADER_BASE,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""DELETE FROM FLUME.FL_HEADER WHERE FLH_EVENT = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+EXPECTED_STMT_DELETE_EVENT_BASE,Identifier
+"
+",Newline
+      ,Whitespace
+=,Operator
+ ,Whitespace
+"""DELETE FROM FLUME.FL_EVENT WHERE FLE_ID = ?""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Test,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+testCreateQueries,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_SCHEMA_FLUME,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_SCHEMA_FLUME,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_EVENT,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_EVENT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_INDEX_FLE_CHANNEL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLE_CHANNEL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_PLSPILL_FK,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_PLSPILL_FK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_PLSPILL_NOFK,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_PLSPILL_NOFK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_INDEX_FLP_EVENT,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLP_EVENT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_HEADER_FK,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_HEADER_FK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_HEADER_NOFK,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_HEADER_NOFK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_INDEX_FLH_EVENT,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLH_EVENT,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_NMSPILL_FK,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_NMSPILL_FK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_NMSPILL_NOFK,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_NMSPILL_NOFK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_INDEX_FLN_HEADER,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLN_HEADER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_VLSPILL_FK,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_VLSPILL_FK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_TABLE_FL_VLSPILL_NOFK,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_TABLE_FL_VLSPILL_NOFK,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CREATE_INDEX_FLV_HEADER,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CREATE_INDEX_FLV_HEADER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+COLUMN_LOOKUP_QUERY,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_COLUMN_LOOKUP_QUERY,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+QUERY_CHANNEL_SIZE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_QUERY_CHANNEL_SIZE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_INSERT_EVENT_BASE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_INSERT_EVENT_BASE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_INSERT_EVENT_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_INSERT_EVENT_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_INSERT_HEADER_BASE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_INSERT_HEADER_BASE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_INSERT_HEADER_NAME_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_INSERT_HEADER_NAME_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_INSERT_HEADER_VALUE_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_INSERT_HEADER_VALUE_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_FETCH_PAYLOAD_BASE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_FETCH_PAYLOAD_BASE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_FETCH_PAYLOAD_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_FETCH_PAYLOAD_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_FETCH_HEADER_BASE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_FETCH_HEADER_BASE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_FETCH_HEADER_NAME_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_FETCH_HEADER_NAME_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_FETCH_HEADER_VALUE_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_FETCH_HEADER_VALUE_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_DELETE_HEADER_VALUE_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_DELETE_HEADER_VALUE_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_DELETE_HEADER_NAME_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_DELETE_HEADER_NAME_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_DELETE_EVENT_SPILL,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_DELETE_EVENT_SPILL,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_DELETE_HEADER_BASE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_DELETE_HEADER_BASE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Assert,Identifier
+.,Punctuation
+assertEquals,Identifier
+(,Punctuation
+DerbySchemaHandler,Identifier
+.,Punctuation
+STMT_DELETE_EVENT_BASE,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+EXPECTED_STMT_DELETE_EVENT_BASE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

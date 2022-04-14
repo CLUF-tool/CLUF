@@ -1,0 +1,1494 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+basic,Identifier
+.,Punctuation
+BasicMeasureType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+bitmap,Identifier
+.,Punctuation
+BitmapMeasureType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+extendedcolumn,Identifier
+.,Punctuation
+ExtendedColumnMeasureType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+hllc,Identifier
+.,Punctuation
+HLLCMeasureType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+raw,Identifier
+.,Punctuation
+RawMeasureType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+.,Punctuation
+topn,Identifier
+.,Punctuation
+TopNMeasureType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+datatype,Identifier
+.,Punctuation
+DataType,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+datatype,Identifier
+.,Punctuation
+DataTypeSerializer,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Maps,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Factory for MeasureType.
+ * 
+ * The factory registers itself by claiming the aggregation function and data type it supports,
+ * to match a measure descriptor in cube definition.
+ * 
+ * E.g. HyperLogLog measure type claims ""COUNT_DISCINT"" as function and ""hllc"" as data type to
+ * match measure descriptor:
+ * <pre>
+  {
+    ""name"" : ""SELLER_CNT_HLL"",
+    ""function"" : {
+      ""expression"" : ""COUNT_DISTINCT"",        <----  function name
+      ""parameter"" : {
+        ""type"" : ""column"",
+        ""value"" : ""SELLER_ID"",
+        ""next_parameter"" : null
+      },
+      ""returntype"" : ""hllc(10)""               <----  data type
+    }
+  }
+</pre>
+ * 
+ * @param <T> the Java type of aggregation data object, e.g. HyperLogLogPlusCounter
+ */",Comment
+"
+",Newline
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MeasureTypeFactory,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Create a measure type with specified aggregation function and data type.
+     * 
+     * @param funcName should always match this factory's claim <code>getAggrFunctionName()</code>
+     * @param dataType should always match this factory's claim <code>getAggrDataTypeName()</code>
+     */",Comment
+"
+",Newline
+    ,Whitespace
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+MeasureType,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+createMeasureType,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+DataType,Identifier
+ ,Whitespace
+dataType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/** Return the aggregation function this factory supports, like ""COUNT_DISTINCT"" */",Comment
+"
+",Newline
+    ,Whitespace
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getAggrFunctionName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/** Return the aggregation data type name this factory supports, like ""hllc"" */",Comment
+"
+",Newline
+    ,Whitespace
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getAggrDataTypeName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** Return the Serializer for aggregation data object. Note a Serializer implementation must be thread-safe! */,Comment
+"
+",Newline
+    ,Whitespace
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+DataTypeSerializer,Identifier
+<,Operator
+T,Identifier
+>>,Operator
+ ,Whitespace
+getAggrDataTypeSerializer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// ============================================================================,Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>>>,Operator
+ ,Whitespace
+factories,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Maps,Identifier
+.,Punctuation
+newHashMap,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>>,Operator
+ ,Whitespace
+defaultFactory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayListWithCapacity,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+init,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+init,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+factories,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>>,Operator
+ ,Whitespace
+factoryInsts,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// two built-in advanced measure types,Comment
+"
+",Newline
+        ,Whitespace
+factoryInsts,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+HLLCMeasureType,Identifier
+.,Punctuation
+Factory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+factoryInsts,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+BitmapMeasureType,Identifier
+.,Punctuation
+Factory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+factoryInsts,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+TopNMeasureType,Identifier
+.,Punctuation
+Factory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+factoryInsts,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+RawMeasureType,Identifier
+.,Punctuation
+Factory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+factoryInsts,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ExtendedColumnMeasureType,Identifier
+.,Punctuation
+Factory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"/*
+         * Maybe do classpath search for more custom measure types?
+         * More MeasureType cannot be configured via kylin.properties alone,
+         * because used in coprocessor, the new classes must be on classpath
+         * and be packaged into coprocessor jar. This inevitably involves
+         * rebuild Kylin from code.
+         */",Comment
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// register factories & data type serializers,Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+factory,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+factoryInsts,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+funcName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+factory,Identifier
+.,Punctuation
+getAggrFunctionName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+funcName,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+funcName,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Aggregation function name '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+funcName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' must be in upper case""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+dataTypeName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+factory,Identifier
+.,Punctuation
+getAggrDataTypeName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dataTypeName,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+dataTypeName,Identifier
+.,Punctuation
+toLowerCase,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Aggregation data type name '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+dataTypeName,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' must be in lower case""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+DataTypeSerializer,Identifier
+<,Operator
+?,Operator
+>>,Operator
+ ,Whitespace
+serializer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+factory,Identifier
+.,Punctuation
+getAggrDataTypeSerializer,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+DataType,Identifier
+.,Punctuation
+register,Identifier
+(,Punctuation
+dataTypeName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+DataTypeSerializer,Identifier
+.,Punctuation
+register,Identifier
+(,Punctuation
+dataTypeName,Identifier
+",",Punctuation
+ ,Whitespace
+serializer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+List,Identifier
+<,Operator
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>>,Operator
+ ,Whitespace
+list,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+factories,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+funcName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+list,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+factories,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+list,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayListWithCapacity,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+list,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+factory,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+defaultFactory,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+BasicMeasureType,Identifier
+.,Punctuation
+Factory,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+MeasureType,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+create,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+dataType,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+create,Identifier
+(,Punctuation
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+DataType,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+dataType,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+MeasureType,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+create,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+DataType,Identifier
+ ,Whitespace
+dataType,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+funcName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+funcName,Identifier
+.,Punctuation
+toUpperCase,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+List,Identifier
+<,Operator
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>>,Operator
+ ,Whitespace
+factory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+factories,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+funcName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+factory,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+factory,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+defaultFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// a special case where in early stage of sql parsing, the data type is unknown; only needRewrite() is required at that stage",Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dataType,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+NeedRewriteOnlyMeasureType,Identifier
+(,Punctuation
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+factory,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// the normal case, only one factory for a function",Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+factory,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+factory,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+.,Punctuation
+createMeasureType,Identifier
+(,Punctuation
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+dataType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+"// sometimes multiple factories are registered for the same function, then data types must tell them apart",Comment
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+f,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+factory,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+f,Identifier
+.,Punctuation
+getAggrDataTypeName,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+dataType,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+f,Identifier
+.,Punctuation
+createMeasureType,Identifier
+(,Punctuation
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+dataType,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""rawtypes""",String
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+NeedRewriteOnlyMeasureType,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+MeasureType,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+Boolean,Identifier
+ ,Whitespace
+needRewrite,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+NeedRewriteOnlyMeasureType,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+List,Identifier
+<,Operator
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>>,Operator
+ ,Whitespace
+factory,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+MeasureTypeFactory,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+f,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+factory,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+boolean,Keyword
+ ,Whitespace
+b,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+f,Identifier
+.,Punctuation
+createMeasureType,Identifier
+(,Punctuation
+funcName,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+.,Punctuation
+needRewrite,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+needRewrite,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+needRewrite,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Boolean,Identifier
+.,Punctuation
+valueOf,Identifier
+(,Punctuation
+b,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+needRewrite,Identifier
+.,Punctuation
+booleanValue,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+b,Identifier
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""needRewrite() of factorys """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+factory,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" does not have consensus""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+MeasureIngester,Identifier
+ ,Whitespace
+newIngester,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UnsupportedOperationException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+MeasureAggregator,Identifier
+ ,Whitespace
+newAggregator,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UnsupportedOperationException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needRewrite,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+needRewrite,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+        ,Whitespace
+public,Keyword
+ ,Whitespace
+Class,Identifier
+ ,Whitespace
+getRewriteCalciteAggrFunctionClass,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UnsupportedOperationException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

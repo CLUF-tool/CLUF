@@ -1,0 +1,1462 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the ""License""); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+sink,Identifier
+.,Punctuation
+solr,Identifier
+.,Punctuation
+morphline,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+.,Punctuation
+Entry,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Context,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+Event,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+Command,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+MorphlineCompilationException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+MorphlineContext,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+api,Identifier
+.,Punctuation
+Record,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Compiler,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+FaultTolerance,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Fields,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Metrics,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+kitesdk,Identifier
+.,Punctuation
+morphline,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Notifications,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+codahale,Identifier
+.,Punctuation
+metrics,Identifier
+.,Punctuation
+Meter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+codahale,Identifier
+.,Punctuation
+metrics,Identifier
+.,Punctuation
+MetricRegistry,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+codahale,Identifier
+.,Punctuation
+metrics,Identifier
+.,Punctuation
+SharedMetricRegistries,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+codahale,Identifier
+.,Punctuation
+metrics,Identifier
+.,Punctuation
+Timer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+typesafe,Identifier
+.,Punctuation
+config,Identifier
+.,Punctuation
+Config,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+typesafe,Identifier
+.,Punctuation
+config,Identifier
+.,Punctuation
+ConfigFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * A {@link MorphlineHandler} that processes it's events using a morphline {@link Command} chain.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MorphlineHandlerImpl,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+MorphlineHandler,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+MorphlineContext,Identifier
+ ,Whitespace
+morphlineContext,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Command,Identifier
+ ,Whitespace
+morphline,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Command,Identifier
+ ,Whitespace
+finalChild,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+morphlineFileAndId,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Timer,Identifier
+ ,Whitespace
+mappingTimer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Meter,Identifier
+ ,Whitespace
+numRecords,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Meter,Identifier
+ ,Whitespace
+numFailedRecords,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+Meter,Identifier
+ ,Whitespace
+numExceptionRecords,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+MORPHLINE_FILE_PARAM,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""morphlineFile""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+MORPHLINE_ID_PARAM,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""morphlineId""",String
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+"/**
+   * Morphline variables can be passed from flume.conf to the morphline, e.g.:
+   * agent.sinks.solrSink.morphlineVariable.zkHost=127.0.0.1:2181/solr
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+MORPHLINE_VARIABLE_PARAM,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""morphlineVariable""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+MorphlineHandlerImpl,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+"
+",Newline
+  ,Whitespace
+// For test injection,Comment
+"
+",Newline
+  ,Whitespace
+void,Keyword
+ ,Whitespace
+setMorphlineContext,Identifier
+(,Punctuation
+MorphlineContext,Identifier
+ ,Whitespace
+morphlineContext,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+morphlineContext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+morphlineContext,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+// for interceptor,Comment
+"
+",Newline
+  ,Whitespace
+void,Keyword
+ ,Whitespace
+setFinalChild,Identifier
+(,Punctuation
+Command,Identifier
+ ,Whitespace
+finalChild,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+finalChild,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+finalChild,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+configure,Identifier
+(,Punctuation
+Context,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+morphlineFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+MORPHLINE_FILE_PARAM,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+morphlineId,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+MORPHLINE_ID_PARAM,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+morphlineFile,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+morphlineFile,Identifier
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MorphlineCompilationException,Identifier
+(,Punctuation
+"""Missing parameter: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+MORPHLINE_FILE_PARAM,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+morphlineFileAndId,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+morphlineFile,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""@""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+morphlineId,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+morphlineContext,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+FaultTolerance,Identifier
+ ,Whitespace
+faultTolerance,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FaultTolerance,Identifier
+(,Punctuation
+"
+",Newline
+          ,Whitespace
+context,Identifier
+.,Punctuation
+getBoolean,Identifier
+(,Punctuation
+FaultTolerance,Identifier
+.,Punctuation
+IS_PRODUCTION_MODE,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+",",Punctuation
+ ,Whitespace
+"
+",Newline
+          ,Whitespace
+context,Identifier
+.,Punctuation
+getBoolean,Identifier
+(,Punctuation
+FaultTolerance,Identifier
+.,Punctuation
+IS_IGNORING_RECOVERABLE_EXCEPTIONS,Identifier
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+context,Identifier
+.,Punctuation
+getString,Identifier
+(,Punctuation
+FaultTolerance,Identifier
+.,Punctuation
+RECOVERABLE_EXCEPTION_CLASSES,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+"
+",Newline
+      ,Whitespace
+morphlineContext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+MorphlineContext,Identifier
+.,Punctuation
+Builder,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+setExceptionHandler,Identifier
+(,Punctuation
+faultTolerance,Identifier
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+setMetricRegistry,Identifier
+(,Punctuation
+SharedMetricRegistries,Identifier
+.,Punctuation
+getOrCreate,Identifier
+(,Punctuation
+morphlineFileAndId,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+        ,Whitespace
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+Config,Identifier
+ ,Whitespace
+override,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+ConfigFactory,Identifier
+.,Punctuation
+parseMap,Identifier
+(,Punctuation
+context,Identifier
+.,Punctuation
+getSubProperties,Identifier
+(,Punctuation
+MORPHLINE_VARIABLE_PARAM,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""".""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+morphline,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Compiler,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+compile,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+morphlineFile,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+morphlineId,Identifier
+",",Punctuation
+ ,Whitespace
+morphlineContext,Identifier
+",",Punctuation
+ ,Whitespace
+finalChild,Identifier
+",",Punctuation
+ ,Whitespace
+override,Identifier
+),Punctuation
+;,Punctuation
+      ,Whitespace
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+mappingTimer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+morphlineContext,Identifier
+.,Punctuation
+getMetricRegistry,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+timer,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+MetricRegistry,Identifier
+.,Punctuation
+name,Identifier
+(,Punctuation
+"""morphline.app""",String
+",",Punctuation
+ ,Whitespace
+Metrics,Identifier
+.,Punctuation
+ELAPSED_TIME,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+numRecords,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+morphlineContext,Identifier
+.,Punctuation
+getMetricRegistry,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+meter,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+MetricRegistry,Identifier
+.,Punctuation
+name,Identifier
+(,Punctuation
+"""morphline.app""",String
+",",Punctuation
+ ,Whitespace
+Metrics,Identifier
+.,Punctuation
+NUM_RECORDS,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+numFailedRecords,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+morphlineContext,Identifier
+.,Punctuation
+getMetricRegistry,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+meter,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+MetricRegistry,Identifier
+.,Punctuation
+name,Identifier
+(,Punctuation
+"""morphline.app""",String
+",",Punctuation
+ ,Whitespace
+"""numFailedRecords""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+numExceptionRecords,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+morphlineContext,Identifier
+.,Punctuation
+getMetricRegistry,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+meter,Identifier
+(,Punctuation
+"
+",Newline
+        ,Whitespace
+MetricRegistry,Identifier
+.,Punctuation
+name,Identifier
+(,Punctuation
+"""morphline.app""",String
+",",Punctuation
+ ,Whitespace
+"""numExceptionRecords""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+process,Identifier
+(,Punctuation
+Event,Identifier
+ ,Whitespace
+event,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+numRecords,Identifier
+.,Punctuation
+mark,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Timer,Identifier
+.,Punctuation
+Context,Identifier
+ ,Whitespace
+timerContext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+mappingTimer,Identifier
+.,Punctuation
+time,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Record,Identifier
+ ,Whitespace
+record,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Record,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+Entry,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+entry,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getHeaders,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+entrySet,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+entry,Identifier
+.,Punctuation
+getKey,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getValue,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+byte,Keyword
+[,Punctuation
+],Punctuation
+ ,Whitespace
+bytes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+event,Identifier
+.,Punctuation
+getBody,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+bytes,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+bytes,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+record,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+Fields,Identifier
+.,Punctuation
+ATTACHMENT_BODY,Identifier
+",",Punctuation
+ ,Whitespace
+bytes,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+    ,Whitespace
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Notifications,Identifier
+.,Punctuation
+notifyStartSession,Identifier
+(,Punctuation
+morphline,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+morphline,Identifier
+.,Punctuation
+process,Identifier
+(,Punctuation
+record,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+numFailedRecords,Identifier
+.,Punctuation
+mark,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Morphline {} failed to process record: {}""",String
+",",Punctuation
+ ,Whitespace
+morphlineFileAndId,Identifier
+",",Punctuation
+ ,Whitespace
+record,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+RuntimeException,Identifier
+ ,Whitespace
+t,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+numExceptionRecords,Identifier
+.,Punctuation
+mark,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+morphlineContext,Identifier
+.,Punctuation
+getExceptionHandler,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+handleException,Identifier
+(,Punctuation
+t,Identifier
+",",Punctuation
+ ,Whitespace
+record,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+timerContext,Identifier
+.,Punctuation
+stop,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+beginTransaction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Notifications,Identifier
+.,Punctuation
+notifyBeginTransaction,Identifier
+(,Punctuation
+morphline,Identifier
+),Punctuation
+;,Punctuation
+      ,Whitespace
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+commitTransaction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Notifications,Identifier
+.,Punctuation
+notifyCommitTransaction,Identifier
+(,Punctuation
+morphline,Identifier
+),Punctuation
+;,Punctuation
+      ,Whitespace
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+rollbackTransaction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Notifications,Identifier
+.,Punctuation
+notifyRollbackTransaction,Identifier
+(,Punctuation
+morphline,Identifier
+),Punctuation
+;,Punctuation
+            ,Whitespace
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+stop,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Notifications,Identifier
+.,Punctuation
+notifyShutdown,Identifier
+(,Punctuation
+morphline,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

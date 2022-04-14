@@ -1,0 +1,1390 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+serialization,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+avro,Identifier
+.,Punctuation
+file,Identifier
+.,Punctuation
+DataFileReader,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+avro,Identifier
+.,Punctuation
+file,Identifier
+.,Punctuation
+DataFileWriter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+avro,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DatumReader,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+avro,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DatumWriter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+avro,Identifier
+.,Punctuation
+specific,Identifier
+.,Punctuation
+SpecificDatumReader,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+avro,Identifier
+.,Punctuation
+specific,Identifier
+.,Punctuation
+SpecificDatumWriter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceAudience,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+annotations,Identifier
+.,Punctuation
+InterfaceStability,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+tools,Identifier
+.,Punctuation
+PlatformDetect,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * <p/>Class that stores object state in an avro container file.
+ * The file is only ever appended to.
+ * At construction time, the object reads data from the end of the file and
+ * caches that data for use by a client application. After construction, reads
+ * never go to disk.
+ * Writes always flush to disk.
+ *
+ * <p/>Note: This class is not thread-safe.
+ */",Comment
+"
+",Newline
+@,Punctuation
+InterfaceAudience,Identifier
+.,Punctuation
+Private,Identifier
+"
+",Newline
+@,Punctuation
+InterfaceStability,Identifier
+.,Punctuation
+Evolving,Identifier
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+DurablePositionTracker,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+PositionTracker,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+File,Identifier
+ ,Whitespace
+trackerFile,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+DataFileWriter,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+ ,Whitespace
+writer,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+DataFileReader,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+ ,Whitespace
+reader,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+TransferStateFileMeta,Identifier
+ ,Whitespace
+metaCache,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+target,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isOpen,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * If the file exists at startup, then read it, roll it, and open a new one.
+   * We go through this to avoid issues with partial reads at the end of the
+   * file from a previous crash. If we append to a bad record,
+   * our writes may never be visible.
+   * @param trackerFile
+   * @param target
+   * @return
+   * @throws IOException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+DurablePositionTracker,Identifier
+ ,Whitespace
+getInstance,Identifier
+(,Punctuation
+File,Identifier
+ ,Whitespace
+trackerFile,Identifier
+",",Punctuation
+"
+",Newline
+      ,Whitespace
+String,Identifier
+ ,Whitespace
+target,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+trackerFile,Identifier
+.,Punctuation
+exists,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DurablePositionTracker,Identifier
+(,Punctuation
+trackerFile,Identifier
+",",Punctuation
+ ,Whitespace
+target,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// exists,Comment
+"
+",Newline
+    ,Whitespace
+DurablePositionTracker,Identifier
+ ,Whitespace
+oldTracker,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+DurablePositionTracker,Identifier
+(,Punctuation
+trackerFile,Identifier
+",",Punctuation
+ ,Whitespace
+target,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+existingTarget,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+oldTracker,Identifier
+.,Punctuation
+getTarget,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+targetPosition,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+oldTracker,Identifier
+.,Punctuation
+getPosition,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+oldTracker,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+tmpMeta,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+File,Identifier
+.,Punctuation
+createTempFile,Identifier
+(,Punctuation
+trackerFile,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+""".tmp""",String
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+trackerFile,Identifier
+.,Punctuation
+getParentFile,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tmpMeta,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+DurablePositionTracker,Identifier
+ ,Whitespace
+tmpTracker,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+DurablePositionTracker,Identifier
+(,Punctuation
+tmpMeta,Identifier
+",",Punctuation
+ ,Whitespace
+existingTarget,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tmpTracker,Identifier
+.,Punctuation
+storePosition,Identifier
+(,Punctuation
+targetPosition,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+tmpTracker,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"// On windows, things get messy with renames...",Comment
+"
+",Newline
+    ,Whitespace
+// FIXME: This is not atomic. Consider implementing a recovery procedure,Comment
+"
+",Newline
+    ,Whitespace
+"// so that if it does not exist at startup, check for a rolled version",Comment
+"
+",Newline
+    ,Whitespace
+// before creating a new file from scratch.,Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+PlatformDetect,Identifier
+.,Punctuation
+isWindows,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+trackerFile,Identifier
+.,Punctuation
+delete,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""Unable to delete existing meta file """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+            ,Whitespace
+trackerFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// rename tmp file to meta,Comment
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+tmpMeta,Identifier
+.,Punctuation
+renameTo,Identifier
+(,Punctuation
+trackerFile,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""Unable to rename """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tmpMeta,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" to """,String
+ ,Whitespace
++,Operator
+"
+",Newline
+          ,Whitespace
+trackerFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// return a new known-good version that is open for append,Comment
+"
+",Newline
+    ,Whitespace
+DurablePositionTracker,Identifier
+ ,Whitespace
+newTracker,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+DurablePositionTracker,Identifier
+(,Punctuation
+trackerFile,Identifier
+",",Punctuation
+ ,Whitespace
+existingTarget,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+newTracker,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * If the file exists, read it and open it for append.
+   * @param trackerFile
+   * @param target
+   * @throws IOException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+DurablePositionTracker,Identifier
+(,Punctuation
+File,Identifier
+ ,Whitespace
+trackerFile,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+target,Identifier
+),Punctuation
+"
+",Newline
+      ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+trackerFile,Identifier
+",",Punctuation
+ ,Whitespace
+"""trackerFile must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+target,Identifier
+",",Punctuation
+ ,Whitespace
+"""target must not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+trackerFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+trackerFile,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+target,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+target,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+DatumWriter,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+ ,Whitespace
+dout,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+SpecificDatumWriter,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+TransferStateFileMeta,Identifier
+.,Punctuation
+SCHEMA$,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+DatumReader,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+ ,Whitespace
+din,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+        ,Whitespace
+new,Keyword
+ ,Whitespace
+SpecificDatumReader,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+TransferStateFileMeta,Identifier
+.,Punctuation
+SCHEMA$,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DataFileWriter,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+(,Punctuation
+dout,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+trackerFile,Identifier
+.,Punctuation
+exists,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// open it for append,Comment
+"
+",Newline
+      ,Whitespace
+writer,Identifier
+.,Punctuation
+appendTo,Identifier
+(,Punctuation
+trackerFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+      ,Whitespace
+reader,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DataFileReader,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+(,Punctuation
+trackerFile,Identifier
+",",Punctuation
+ ,Whitespace
+din,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+target,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+reader,Identifier
+.,Punctuation
+getMetaString,Identifier
+(,Punctuation
+"""file""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+// create the file,Comment
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+target,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+target,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+writer,Identifier
+.,Punctuation
+setMeta,Identifier
+(,Punctuation
+"""file""",String
+",",Punctuation
+ ,Whitespace
+target,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+writer,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+TransferStateFileMeta,Identifier
+.,Punctuation
+SCHEMA$,Identifier
+",",Punctuation
+ ,Whitespace
+trackerFile,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+reader,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DataFileReader,Identifier
+<,Operator
+TransferStateFileMeta,Identifier
+>,Operator
+(,Punctuation
+trackerFile,Identifier
+",",Punctuation
+ ,Whitespace
+din,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+target,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getTarget,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// initialize @ line = 0;,Comment
+"
+",Newline
+    ,Whitespace
+metaCache,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+TransferStateFileMeta,Identifier
+.,Punctuation
+newBuilder,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+setOffset,Identifier
+(,Punctuation
+0L,Literal
+),Punctuation
+.,Punctuation
+build,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+initReader,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+isOpen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Read the last record in the file.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+initReader,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+syncPos,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+trackerFile,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+256L,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+syncPos,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+syncPos,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0L,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+reader,Identifier
+.,Punctuation
+sync,Identifier
+(,Punctuation
+syncPos,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+reader,Identifier
+.,Punctuation
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+reader,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+metaCache,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+storePosition,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+position,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+metaCache,Identifier
+.,Punctuation
+setOffset,Identifier
+(,Punctuation
+position,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+metaCache,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+sync,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+writer,Identifier
+.,Punctuation
+flush,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+synchronized,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+getPosition,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+metaCache,Identifier
+.,Punctuation
+getOffset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getTarget,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+target,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+close,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isOpen,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+writer,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+reader,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+isOpen,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

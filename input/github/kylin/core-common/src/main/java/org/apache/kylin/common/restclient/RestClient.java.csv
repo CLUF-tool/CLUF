@@ -1,0 +1,1209 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+restclient,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Matcher,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Pattern,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+Credentials,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+HttpClient,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+HttpException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+HttpMethod,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+UsernamePasswordCredentials,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+auth,Identifier
+.,Punctuation
+AuthScope,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+methods,Identifier
+.,Punctuation
+GetMethod,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+methods,Identifier
+.,Punctuation
+PutMethod,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Bytes,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+JsonUtil,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * @author yangli9
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+RestClient,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+host,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+baseUrl,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+userName,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+ ,Whitespace
+password,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+HttpClient,Identifier
+ ,Whitespace
+client,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+fullRestPattern,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+"""(?:([^:]+)[:]([^@]+)[@])?([^:]+)(?:[:](\\d+))?""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+matchFullRestPattern,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+uri,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fullRestPattern,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+uri,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+m,Identifier
+.,Punctuation
+matches,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @param uri
+     *            ""user:pwd@host:port""
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+RestClient,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+uri,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fullRestPattern,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+uri,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+m,Identifier
+.,Punctuation
+matches,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""URI: """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+uri,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" -- does not match pattern """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+fullRestPattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+user,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+m,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+pwd,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+m,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+host,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+m,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+3,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+portStr,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+m,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+4,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+portStr,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+?,Operator
+ ,Whitespace
+"""7070""",String
+ ,Whitespace
+:,Operator
+ ,Whitespace
+portStr,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+init,Identifier
+(,Punctuation
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+user,Identifier
+",",Punctuation
+ ,Whitespace
+pwd,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+init,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+host,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+userName,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+password,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+host,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+host,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+port,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+port,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+userName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+userName,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+password,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+password,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+baseUrl,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""http://""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+host,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""":""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+port,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/kylin/api""",String
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+client,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HttpClient,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+userName,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+password,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+client,Identifier
+.,Punctuation
+getParams,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+setAuthenticationPreemptive,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Credentials,Identifier
+ ,Whitespace
+creds,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UsernamePasswordCredentials,Identifier
+(,Punctuation
+userName,Identifier
+",",Punctuation
+ ,Whitespace
+password,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+client,Identifier
+.,Punctuation
+getState,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+setCredentials,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+AuthScope,Identifier
+(,Punctuation
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+AuthScope,Identifier
+.,Punctuation
+ANY_REALM,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+creds,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+wipeCache,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+type,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+action,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+name,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+url,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+baseUrl,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/cache/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+type,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+name,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+action,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+HttpMethod,Identifier
+ ,Whitespace
+request,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+PutMethod,Identifier
+(,Punctuation
+url,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+code,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+client,Identifier
+.,Punctuation
+executeMethod,Identifier
+(,Punctuation
+request,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+request,Identifier
+.,Punctuation
+getResponseBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+code,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+200,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""Invalid response """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+code,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" with cache wipe url """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+url,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+HttpException,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+ex,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+request,Identifier
+.,Punctuation
+releaseConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+getKylinProperties,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+url,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+baseUrl,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""/admin/config""",String
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+HttpMethod,Identifier
+ ,Whitespace
+request,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GetMethod,Identifier
+(,Punctuation
+url,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+code,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+client,Identifier
+.,Punctuation
+executeMethod,Identifier
+(,Punctuation
+request,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Bytes,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+request,Identifier
+.,Punctuation
+getResponseBody,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+>,Operator
+ ,Whitespace
+map,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+JsonUtil,Identifier
+.,Punctuation
+readValueAsMap,Identifier
+(,Punctuation
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+map,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+"""config""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+code,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+200,Literal
+),Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""Invalid response """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+code,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" with cache wipe url """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+url,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+msg,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+request,Identifier
+.,Punctuation
+releaseConnection,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

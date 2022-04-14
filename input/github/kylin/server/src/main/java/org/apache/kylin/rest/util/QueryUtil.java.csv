@@ -1,0 +1,2315 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ArrayList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+HashSet,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+LinkedList,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Matcher,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+regex,Identifier
+.,Punctuation
+Pattern,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+SelectedColumnMeta,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+request,Identifier
+.,Punctuation
+SQLRequest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+rest,Identifier
+.,Punctuation
+response,Identifier
+.,Punctuation
+SQLResponse,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+QueryUtil,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+QueryUtil,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""\\s*""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+S1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""\\s""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+SM,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""\\s+""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+PTN_GROUP_BY,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+S1,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""GROUP""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+SM,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""BY""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S1,Identifier
+",",Punctuation
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+CASE_INSENSITIVE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+PTN_HAVING_COUNT_GREATER_THAN_ZERO,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+S1,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""HAVING""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+SM,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""[(]?""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""COUNT""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""[(]""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""1""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""[)]""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""">""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""0""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""[)]?""",String
+",",Punctuation
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+CASE_INSENSITIVE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+PTN_SUM_1,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+S1,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""SUM""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""[(]""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""[1]""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S0,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""[)]""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+S1,Identifier
+",",Punctuation
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+CASE_INSENSITIVE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// private static final Pattern PTN_HAVING_ESCAPE_FUNCTION =,Comment
+"
+",Newline
+    ,Whitespace
+"// Pattern.compile(""\\{fn"" + ""("" + S0 + "")"" + ""\\}"",",Comment
+"
+",Newline
+    ,Whitespace
+// Pattern.CASE_INSENSITIVE);,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+PTN_HAVING_ESCAPE_FUNCTION,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+"""\\{fn""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""(.*?)""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\\}""",String
+",",Punctuation
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+CASE_INSENSITIVE,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+tableauTestQueries,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+"""SELECT 1""",String
+",",Punctuation
+//,Comment
+"
+",Newline
+            ,Whitespace
+"""CREATE LOCAL TEMPORARY TABLE \""XTableau_B_Connect\"" ( \""COL\"" INTEGER ) ON COMMIT PRESERVE ROWS""",String
+",",Punctuation
+//,Comment
+"
+",Newline
+            ,Whitespace
+"""DROP TABLE \""XTableau_B_Connect\""""",String
+",",Punctuation
+//,Comment
+"
+",Newline
+            ,Whitespace
+"""SELECT \""COL\"" FROM (SELECT 1 AS \""COL\"") AS \""SUBQUERY\""""",String
+",",Punctuation
+//,Comment
+"
+",Newline
+            ,Whitespace
+"""SELECT TOP 1 \""COL\"" FROM (SELECT 1 AS \""COL\"") AS \""CHECKTOP\""""",String
+",",Punctuation
+ ,Whitespace
+"""SELECT \""COL\"" FROM (SELECT 1 AS \""COL\"") AS \""CHECKTOP\"" LIMIT 1""",String
+",",Punctuation
+//,Comment
+"
+",Newline
+            ,Whitespace
+"""SELECT \""SUBCOL\"" AS \""COL\""  FROM (   SELECT 1 AS \""SUBCOL\"" ) \""SUBQUERY\"" GROUP BY 1""",String
+",",Punctuation
+ ,Whitespace
+"""SELECT \""SUBCOL\"" AS \""COL\"" FROM (   SELECT 1 AS \""SUBCOL\"" ) \""SUBQUERY\"" GROUP BY 2""",String
+",",Punctuation
+ ,Whitespace
+"""INSERT INTO \""XTableau_C_Connect\"" SELECT * FROM (SELECT 1 AS COL) AS CHECKTEMP LIMIT 1""",String
+",",Punctuation
+ ,Whitespace
+"""DROP TABLE \""XTableau_C_Connect\""""",String
+",",Punctuation
+ ,Whitespace
+"""INSERT INTO \""XTableau_B_Connect\"" SELECT * FROM (SELECT 1 AS COL) AS CHECKTEMP LIMIT 1""",String
+ ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+ ,Whitespace
+temp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+LinkedList,Identifier
+<,Operator
+SelectedColumnMeta,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+serialVersionUID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+8086728462624901359L,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+SelectedColumnMeta,Identifier
+(,Punctuation
+false,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+2,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+11,Literal
+",",Punctuation
+ ,Whitespace
+"""COL""",String
+",",Punctuation
+ ,Whitespace
+"""COL""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+",",Punctuation
+ ,Whitespace
+"""""",String
+",",Punctuation
+ ,Whitespace
+10,Literal
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+4,Literal
+",",Punctuation
+ ,Whitespace
+"""int4""",String
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+false,Keyword
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+LinkedList,Identifier
+<,Operator
+List,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+serialVersionUID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+470083340592928073L,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+add,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+LinkedList,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+serialVersionUID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+3673192785838230054L,Literal
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+add,Identifier
+(,Punctuation
+"""1""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+fakeResponses,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+temp,Identifier
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+false,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+temp,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""near 1 syntax error""",String
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+temp,Identifier
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""group by 1????""",String
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""group by 2????""",String
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""XTableau_C_Connect not exist""",String
+),Punctuation
+",",Punctuation
+ ,Whitespace
+//,Comment
+"
+",Newline
+            ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""XTableau_C_Connect not exist""",String
+),Punctuation
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""XTableau_B_Connect not exist""",String
+),Punctuation
+",",Punctuation
+ ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+HashSet,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+tableauTestQueriesInToken,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ArrayList,Identifier
+<,Operator
+HashSet,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+q,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tableauTestQueries,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+HashSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+temp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HashSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+token,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+q,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+"""[\r\n\t \\(\\)]""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+temp,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+token,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+temp,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+"""""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+tableauTestQueriesInToken,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+temp,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+massageSql,Identifier
+(,Punctuation
+SQLRequest,Identifier
+ ,Whitespace
+sqlRequest,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlRequest,Identifier
+.,Punctuation
+getSql,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+sql,Identifier
+.,Punctuation
+endsWith,Identifier
+(,Punctuation
+""";""",String
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+limit,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlRequest,Identifier
+.,Punctuation
+getLimit,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+limit,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+sql,Identifier
+.,Punctuation
+toLowerCase,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""limit""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+sql,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+(,Punctuation
+"""\nLIMIT """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+limit,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlRequest,Identifier
+.,Punctuation
+getOffset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+offset,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+!,Operator
+sql,Identifier
+.,Punctuation
+toLowerCase,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""offset""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+sql,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+(,Punctuation
+"""\nOFFSET """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+offset,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+healSickSql,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+// correct sick / invalid SQL,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+healSickSql,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+sql,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+m,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Case fn{ EXTRACT(...) },Comment
+"
+",Newline
+        ,Whitespace
+// Use non-greedy regrex matching to remove escape functions,Comment
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+PTN_HAVING_ESCAPE_FUNCTION,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+m,Identifier
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+m,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+m,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+m,Identifier
+.,Punctuation
+end,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Case: HAVING COUNT(1)>0 without Group By,Comment
+"
+",Newline
+        ,Whitespace
+"// Tableau generates: SELECT SUM(1) AS ""COL"" FROM ""VAC_SW"" HAVING",Comment
+"
+",Newline
+        ,Whitespace
+// COUNT(1)>0,Comment
+"
+",Newline
+        ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+PTN_HAVING_COUNT_GREATER_THAN_ZERO,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+m,Identifier
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+PTN_GROUP_BY,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+m,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+m,Identifier
+.,Punctuation
+end,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// Case: SUM(1),Comment
+"
+",Newline
+        ,Whitespace
+// Replace it with COUNT(1),Comment
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+true,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+m,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+PTN_SUM_1,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+sql,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+m,Identifier
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+sql,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+0,Literal
+",",Punctuation
+ ,Whitespace
+m,Identifier
+.,Punctuation
+start,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" COUNT(1) """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+m,Identifier
+.,Punctuation
+end,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+sql,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+SQLResponse,Identifier
+ ,Whitespace
+tableauIntercept,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+sql,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+tokens,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sql,Identifier
+.,Punctuation
+split,Identifier
+(,Punctuation
+"""[\r\n\t \\(\\)]""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+tableauTestQueries,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+ ,Whitespace
+++,Operator
+i,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isTokenWiseEqual,Identifier
+(,Punctuation
+tokens,Identifier
+",",Punctuation
+ ,Whitespace
+tableauTestQueriesInToken,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Hit fake response """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+fakeResponses,Identifier
+[,Punctuation
+i,Identifier
+],Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+makeErrorMsgUserFriendly,Identifier
+(,Punctuation
+Throwable,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+e,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// pick ParseException error message if possible,Comment
+"
+",Newline
+        ,Whitespace
+Throwable,Identifier
+ ,Whitespace
+cause,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+e,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+cause,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+cause,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+contains,Identifier
+(,Punctuation
+"""ParseException""",String
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+msg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cause,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+cause,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cause,Identifier
+.,Punctuation
+getCause,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+makeErrorMsgUserFriendly,Identifier
+(,Punctuation
+msg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+makeErrorMsgUserFriendly,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+errorMsg,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// make one line,Comment
+"
+",Newline
+            ,Whitespace
+errorMsg,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+errorMsg,Identifier
+.,Punctuation
+replaceAll,Identifier
+(,Punctuation
+"""\\s""",String
+",",Punctuation
+ ,Whitespace
+""" """,String
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+"// move cause to be ahead of sql, calcite creates the message pattern below",Comment
+"
+",Newline
+            ,Whitespace
+Pattern,Identifier
+ ,Whitespace
+pattern,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Pattern,Identifier
+.,Punctuation
+compile,Identifier
+(,Punctuation
+"""error while executing SQL \""(.*)\"":(.*)""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+Matcher,Identifier
+ ,Whitespace
+matcher,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pattern,Identifier
+.,Punctuation
+matcher,Identifier
+(,Punctuation
+errorMsg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+matcher,Identifier
+.,Punctuation
+find,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+2,Literal
+),Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\n""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""while executing SQL: \""""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+matcher,Identifier
+.,Punctuation
+group,Identifier
+(,Punctuation
+1,Literal
+),Punctuation
+.,Punctuation
+trim,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""\""""",String
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+errorMsg,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+errorMsg,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isTokenWiseEqual,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+tokens,Identifier
+",",Punctuation
+ ,Whitespace
+HashSet,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+tokenSet,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+token,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+tokens,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+tokenSet,Identifier
+.,Punctuation
+contains,Identifier
+(,Punctuation
+token,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

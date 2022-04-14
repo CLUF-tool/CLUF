@@ -1,0 +1,2736 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+base,Identifier
+.,Punctuation
+Preconditions,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+HashMultimap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+SetMultimap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Sets,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+EOFException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+File,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+CommandLine,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+CommandLineParser,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+GnuParser,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Option,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+cli,Identifier
+.,Punctuation
+Options,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+CheckpointRebuilder,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+logFiles,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+FlumeEventQueue,Identifier
+ ,Whitespace
+queue,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+ComparableFlumeEventPointer,Identifier
+>,Operator
+ ,Whitespace
+committedPuts,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Set,Identifier
+<,Operator
+ComparableFlumeEventPointer,Identifier
+>,Operator
+ ,Whitespace
+pendingTakes,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+Sets,Identifier
+.,Punctuation
+newHashSet,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+SetMultimap,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+ComparableFlumeEventPointer,Identifier
+>,Operator
+ ,Whitespace
+uncommittedPuts,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+HashMultimap,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+SetMultimap,Identifier
+<,Operator
+Long,Identifier
+",",Punctuation
+ ,Whitespace
+ComparableFlumeEventPointer,Identifier
+>,Operator
+"
+",Newline
+          ,Whitespace
+uncommittedTakes,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+HashMultimap,Identifier
+.,Punctuation
+create,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+fsyncPerTransaction,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+LOG,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+CheckpointRebuilder,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+CheckpointRebuilder,Identifier
+(,Punctuation
+List,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+logFiles,Identifier
+",",Punctuation
+"
+",Newline
+    ,Whitespace
+FlumeEventQueue,Identifier
+ ,Whitespace
+queue,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+fsyncPerTransaction,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+"
+",Newline
+    ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+logFiles,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+logFiles,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+queue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+queue,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+this,Keyword
+.,Punctuation
+fsyncPerTransaction,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+fsyncPerTransaction,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+rebuild,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Attempting to fast replay the log files.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+LogFile,Identifier
+.,Punctuation
+SequentialReader,Identifier
+>,Operator
+ ,Whitespace
+logReaders,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+File,Identifier
+ ,Whitespace
+logFile,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+logFiles,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+logReaders,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+LogFileFactory,Identifier
+.,Punctuation
+getSequentialReader,Identifier
+(,Punctuation
+logFile,Identifier
+",",Punctuation
+ ,Whitespace
+null,Keyword
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+fsyncPerTransaction,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+(,Punctuation
+EOFException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Ignoring """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+logFile,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" due to EOF""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+transactionIDSeed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+writeOrderIDSeed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+LogFile,Identifier
+.,Punctuation
+SequentialReader,Identifier
+ ,Whitespace
+log,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+logReaders,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LogRecord,Identifier
+ ,Whitespace
+entry,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+fileID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+log,Identifier
+.,Punctuation
+getLogFileID,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+entry,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+log,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+int,Keyword
+ ,Whitespace
+offset,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getOffset,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+TransactionEventRecord,Identifier
+ ,Whitespace
+record,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+entry,Identifier
+.,Punctuation
+getEvent,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+long,Keyword
+ ,Whitespace
+trans,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+long,Keyword
+ ,Whitespace
+writeOrderID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+record,Identifier
+.,Punctuation
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+transactionIDSeed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+trans,Identifier
+",",Punctuation
+ ,Whitespace
+transactionIDSeed,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+writeOrderIDSeed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Math,Identifier
+.,Punctuation
+max,Identifier
+(,Punctuation
+writeOrderID,Identifier
+",",Punctuation
+ ,Whitespace
+writeOrderIDSeed,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+record,Identifier
+.,Punctuation
+getRecordType,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+TransactionEventRecord,Identifier
+.,Punctuation
+Type,Identifier
+.,Punctuation
+PUT,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+uncommittedPuts,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+                    ,Whitespace
+new,Keyword
+ ,Whitespace
+ComparableFlumeEventPointer,Identifier
+(,Punctuation
+"
+",Newline
+                    ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeEventPointer,Identifier
+(,Punctuation
+fileID,Identifier
+",",Punctuation
+ ,Whitespace
+offset,Identifier
+),Punctuation
+",",Punctuation
+"
+",Newline
+                    ,Whitespace
+record,Identifier
+.,Punctuation
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+record,Identifier
+.,Punctuation
+getRecordType,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+                  ,Whitespace
+==,Operator
+ ,Whitespace
+TransactionEventRecord,Identifier
+.,Punctuation
+Type,Identifier
+.,Punctuation
+TAKE,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Take,Identifier
+ ,Whitespace
+take,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+Take,Identifier
+),Punctuation
+ ,Whitespace
+record,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+uncommittedTakes,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+                    ,Whitespace
+new,Keyword
+ ,Whitespace
+ComparableFlumeEventPointer,Identifier
+(,Punctuation
+"
+",Newline
+                    ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeEventPointer,Identifier
+(,Punctuation
+take,Identifier
+.,Punctuation
+getFileID,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+take,Identifier
+.,Punctuation
+getOffset,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+",",Punctuation
+"
+",Newline
+                    ,Whitespace
+record,Identifier
+.,Punctuation
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+record,Identifier
+.,Punctuation
+getRecordType,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+                  ,Whitespace
+==,Operator
+ ,Whitespace
+TransactionEventRecord,Identifier
+.,Punctuation
+Type,Identifier
+.,Punctuation
+COMMIT,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Commit,Identifier
+ ,Whitespace
+commit,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+Commit,Identifier
+),Punctuation
+ ,Whitespace
+record,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+commit,Identifier
+.,Punctuation
+getType,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+==,Operator
+ ,Whitespace
+TransactionEventRecord,Identifier
+.,Punctuation
+Type,Identifier
+.,Punctuation
+PUT,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+Set,Identifier
+<,Operator
+ComparableFlumeEventPointer,Identifier
+>,Operator
+ ,Whitespace
+puts,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+                      ,Whitespace
+uncommittedPuts,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+puts,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ComparableFlumeEventPointer,Identifier
+ ,Whitespace
+put,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+puts,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                  ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+pendingTakes,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+put,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+committedPuts,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+put,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+              ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+Set,Identifier
+<,Operator
+ComparableFlumeEventPointer,Identifier
+>,Operator
+ ,Whitespace
+takes,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+                      ,Whitespace
+uncommittedTakes,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+              ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+takes,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ComparableFlumeEventPointer,Identifier
+ ,Whitespace
+take,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+takes,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                  ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+committedPuts,Identifier
+.,Punctuation
+remove,Identifier
+(,Punctuation
+take,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+pendingTakes,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+take,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                  ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+              ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+record,Identifier
+.,Punctuation
+getRecordType,Identifier
+(,Punctuation
+),Punctuation
+"
+",Newline
+                  ,Whitespace
+==,Operator
+ ,Whitespace
+TransactionEventRecord,Identifier
+.,Punctuation
+Type,Identifier
+.,Punctuation
+ROLLBACK,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+uncommittedPuts,Identifier
+.,Punctuation
+containsKey,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+uncommittedPuts,Identifier
+.,Punctuation
+removeAll,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+              ,Whitespace
+uncommittedTakes,Identifier
+.,Punctuation
+removeAll,Identifier
+(,Punctuation
+record,Identifier
+.,Punctuation
+getTransactionID,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+          ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error while generating checkpoint """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""using fast generation logic""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+TransactionIDOracle,Identifier
+.,Punctuation
+setSeed,Identifier
+(,Punctuation
+transactionIDSeed,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+WriteOrderOracle,Identifier
+.,Punctuation
+setSeed,Identifier
+(,Punctuation
+writeOrderIDSeed,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+LogFile,Identifier
+.,Punctuation
+SequentialReader,Identifier
+ ,Whitespace
+reader,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+logReaders,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+reader,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+Set,Identifier
+<,Operator
+ComparableFlumeEventPointer,Identifier
+>,Operator
+ ,Whitespace
+sortedPuts,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+            ,Whitespace
+Sets,Identifier
+.,Punctuation
+newTreeSet,Identifier
+(,Punctuation
+committedPuts,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+count,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+ComparableFlumeEventPointer,Identifier
+ ,Whitespace
+put,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+sortedPuts,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+queue,Identifier
+.,Punctuation
+addTail,Identifier
+(,Punctuation
+put,Identifier
+.,Punctuation
+pointer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+count,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+LOG,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Replayed {} events using fast replay logic.""",String
+",",Punctuation
+ ,Whitespace
+count,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+writeCheckpoint,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+checkpointLogOrderID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+LogFile,Identifier
+.,Punctuation
+MetaDataWriter,Identifier
+>,Operator
+ ,Whitespace
+metaDataWriters,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+File,Identifier
+ ,Whitespace
+logFile,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+logFiles,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+String,Identifier
+ ,Whitespace
+name,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+logFile,Identifier
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+metaDataWriters,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+LogFileFactory,Identifier
+.,Punctuation
+getMetaDataWriter,Identifier
+(,Punctuation
+logFile,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+name,Identifier
+.,Punctuation
+substring,Identifier
+(,Punctuation
+name,Identifier
+.,Punctuation
+lastIndexOf,Identifier
+(,Punctuation
+'-',String
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+queue,Identifier
+.,Punctuation
+checkpoint,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+checkpointLogOrderID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+queue,Identifier
+.,Punctuation
+getLogWriteOrderID,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+LogFile,Identifier
+.,Punctuation
+MetaDataWriter,Identifier
+ ,Whitespace
+metaDataWriter,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+metaDataWriters,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+          ,Whitespace
+metaDataWriter,Identifier
+.,Punctuation
+markCheckpoint,Identifier
+(,Punctuation
+checkpointLogOrderID,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+warn,Identifier
+(,Punctuation
+"""Error while generating checkpoint """,String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""using fast generation logic""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+finally,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+LogFile,Identifier
+.,Punctuation
+MetaDataWriter,Identifier
+ ,Whitespace
+metaDataWriter,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+metaDataWriters,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+metaDataWriter,Identifier
+.,Punctuation
+close,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+ComparableFlumeEventPointer,Identifier
+"
+",Newline
+          ,Whitespace
+implements,Keyword
+ ,Whitespace
+Comparable,Identifier
+<,Operator
+ComparableFlumeEventPointer,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+FlumeEventPointer,Identifier
+ ,Whitespace
+pointer,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+orderID,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+ComparableFlumeEventPointer,Identifier
+(,Punctuation
+FlumeEventPointer,Identifier
+ ,Whitespace
+pointer,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+orderID,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+Preconditions,Identifier
+.,Punctuation
+checkNotNull,Identifier
+(,Punctuation
+pointer,Identifier
+",",Punctuation
+ ,Whitespace
+"""FlumeEventPointer cannot be""",String
+"
+",Newline
+              ,Whitespace
++,Operator
+ ,Whitespace
+"""null while creating a ComparableFlumeEventPointer""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+pointer,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pointer,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+this,Keyword
+.,Punctuation
+orderID,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+orderID,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+compareTo,Identifier
+(,Punctuation
+ComparableFlumeEventPointer,Identifier
+ ,Whitespace
+o,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+orderID,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+o,Identifier
+.,Punctuation
+orderID,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+-,Operator
+1,Literal
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+//Unfortunately same log order id does not mean same event,Comment
+"
+",Newline
+        ,Whitespace
+//for older logs.,Comment
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+hashCode,Identifier
+(,Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+pointer,Identifier
+.,Punctuation
+hashCode,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+equals,Identifier
+(,Punctuation
+Object,Identifier
+ ,Whitespace
+o,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+this,Keyword
+ ,Whitespace
+==,Operator
+ ,Whitespace
+o,Identifier
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+o,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+o,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+this,Keyword
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+pointer,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+(,Punctuation
+(,Punctuation
+ComparableFlumeEventPointer,Identifier
+),Punctuation
+o,Identifier
+),Punctuation
+.,Punctuation
+pointer,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+main,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+Exception,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+Options,Identifier
+ ,Whitespace
+options,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Options,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+Option,Identifier
+ ,Whitespace
+opt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Option,Identifier
+(,Punctuation
+"""c""",String
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""checkpoint directory""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+opt,Identifier
+.,Punctuation
+setRequired,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+opt,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+opt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Option,Identifier
+(,Punctuation
+"""l""",String
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""comma-separated list of log directories""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+opt,Identifier
+.,Punctuation
+setRequired,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+opt,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+opt,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+opt,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+Option,Identifier
+(,Punctuation
+"""t""",String
+",",Punctuation
+ ,Whitespace
+true,Keyword
+",",Punctuation
+ ,Whitespace
+"""capacity of the channel""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+opt,Identifier
+.,Punctuation
+setRequired,Identifier
+(,Punctuation
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+options,Identifier
+.,Punctuation
+addOption,Identifier
+(,Punctuation
+opt,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+CommandLineParser,Identifier
+ ,Whitespace
+parser,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+GnuParser,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+CommandLine,Identifier
+ ,Whitespace
+cli,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+parser,Identifier
+.,Punctuation
+parse,Identifier
+(,Punctuation
+options,Identifier
+",",Punctuation
+ ,Whitespace
+args,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+checkpointDir,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+cli,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+"""c""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+logDirs,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+cli,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+"""l""",String
+),Punctuation
+.,Punctuation
+split,Identifier
+(,Punctuation
+""",""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+List,Identifier
+<,Operator
+File,Identifier
+>,Operator
+ ,Whitespace
+logFiles,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+logDir,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+logDirs,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+logFiles,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+LogUtils,Identifier
+.,Punctuation
+getLogs,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+logDir,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+capacity,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+parseInt,Identifier
+(,Punctuation
+cli,Identifier
+.,Punctuation
+getOptionValue,Identifier
+(,Punctuation
+"""t""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+File,Identifier
+ ,Whitespace
+checkpointFile,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+checkpointDir,Identifier
+",",Punctuation
+ ,Whitespace
+"""checkpoint""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+(,Punctuation
+checkpointFile,Identifier
+.,Punctuation
+exists,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Cannot execute fast replay""",String
+",",Punctuation
+"
+",Newline
+          ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalStateException,Identifier
+(,Punctuation
+"""Checkpoint exists""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+checkpointFile,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+EventQueueBackingStore,Identifier
+ ,Whitespace
+backingStore,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+          ,Whitespace
+EventQueueBackingStoreFactory,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+checkpointFile,Identifier
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+capacity,Identifier
+",",Punctuation
+ ,Whitespace
+"""channel""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+FlumeEventQueue,Identifier
+ ,Whitespace
+queue,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+FlumeEventQueue,Identifier
+(,Punctuation
+backingStore,Identifier
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+checkpointDir,Identifier
+",",Punctuation
+ ,Whitespace
+"""inflighttakes""",String
+),Punctuation
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+checkpointDir,Identifier
+",",Punctuation
+ ,Whitespace
+"""inflightputs""",String
+),Punctuation
+",",Punctuation
+"
+",Newline
+              ,Whitespace
+new,Keyword
+ ,Whitespace
+File,Identifier
+(,Punctuation
+checkpointDir,Identifier
+",",Punctuation
+ ,Whitespace
+Log,Identifier
+.,Punctuation
+QUEUE_SET,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+CheckpointRebuilder,Identifier
+ ,Whitespace
+rebuilder,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CheckpointRebuilder,Identifier
+(,Punctuation
+logFiles,Identifier
+",",Punctuation
+"
+",Newline
+        ,Whitespace
+queue,Identifier
+",",Punctuation
+ ,Whitespace
+true,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+if,Keyword
+(,Punctuation
+rebuilder,Identifier
+.,Punctuation
+rebuild,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+rebuilder,Identifier
+.,Punctuation
+writeCheckpoint,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+LOG,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+"""Could not rebuild the checkpoint due to errors.""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

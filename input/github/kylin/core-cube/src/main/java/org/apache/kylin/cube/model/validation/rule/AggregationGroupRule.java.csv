@@ -1,0 +1,1753 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+validation,Identifier
+.,Punctuation
+rule,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Arrays,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Set,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TreeSet,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+collections,Identifier
+.,Punctuation
+CollectionUtils,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+KylinConfig,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+AggregationGroup,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+CubeDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+validation,Identifier
+.,Punctuation
+IValidatorRule,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+validation,Identifier
+.,Punctuation
+ResultLevel,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+validation,Identifier
+.,Punctuation
+ValidateContext,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ *  find forbid overlaps in each AggregationGroup
+ *  the include dims in AggregationGroup must contain all mandatory, hierarchy and joint
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+AggregationGroupRule,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+IValidatorRule,Identifier
+<,Operator
+CubeDesc,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+validate,Identifier
+(,Punctuation
+CubeDesc,Identifier
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+ValidateContext,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+inner,Identifier
+(,Punctuation
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+context,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+count,Identifier
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+[,Punctuation
+],Punctuation
+ ,Whitespace
+input,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+input,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+input,Identifier
+.,Punctuation
+length,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+inner,Identifier
+(,Punctuation
+CubeDesc,Identifier
+ ,Whitespace
+cube,Identifier
+",",Punctuation
+ ,Whitespace
+ValidateContext,Identifier
+ ,Whitespace
+context,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+maxSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getMaxAgrGroupSize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+index,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+AggregationGroup,Identifier
+ ,Whitespace
+agg,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+cube,Identifier
+.,Punctuation
+getAggregationGroups,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getIncludes,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" includes field not set""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" select rule field not set""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+includeDims,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getIncludes,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+include,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+agg,Identifier
+.,Punctuation
+getIncludes,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+includeDims,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+include,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+mandatoryDims,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+mandatory_dims,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+m,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+mandatory_dims,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+mandatoryDims,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+m,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+hierarchyDims,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+hierarchy_dims,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+ss,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+hierarchy_dims,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+ss,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+hierarchyDims,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+s,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+jointDims,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+joint_dims,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+ss,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+joint_dims,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+ss,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+jointDims,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+s,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+includeDims,Identifier
+.,Punctuation
+containsAll,Identifier
+(,Punctuation
+mandatoryDims,Identifier
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+!,Operator
+includeDims,Identifier
+.,Punctuation
+containsAll,Identifier
+(,Punctuation
+hierarchyDims,Identifier
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+!,Operator
+includeDims,Identifier
+.,Punctuation
+containsAll,Identifier
+(,Punctuation
+jointDims,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" Include dims not containing all the used dims""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+normalDims,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+normalDims,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+includeDims,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+normalDims,Identifier
+.,Punctuation
+removeAll,Identifier
+(,Punctuation
+mandatoryDims,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+normalDims,Identifier
+.,Punctuation
+removeAll,Identifier
+(,Punctuation
+hierarchyDims,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+normalDims,Identifier
+.,Punctuation
+removeAll,Identifier
+(,Punctuation
+jointDims,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+normalDimSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+normalDims,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+hierarchySize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+count,Identifier
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+hierarchy_dims,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+jointSize,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+count,Identifier
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+joint_dims,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+mandatoryDims,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
++,Operator
+ ,Whitespace
+normalDimSize,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+hierarchySize,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+jointSize,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+maxSize,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" has too many dimensions""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+CollectionUtils,Identifier
+.,Punctuation
+containsAny,Identifier
+(,Punctuation
+mandatoryDims,Identifier
+",",Punctuation
+ ,Whitespace
+hierarchyDims,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" mandatory dims overlap with hierarchy dims""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+CollectionUtils,Identifier
+.,Punctuation
+containsAny,Identifier
+(,Punctuation
+mandatoryDims,Identifier
+",",Punctuation
+ ,Whitespace
+jointDims,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" mandatory dims overlap with joint dims""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+jointDimNum,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+joint_dims,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+joints,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+joint_dims,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+                    ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+oneJoint,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+joints,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+oneJoint,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+s,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+oneJoint,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+2,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" require at least 2 dims in a joint""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+jointDimNum,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+oneJoint,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                    ,Whitespace
+int,Keyword
+ ,Whitespace
+overlapHierarchies,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+hierarchy_dims,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+oneHierarchy,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+agg,Identifier
+.,Punctuation
+getSelectRule,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+hierarchy_dims,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                            ,Whitespace
+Set,Identifier
+<,Operator
+String,Identifier
+>,Operator
+ ,Whitespace
+share,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TreeSet,Identifier
+<,Operator
+>,Operator
+(,Punctuation
+String,Identifier
+.,Punctuation
+CASE_INSENSITIVE_ORDER,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                            ,Whitespace
+share,Identifier
+.,Punctuation
+addAll,Identifier
+(,Punctuation
+CollectionUtils,Identifier
+.,Punctuation
+intersection,Identifier
+(,Punctuation
+oneJoint,Identifier
+",",Punctuation
+ ,Whitespace
+Arrays,Identifier
+.,Punctuation
+asList,Identifier
+(,Punctuation
+oneHierarchy,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+share,Identifier
+.,Punctuation
+isEmpty,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                                ,Whitespace
+overlapHierarchies,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+                            ,Whitespace
+},Punctuation
+"
+",Newline
+                            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+share,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                                ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" joint columns overlap with more than 1 dim in same hierarchy""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+                            ,Whitespace
+},Punctuation
+"
+",Newline
+                        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+                        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+overlapHierarchies,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                            ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" joint columns overlap with more than 1 hierarchies""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                            ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+jointDimNum,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+jointDims,Identifier
+.,Punctuation
+size,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+context,Identifier
+.,Punctuation
+addResult,Identifier
+(,Punctuation
+ResultLevel,Identifier
+.,Punctuation
+ERROR,Identifier
+",",Punctuation
+ ,Whitespace
+"""Aggregation group """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+index,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+""" a dim exist in more than one joint""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+index,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+protected,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+getMaxAgrGroupSize,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+KylinConfig,Identifier
+.,Punctuation
+getInstanceFromEnv,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getCubeAggrGroupMaxSize,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

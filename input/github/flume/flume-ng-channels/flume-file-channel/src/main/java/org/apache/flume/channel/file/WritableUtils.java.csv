@@ -1,0 +1,969 @@
+"/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+flume,Identifier
+.,Punctuation
+channel,Identifier
+.,Punctuation
+file,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DataInput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+DataOutput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * Util methods copied from org.apache.hadoop.io.WritableUtils.
+ */",Comment
+"
+",Newline
+class,Keyword
+ ,Whitespace
+WritableUtils,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Serializes an integer to a binary stream with zero-compressed encoding.
+   * For -120 <= i <= 127, only one byte is used with the actual value.
+   * For other values of i, the first byte value indicates whether the
+   * integer is positive or negative, and the number of bytes that follow.
+   * If the first byte value v is between -121 and -124, the following integer
+   * is positive, with number of bytes that follow are -(v+120).
+   * If the first byte value v is between -125 and -128, the following integer
+   * is negative, with number of bytes that follow are -(v+124). Bytes are
+   * stored in the high-non-zero-byte-first order.
+   *
+   * @param stream Binary output stream
+   * @param i Integer to be serialized
+   * @throws java.io.IOException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+writeVInt,Identifier
+(,Punctuation
+DataOutput,Identifier
+ ,Whitespace
+stream,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+writeVLong,Identifier
+(,Punctuation
+stream,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Serializes a long to a binary stream with zero-compressed encoding.
+   * For -112 <= i <= 127, only one byte is used with the actual value.
+   * For other values of i, the first byte value indicates whether the
+   * long is positive or negative, and the number of bytes that follow.
+   * If the first byte value v is between -113 and -120, the following long
+   * is positive, with number of bytes that follow are -(v+112).
+   * If the first byte value v is between -121 and -128, the following long
+   * is negative, with number of bytes that follow are -(v+120). Bytes are
+   * stored in the high-non-zero-byte-first order.
+   *
+   * @param stream Binary output stream
+   * @param i Long to be serialized
+   * @throws java.io.IOException
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+writeVLong,Identifier
+(,Punctuation
+DataOutput,Identifier
+ ,Whitespace
+stream,Identifier
+",",Punctuation
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+i,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+-,Operator
+112,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+127,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+stream,Identifier
+.,Punctuation
+writeByte,Identifier
+(,Punctuation
+(,Punctuation
+byte,Keyword
+),Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+112,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+i,Identifier
+ ,Whitespace
+^=,Operator
+ ,Whitespace
+-,Operator
+1L,Literal
+;,Punctuation
+ ,Whitespace
+// take one's complement',Comment
+"
+",Newline
+      ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+-,Operator
+120,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+tmp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+tmp,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+tmp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+tmp,Identifier
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+8,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+len,Identifier
+--,Operator
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+stream,Identifier
+.,Punctuation
+writeByte,Identifier
+(,Punctuation
+(,Punctuation
+byte,Keyword
+),Punctuation
+len,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+len,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+-,Operator
+120,Literal
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+-,Operator
+(,Punctuation
+len,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+120,Literal
+),Punctuation
+ ,Whitespace
+:,Operator
+ ,Whitespace
+-,Operator
+(,Punctuation
+len,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+112,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+idx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+ ,Whitespace
+idx,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+idx,Identifier
+--,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+int,Keyword
+ ,Whitespace
+shiftbits,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+idx,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+8,Literal
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+long,Keyword
+ ,Whitespace
+mask,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0xFFL,Literal
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+shiftbits,Identifier
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+stream,Identifier
+.,Punctuation
+writeByte,Identifier
+(,Punctuation
+(,Punctuation
+byte,Keyword
+),Punctuation
+(,Punctuation
+(,Punctuation
+i,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+mask,Identifier
+),Punctuation
+ ,Whitespace
+>>,Operator
+ ,Whitespace
+shiftbits,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Reads a zero-compressed encoded long from input stream and returns it.
+   * @param stream Binary input stream
+   * @throws java.io.IOException
+   * @return deserialized long from stream.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+readVLong,Identifier
+(,Punctuation
+DataInput,Identifier
+ ,Whitespace
+stream,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+byte,Keyword
+ ,Whitespace
+firstByte,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stream,Identifier
+.,Punctuation
+readByte,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+decodeVIntSize,Identifier
+(,Punctuation
+firstByte,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+len,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+firstByte,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+idx,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+idx,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+len,Identifier
+-,Operator
+1,Literal
+;,Punctuation
+ ,Whitespace
+idx,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+byte,Keyword
+ ,Whitespace
+b,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+stream,Identifier
+.,Punctuation
+readByte,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<<,Operator
+ ,Whitespace
+8,Literal
+;,Punctuation
+"
+",Newline
+      ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+|,Operator
+ ,Whitespace
+(,Punctuation
+b,Identifier
+ ,Whitespace
+&,Operator
+ ,Whitespace
+0xFF,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+isNegativeVInt,Identifier
+(,Punctuation
+firstByte,Identifier
+),Punctuation
+ ,Whitespace
+?,Operator
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+^,Operator
+ ,Whitespace
+-,Operator
+1L,Literal
+),Punctuation
+ ,Whitespace
+:,Operator
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Reads a zero-compressed encoded integer from input stream and returns it.
+   * @param stream Binary input stream
+   * @throws java.io.IOException
+   * @return deserialized integer from stream.
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+readVInt,Identifier
+(,Punctuation
+DataInput,Identifier
+ ,Whitespace
+stream,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+long,Keyword
+ ,Whitespace
+n,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+readVLong,Identifier
+(,Punctuation
+stream,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+n,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+MAX_VALUE,Identifier
+),Punctuation
+ ,Whitespace
+||,Operator
+ ,Whitespace
+(,Punctuation
+n,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+Integer,Identifier
+.,Punctuation
+MIN_VALUE,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IOException,Identifier
+(,Punctuation
+"""value too long to fit in integer""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+),Punctuation
+n,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Given the first byte of a vint/vlong, determine the sign
+   * @param value the first byte
+   * @return is the value negative
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isNegativeVInt,Identifier
+(,Punctuation
+byte,Keyword
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+-,Operator
+120,Literal
+ ,Whitespace
+||,Operator
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+-,Operator
+112,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+value,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+  ,Whitespace
+"/**
+   * Parse the first byte of a vint/vlong to determine the number of bytes
+   * @param value the first byte of the vint/vlong
+   * @return the total number of bytes (1 to 9)
+   */",Comment
+"
+",Newline
+  ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+decodeVIntSize,Identifier
+(,Punctuation
+byte,Keyword
+ ,Whitespace
+value,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+-,Operator
+112,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+value,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+-,Operator
+120,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+      ,Whitespace
+return,Keyword
+ ,Whitespace
+-,Operator
+119,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+return,Keyword
+ ,Whitespace
+-,Operator
+111,Literal
+ ,Whitespace
+-,Operator
+ ,Whitespace
+value,Identifier
+;,Punctuation
+"
+",Newline
+  ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+},Punctuation
+"
+",Newline

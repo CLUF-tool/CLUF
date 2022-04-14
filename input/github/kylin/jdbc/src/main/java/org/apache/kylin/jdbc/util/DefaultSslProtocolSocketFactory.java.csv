@@ -1,0 +1,1003 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+jdbc,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+io,Identifier
+.,Punctuation
+IOException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+InetAddress,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+Socket,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+UnknownHostException,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+ssl,Identifier
+.,Punctuation
+SSLContext,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+javax,Identifier
+.,Punctuation
+net,Identifier
+.,Punctuation
+ssl,Identifier
+.,Punctuation
+TrustManager,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+ConnectTimeoutException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+HttpClientError,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+params,Identifier
+.,Punctuation
+HttpConnectionParams,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+protocol,Identifier
+.,Punctuation
+ControllerThreadSocketFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+commons,Identifier
+.,Punctuation
+httpclient,Identifier
+.,Punctuation
+protocol,Identifier
+.,Punctuation
+SecureProtocolSocketFactory,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+DefaultSslProtocolSocketFactory,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+SecureProtocolSocketFactory,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+/** Log object for this class. */,Comment
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+DefaultSslProtocolSocketFactory,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+SSLContext,Identifier
+ ,Whitespace
+sslcontext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Constructor for DefaultSslProtocolSocketFactory.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+DefaultSslProtocolSocketFactory,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+SSLContext,Identifier
+ ,Whitespace
+createEasySSLContext,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+SSLContext,Identifier
+ ,Whitespace
+context,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+SSLContext,Identifier
+.,Punctuation
+getInstance,Identifier
+(,Punctuation
+"""TLS""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+context,Identifier
+.,Punctuation
+init,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+TrustManager,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+DefaultX509TrustManager,Identifier
+(,Punctuation
+null,Keyword
+),Punctuation
+ ,Whitespace
+},Punctuation
+",",Punctuation
+ ,Whitespace
+null,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+context,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+error,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+HttpClientError,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @see SecureProtocolSocketFactory#createSocket(java.lang.String,int,java.net.InetAddress,int)
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Socket,Identifier
+ ,Whitespace
+createSocket,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+host,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+InetAddress,Identifier
+ ,Whitespace
+clientHost,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+clientPort,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+UnknownHostException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getSSLContext,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getSocketFactory,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+createSocket,Identifier
+(,Punctuation
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+clientHost,Identifier
+",",Punctuation
+ ,Whitespace
+clientPort,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Attempts to get a new socket connection to the given host within the
+     * given time limit.
+     *
+     * <p>
+     * To circumvent the limitations of older JREs that do not support connect
+     * timeout a controller thread is executed. The controller thread attempts
+     * to create a new socket within the given limit of time. If socket
+     * constructor does not return until the timeout expires, the controller
+     * terminates and throws an {@link ConnectTimeoutException}
+     * </p>
+     *
+     * @param host
+     *            the host name/IP
+     * @param port
+     *            the port on the host
+     * @param localAddress
+     *            the local host name/IP to bind the socket to
+     * @param localPort
+     *            the port on the local machine
+     * @param params
+     *            {@link HttpConnectionParams Http connection parameters}
+     *
+     * @return Socket a new socket
+     *
+     * @throws IOException
+     *             if an I/O error occurs while creating the socket
+     * @throws UnknownHostException
+     *             if the IP address of the host cannot be determined
+     * @throws ConnectTimeoutException
+     *             DOCUMENT ME!
+     * @throws IllegalArgumentException
+     *             DOCUMENT ME!
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Socket,Identifier
+ ,Whitespace
+createSocket,Identifier
+(,Punctuation
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+host,Identifier
+",",Punctuation
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+InetAddress,Identifier
+ ,Whitespace
+localAddress,Identifier
+",",Punctuation
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+localPort,Identifier
+",",Punctuation
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+HttpConnectionParams,Identifier
+ ,Whitespace
+params,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+UnknownHostException,Identifier
+",",Punctuation
+ ,Whitespace
+ConnectTimeoutException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+params,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""Parameters may not be null""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+timeout,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+params,Identifier
+.,Punctuation
+getConnectionTimeout,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+timeout,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+createSocket,Identifier
+(,Punctuation
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+localAddress,Identifier
+",",Punctuation
+ ,Whitespace
+localPort,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// To be eventually deprecated when migrated to Java 1.4 or above,Comment
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+ControllerThreadSocketFactory,Identifier
+.,Punctuation
+createSocket,Identifier
+(,Punctuation
+this,Keyword
+",",Punctuation
+ ,Whitespace
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+localAddress,Identifier
+",",Punctuation
+ ,Whitespace
+localPort,Identifier
+",",Punctuation
+ ,Whitespace
+timeout,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @see SecureProtocolSocketFactory#createSocket(java.lang.String,int)
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Socket,Identifier
+ ,Whitespace
+createSocket,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+host,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+UnknownHostException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getSSLContext,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getSocketFactory,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+createSocket,Identifier
+(,Punctuation
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * @see SecureProtocolSocketFactory#createSocket(java.net.Socket,java.lang.String,int,boolean)
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+Socket,Identifier
+ ,Whitespace
+createSocket,Identifier
+(,Punctuation
+Socket,Identifier
+ ,Whitespace
+socket,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+host,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+autoClose,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IOException,Identifier
+",",Punctuation
+ ,Whitespace
+UnknownHostException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getSSLContext,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getSocketFactory,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+createSocket,Identifier
+(,Punctuation
+socket,Identifier
+",",Punctuation
+ ,Whitespace
+host,Identifier
+",",Punctuation
+ ,Whitespace
+port,Identifier
+",",Punctuation
+ ,Whitespace
+autoClose,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+equals,Identifier
+(,Punctuation
+Object,Identifier
+ ,Whitespace
+obj,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+obj,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+obj,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+equals,Identifier
+(,Punctuation
+DefaultX509TrustManager,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+hashCode,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+DefaultX509TrustManager,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+hashCode,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+SSLContext,Identifier
+ ,Whitespace
+getSSLContext,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+this,Keyword
+.,Punctuation
+sslcontext,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+this,Keyword
+.,Punctuation
+sslcontext,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+createEasySSLContext,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+this,Keyword
+.,Punctuation
+sslcontext,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

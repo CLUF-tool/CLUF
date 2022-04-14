@@ -1,0 +1,1738 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dict,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+ListIterator,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dimension,Identifier
+.,Punctuation
+Dictionary,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dimension,Identifier
+.,Punctuation
+IDimensionEncodingMap,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+BuildInFunctionTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+ColumnTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+CompareTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+ConstantTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+ITupleFilterTransformer,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+LogicalTupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+TupleFilter,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+TupleFilter,Identifier
+.,Punctuation
+FilterOperatorEnum,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+collect,Identifier
+.,Punctuation
+Lists,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+com,Identifier
+.,Punctuation
+google,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+primitives,Identifier
+.,Punctuation
+Primitives,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * only take effect when the compare filter has function
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+BuildInFunctionTransformer,Identifier
+ ,Whitespace
+implements,Keyword
+ ,Whitespace
+ITupleFilterTransformer,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+BuildInFunctionTransformer,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+IDimensionEncodingMap,Identifier
+ ,Whitespace
+dimEncMap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+BuildInFunctionTransformer,Identifier
+(,Punctuation
+IDimensionEncodingMap,Identifier
+ ,Whitespace
+dimEncMap,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+dimEncMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dimEncMap,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+Override,Identifier
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+transform,Identifier
+(,Punctuation
+TupleFilter,Identifier
+ ,Whitespace
+tupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+translated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tupleFilter,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+CompareTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+//normal case,Comment
+"
+",Newline
+            ,Whitespace
+translated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+translateCompareTupleFilter,Identifier
+(,Punctuation
+(,Punctuation
+CompareTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+tupleFilter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+translated,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Translated {""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tupleFilter,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""} to IN clause: {""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+translated,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""}""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tupleFilter,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+BuildInFunctionTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+//like case,Comment
+"
+",Newline
+            ,Whitespace
+translated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+translateFunctionTupleFilter,Identifier
+(,Punctuation
+(,Punctuation
+BuildInFunctionTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+tupleFilter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+translated,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""Translated {""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tupleFilter,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""} to IN clause: {""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+translated,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""}""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+tupleFilter,Identifier
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+LogicalTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+"""unchecked""",String
+),Punctuation
+"
+",Newline
+            ,Whitespace
+ListIterator,Identifier
+<,Operator
+TupleFilter,Identifier
+>,Operator
+ ,Whitespace
+childIterator,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+ListIterator,Identifier
+<,Operator
+TupleFilter,Identifier
+>,Operator
+),Punctuation
+ ,Whitespace
+tupleFilter,Identifier
+.,Punctuation
+getChildren,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+listIterator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+while,Keyword
+ ,Whitespace
+(,Punctuation
+childIterator,Identifier
+.,Punctuation
+hasNext,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+transformed,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+transform,Identifier
+(,Punctuation
+childIterator,Identifier
+.,Punctuation
+next,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+transformed,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+childIterator,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+transformed,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+translated,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+?,Operator
+ ,Whitespace
+tupleFilter,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+translated,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+translateFunctionTupleFilter,Identifier
+(,Punctuation
+BuildInFunctionTupleFilter,Identifier
+ ,Whitespace
+buildInFunctionTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+buildInFunctionTupleFilter,Identifier
+.,Punctuation
+isValid,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+TblColRef,Identifier
+ ,Whitespace
+columnRef,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buildInFunctionTupleFilter,Identifier
+.,Punctuation
+getColumn,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Dictionary,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+dict,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dimEncMap,Identifier
+.,Punctuation
+getDictionary,Identifier
+(,Punctuation
+columnRef,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dict,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+CompareTupleFilter,Identifier
+ ,Whitespace
+translated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CompareTupleFilter,Identifier
+(,Punctuation
+FilterOperatorEnum,Identifier
+.,Punctuation
+IN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+translated,Identifier
+.,Punctuation
+addChild,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ColumnTupleFilter,Identifier
+(,Punctuation
+columnRef,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getMinId,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getMaxId,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Object,Identifier
+ ,Whitespace
+dictVal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getValueFromId,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+Boolean,Identifier
+),Punctuation
+ ,Whitespace
+buildInFunctionTupleFilter,Identifier
+.,Punctuation
+invokeFunction,Identifier
+(,Punctuation
+dictVal,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+translated,Identifier
+.,Punctuation
+addChild,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ConstantTupleFilter,Identifier
+(,Punctuation
+dictVal,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+translated,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+@,Punctuation
+SuppressWarnings,Identifier
+(,Punctuation
+{,Punctuation
+ ,Whitespace
+"""unchecked""",String
+",",Punctuation
+ ,Whitespace
+"""rawtypes""",String
+ ,Whitespace
+},Punctuation
+),Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+TupleFilter,Identifier
+ ,Whitespace
+translateCompareTupleFilter,Identifier
+(,Punctuation
+CompareTupleFilter,Identifier
+ ,Whitespace
+compTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+compTupleFilter,Identifier
+.,Punctuation
+getFunction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+ ,Whitespace
+||,Operator
+ ,Whitespace
+(,Punctuation
+!,Operator
+(,Punctuation
+compTupleFilter,Identifier
+.,Punctuation
+getFunction,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+instanceof,Keyword
+ ,Whitespace
+BuildInFunctionTupleFilter,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+BuildInFunctionTupleFilter,Identifier
+ ,Whitespace
+buildInFunctionTupleFilter,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+BuildInFunctionTupleFilter,Identifier
+),Punctuation
+ ,Whitespace
+compTupleFilter,Identifier
+.,Punctuation
+getFunction,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+buildInFunctionTupleFilter,Identifier
+.,Punctuation
+isValid,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+TblColRef,Identifier
+ ,Whitespace
+columnRef,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buildInFunctionTupleFilter,Identifier
+.,Punctuation
+getColumn,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+Dictionary,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+dict,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dimEncMap,Identifier
+.,Punctuation
+getDictionary,Identifier
+(,Punctuation
+columnRef,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dict,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+CompareTupleFilter,Identifier
+ ,Whitespace
+translated,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+CompareTupleFilter,Identifier
+(,Punctuation
+FilterOperatorEnum,Identifier
+.,Punctuation
+IN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+translated,Identifier
+.,Punctuation
+addChild,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ColumnTupleFilter,Identifier
+(,Punctuation
+columnRef,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+Collection,Identifier
+<,Operator
+Object,Identifier
+>,Operator
+ ,Whitespace
+inValues,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Lists,Identifier
+.,Punctuation
+newArrayList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getMinId,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getMaxId,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+Object,Identifier
+ ,Whitespace
+dictVal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+dict,Identifier
+.,Punctuation
+getValueFromId,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+Object,Identifier
+ ,Whitespace
+computedVal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+buildInFunctionTupleFilter,Identifier
+.,Punctuation
+invokeFunction,Identifier
+(,Punctuation
+dictVal,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+Class,Identifier
+ ,Whitespace
+clazz,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+Primitives,Identifier
+.,Punctuation
+wrap,Identifier
+(,Punctuation
+computedVal,Identifier
+.,Punctuation
+getClass,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+Object,Identifier
+ ,Whitespace
+targetVal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+compTupleFilter,Identifier
+.,Punctuation
+getFirstValue,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+Primitives,Identifier
+.,Punctuation
+isWrapperType,Identifier
+(,Punctuation
+clazz,Identifier
+),Punctuation
+),Punctuation
+"
+",Newline
+                    ,Whitespace
+targetVal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+clazz,Identifier
+.,Punctuation
+cast,Identifier
+(,Punctuation
+clazz,Identifier
+.,Punctuation
+getDeclaredMethod,Identifier
+(,Punctuation
+"""valueOf""",String
+",",Punctuation
+ ,Whitespace
+String,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+.,Punctuation
+invoke,Identifier
+(,Punctuation
+null,Keyword
+",",Punctuation
+ ,Whitespace
+compTupleFilter,Identifier
+.,Punctuation
+getFirstValue,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+comp,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+Comparable,Identifier
+),Punctuation
+ ,Whitespace
+computedVal,Identifier
+),Punctuation
+.,Punctuation
+compareTo,Identifier
+(,Punctuation
+targetVal,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+boolean,Keyword
+ ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+compTupleFilter,Identifier
+.,Punctuation
+getOperator,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+EQ,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+comp,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+NEQ,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+comp,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+LT,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+comp,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+LTE,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+comp,Identifier
+ ,Whitespace
+<=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+GT,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+comp,Identifier
+ ,Whitespace
+>,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+GTE,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+comp,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+IN,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+compTupleFilter,Identifier
+.,Punctuation
+getValues,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+contains,Identifier
+(,Punctuation
+computedVal,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+case,Keyword
+ ,Whitespace
+NOTIN,Identifier
+:,Operator
+"
+",Newline
+                    ,Whitespace
+compResult,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+!,Operator
+compTupleFilter,Identifier
+.,Punctuation
+getValues,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+contains,Identifier
+(,Punctuation
+computedVal,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+                    ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+compResult,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+inValues,Identifier
+.,Punctuation
+add,Identifier
+(,Punctuation
+dictVal,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+translated,Identifier
+.,Punctuation
+addChild,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+ConstantTupleFilter,Identifier
+(,Punctuation
+inValues,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+logger,Identifier
+.,Punctuation
+debug,Identifier
+(,Punctuation
+e,Identifier
+.,Punctuation
+getMessage,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+translated,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

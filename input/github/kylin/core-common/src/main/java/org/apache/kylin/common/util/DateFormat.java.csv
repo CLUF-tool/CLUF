@@ -1,0 +1,1344 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+common,Identifier
+.,Punctuation
+util,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+ParseException,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+text,Identifier
+.,Punctuation
+SimpleDateFormat,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Date,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+TimeZone,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+concurrent,Identifier
+.,Punctuation
+ConcurrentHashMap,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+DateFormat,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+DEFAULT_DATE_PATTERN,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""yyyy-MM-dd""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+DEFAULT_TIME_PATTERN,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""HH:mm:ss""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+DEFAULT_DATETIME_PATTERN_WITHOUT_MILLISECONDS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""yyyy-MM-dd HH:mm:ss""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+DEFAULT_DATETIME_PATTERN_WITH_MILLISECONDS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""yyyy-MM-dd HH:mm:ss.SSS""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+[,Punctuation
+],Punctuation
+ ,Whitespace
+SUPPORTED_DATETIME_PATTERN,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+ ,Whitespace
+DEFAULT_DATE_PATTERN,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATETIME_PATTERN_WITHOUT_MILLISECONDS,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATETIME_PATTERN_WITH_MILLISECONDS,Identifier
+",",Punctuation
+ ,Whitespace
+"""yyyyMMdd""",String
+ ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+private,Keyword
+ ,Whitespace
+Map,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+SimpleDateFormat,Identifier
+>>,Operator
+ ,Whitespace
+threadLocalMap,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ConcurrentHashMap,Identifier
+<,Operator
+String,Identifier
+",",Punctuation
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+SimpleDateFormat,Identifier
+>>,Operator
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+SimpleDateFormat,Identifier
+ ,Whitespace
+getDateFormat,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+datePattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+SimpleDateFormat,Identifier
+>,Operator
+ ,Whitespace
+formatThreadLocal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+threadLocalMap,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+datePattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+formatThreadLocal,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+threadLocalMap,Identifier
+.,Punctuation
+put,Identifier
+(,Punctuation
+datePattern,Identifier
+",",Punctuation
+ ,Whitespace
+formatThreadLocal,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+ThreadLocal,Identifier
+<,Operator
+SimpleDateFormat,Identifier
+>,Operator
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+SimpleDateFormat,Identifier
+ ,Whitespace
+format,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+formatThreadLocal,Identifier
+.,Punctuation
+get,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+format,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+format,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SimpleDateFormat,Identifier
+(,Punctuation
+datePattern,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+format,Identifier
+.,Punctuation
+setTimeZone,Identifier
+(,Punctuation
+TimeZone,Identifier
+.,Punctuation
+getTimeZone,Identifier
+(,Punctuation
+"""GMT""",String
+),Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+// NOTE: this must be GMT to calculate epoch date correctly,Comment
+"
+",Newline
+            ,Whitespace
+formatThreadLocal,Identifier
+.,Punctuation
+set,Identifier
+(,Punctuation
+format,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+format,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+formatToDateStr,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+millis,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+formatToDateStr,Identifier
+(,Punctuation
+millis,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATE_PATTERN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+formatToDateStr,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+millis,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+pattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getDateFormat,Identifier
+(,Punctuation
+pattern,Identifier
+),Punctuation
+.,Punctuation
+format,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Date,Identifier
+(,Punctuation
+millis,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+formatToTimeStr,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+millis,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+formatToTimeStr,Identifier
+(,Punctuation
+millis,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATETIME_PATTERN_WITH_MILLISECONDS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+formatToTimeWithoutMilliStr,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+millis,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+formatToTimeStr,Identifier
+(,Punctuation
+millis,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATETIME_PATTERN_WITHOUT_MILLISECONDS,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+formatToTimeStr,Identifier
+(,Punctuation
+long,Keyword
+ ,Whitespace
+millis,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+pattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getDateFormat,Identifier
+(,Punctuation
+pattern,Identifier
+),Punctuation
+.,Punctuation
+format,Identifier
+(,Punctuation
+new,Keyword
+ ,Whitespace
+Date,Identifier
+(,Punctuation
+millis,Identifier
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+dateToString,Identifier
+(,Punctuation
+Date,Identifier
+ ,Whitespace
+date,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+pattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+getDateFormat,Identifier
+(,Punctuation
+pattern,Identifier
+),Punctuation
+.,Punctuation
+format,Identifier
+(,Punctuation
+date,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Date,Identifier
+ ,Whitespace
+stringToDate,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+str,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+stringToDate,Identifier
+(,Punctuation
+str,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATE_PATTERN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+Date,Identifier
+ ,Whitespace
+stringToDate,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+str,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+pattern,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+Date,Identifier
+ ,Whitespace
+date,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+date,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+getDateFormat,Identifier
+(,Punctuation
+pattern,Identifier
+),Punctuation
+.,Punctuation
+parse,Identifier
+(,Punctuation
+str,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+ParseException,Identifier
+ ,Whitespace
+e,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""'""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+str,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""' is not a valid date of pattern '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+pattern,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+",",Punctuation
+ ,Whitespace
+e,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+date,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+stringToMillis,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+str,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+stringToMillis,Identifier
+(,Punctuation
+str,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATE_PATTERN,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+long,Keyword
+ ,Whitespace
+stringToMillis,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+str,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+partitionDateFormat,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+isAllDigits,Identifier
+(,Punctuation
+str,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+Long,Identifier
+.,Punctuation
+parseLong,Identifier
+(,Punctuation
+str,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+str,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+8,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+partitionDateFormat,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+8,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+stringToDate,Identifier
+(,Punctuation
+str,Identifier
+",",Punctuation
+ ,Whitespace
+partitionDateFormat,Identifier
+),Punctuation
+.,Punctuation
+getTime,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+str,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+10,Literal
+ ,Whitespace
+&&,Operator
+ ,Whitespace
+partitionDateFormat,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+10,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+stringToDate,Identifier
+(,Punctuation
+str,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATE_PATTERN,Identifier
+),Punctuation
+.,Punctuation
+getTime,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+str,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+19,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+stringToDate,Identifier
+(,Punctuation
+str,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATETIME_PATTERN_WITHOUT_MILLISECONDS,Identifier
+),Punctuation
+.,Punctuation
+getTime,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+str,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+>,Operator
+ ,Whitespace
+19,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+ ,Whitespace
+stringToDate,Identifier
+(,Punctuation
+str,Identifier
+",",Punctuation
+ ,Whitespace
+DEFAULT_DATETIME_PATTERN_WITH_MILLISECONDS,Identifier
+),Punctuation
+.,Punctuation
+getTime,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+(,Punctuation
+"""there is no valid date pattern for:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+str,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isAllDigits,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+str,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+",",Punctuation
+ ,Whitespace
+n,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+str,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+n,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+Character,Identifier
+.,Punctuation
+isDigit,Identifier
+(,Punctuation
+str,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+false,Keyword
+),Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isSupportedDateFormat,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+dateStr,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+assert,Identifier
+ ,Whitespace
+dateStr,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+String,Identifier
+ ,Whitespace
+formatStr,Identifier
+ ,Whitespace
+:,Operator
+ ,Whitespace
+SUPPORTED_DATETIME_PATTERN,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+try,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+dateStr,Identifier
+.,Punctuation
+equals,Identifier
+(,Punctuation
+dateToString,Identifier
+(,Punctuation
+stringToDate,Identifier
+(,Punctuation
+dateStr,Identifier
+",",Punctuation
+ ,Whitespace
+formatStr,Identifier
+),Punctuation
+",",Punctuation
+ ,Whitespace
+formatStr,Identifier
+),Punctuation
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+return,Keyword
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+catch,Keyword
+ ,Whitespace
+(,Punctuation
+Exception,Identifier
+ ,Whitespace
+ex,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+continue,Keyword
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

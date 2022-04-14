@@ -1,0 +1,648 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+spark,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+cube,Identifier
+.,Punctuation
+CubeSegment,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+CubingJob,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+IMRInput,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+IMROutput2,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+JobBuilderSupport,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+MRUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+engine,Identifier
+.,Punctuation
+mr,Identifier
+.,Punctuation
+steps,Identifier
+.,Punctuation
+CubingExecutableUtil,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+job,Identifier
+.,Punctuation
+execution,Identifier
+.,Punctuation
+DefaultChainedExecutable,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+IJoinedFlatTableDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+Logger,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+slf4j,Identifier
+.,Punctuation
+LoggerFactory,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+SparkCubingJobBuilder,Identifier
+ ,Whitespace
+extends,Keyword
+ ,Whitespace
+JobBuilderSupport,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+Logger,Identifier
+ ,Whitespace
+logger,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+LoggerFactory,Identifier
+.,Punctuation
+getLogger,Identifier
+(,Punctuation
+SparkCubingJobBuilder,Identifier
+.,Punctuation
+class,Keyword
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+IMRInput,Identifier
+.,Punctuation
+IMRBatchCubingInputSide,Identifier
+ ,Whitespace
+inputSide,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+IMROutput2,Identifier
+.,Punctuation
+IMRBatchCubingOutputSide2,Identifier
+ ,Whitespace
+outputSide,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+confPath,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+coprocessor,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+SparkCubingJobBuilder,Identifier
+(,Punctuation
+CubeSegment,Identifier
+ ,Whitespace
+seg,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+submitter,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+confPath,Identifier
+",",Punctuation
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+coprocessor,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+super,Keyword
+(,Punctuation
+seg,Identifier
+",",Punctuation
+ ,Whitespace
+submitter,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+inputSide,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MRUtil,Identifier
+.,Punctuation
+getBatchCubingInputSide,Identifier
+(,Punctuation
+seg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+outputSide,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+MRUtil,Identifier
+.,Punctuation
+getBatchCubingOutputSide2,Identifier
+(,Punctuation
+seg,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+confPath,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+confPath,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+this,Keyword
+.,Punctuation
+coprocessor,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+coprocessor,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+DefaultChainedExecutable,Identifier
+ ,Whitespace
+build,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+CubingJob,Identifier
+ ,Whitespace
+result,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+CubingJob,Identifier
+.,Punctuation
+createBuildJob,Identifier
+(,Punctuation
+(,Punctuation
+CubeSegment,Identifier
+),Punctuation
+ ,Whitespace
+seg,Identifier
+",",Punctuation
+ ,Whitespace
+submitter,Identifier
+",",Punctuation
+ ,Whitespace
+config,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+jobId,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+result,Identifier
+.,Punctuation
+getId,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+inputSide,Identifier
+.,Punctuation
+addStepPhase1_CreateFlatTable,Identifier
+(,Punctuation
+result,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+IJoinedFlatTableDesc,Identifier
+ ,Whitespace
+joinedFlatTableDesc,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+seg,Identifier
+.,Punctuation
+getJoinedFlatTableDesc,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+tableName,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+joinedFlatTableDesc,Identifier
+.,Punctuation
+getTableName,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+logger,Identifier
+.,Punctuation
+info,Identifier
+(,Punctuation
+"""intermediate table:""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+SparkExecutable,Identifier
+ ,Whitespace
+sparkExecutable,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+SparkExecutable,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sparkExecutable,Identifier
+.,Punctuation
+setClassName,Identifier
+(,Punctuation
+SparkCubing,Identifier
+.,Punctuation
+class,Keyword
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sparkExecutable,Identifier
+.,Punctuation
+setParam,Identifier
+(,Punctuation
+"""hiveTable""",String
+",",Punctuation
+ ,Whitespace
+tableName,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sparkExecutable,Identifier
+.,Punctuation
+setParam,Identifier
+(,Punctuation
+CubingExecutableUtil,Identifier
+.,Punctuation
+CUBE_NAME,Identifier
+",",Punctuation
+ ,Whitespace
+seg,Identifier
+.,Punctuation
+getRealization,Identifier
+(,Punctuation
+),Punctuation
+.,Punctuation
+getName,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sparkExecutable,Identifier
+.,Punctuation
+setParam,Identifier
+(,Punctuation
+"""segmentId""",String
+",",Punctuation
+ ,Whitespace
+seg,Identifier
+.,Punctuation
+getUuid,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sparkExecutable,Identifier
+.,Punctuation
+setParam,Identifier
+(,Punctuation
+"""confPath""",String
+",",Punctuation
+ ,Whitespace
+confPath,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+sparkExecutable,Identifier
+.,Punctuation
+setParam,Identifier
+(,Punctuation
+"""coprocessor""",String
+",",Punctuation
+ ,Whitespace
+coprocessor,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+result,Identifier
+.,Punctuation
+addTask,Identifier
+(,Punctuation
+sparkExecutable,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+result,Identifier
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

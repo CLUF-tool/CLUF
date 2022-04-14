@@ -1,0 +1,820 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+measure,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collection,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Collections,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+List,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+java,Identifier
+.,Punctuation
+util,Identifier
+.,Punctuation
+Map,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+dimension,Identifier
+.,Punctuation
+Dictionary,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+FunctionDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+MeasureDesc,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+model,Identifier
+.,Punctuation
+TblColRef,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+CapabilityResult,Identifier
+.,Punctuation
+CapabilityInfluence,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+realization,Identifier
+.,Punctuation
+SQLDigest,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+tuple,Identifier
+.,Punctuation
+Tuple,Identifier
+;,Punctuation
+"
+",Newline
+import,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+tuple,Identifier
+.,Punctuation
+TupleInfo,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * MeasureType captures how a kind of aggregation is defined, how it is calculated 
+ * during cube build, and how it is involved in query and storage scan.
+ * 
+ * @param <T> the Java type of aggregation data object, e.g. HyperLogLogPlusCounter
+ */",Comment
+"
+",Newline
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+MeasureType,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/* ============================================================================
+     * Define
+     * ---------------------------------------------------------------------------- */",Comment
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+/** Validates a user defined FunctionDesc has expected parameter etc. Throw IllegalArgumentException if anything wrong. */,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+validate,Identifier
+(,Punctuation
+FunctionDesc,Identifier
+ ,Whitespace
+functionDesc,Identifier
+),Punctuation
+ ,Whitespace
+throws,Keyword
+ ,Whitespace
+IllegalArgumentException,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/** Although most aggregated object takes only 8 bytes like long or double, 
+     * some advanced aggregation like HyperLogLog or TopN can consume more than 10 KB for 
+     * each object, which requires special care on memory allocation. */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+isMemoryHungry,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/** Return true if this MeasureType only aggregate values in base cuboid, and output initial value in child cuboid. */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+onlyAggrInBaseCuboid,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/* ============================================================================
+     * Build
+     * ---------------------------------------------------------------------------- */",Comment
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+/** Return a MeasureIngester which knows how to init aggregation object from raw records. */,Comment
+"
+",Newline
+    ,Whitespace
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+MeasureIngester,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+newIngester,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+/** Return a MeasureAggregator which does aggregation. */,Comment
+"
+",Newline
+    ,Whitespace
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+MeasureAggregator,Identifier
+<,Operator
+T,Identifier
+>,Operator
+ ,Whitespace
+newAggregator,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+ ,Whitespace
+"
+",Newline
+    ,Whitespace
+/** Some special measures need dictionary to encode column values for optimal storage. TopN is an example. */,Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+List,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+getColumnsNeedDictionary,Identifier
+(,Punctuation
+FunctionDesc,Identifier
+ ,Whitespace
+functionDesc,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+Collections,Identifier
+.,Punctuation
+emptyList,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/* ============================================================================
+     * Cube Selection
+     * ---------------------------------------------------------------------------- */",Comment
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/**
+     * Some special measures hold columns which are usually treated as dimensions (or vice-versa). 
+     * This is where they override to influence cube capability check.
+     * 
+     * A SQLDigest contains dimensions and measures extracted from a query. After comparing to
+     * cube definition, the matched dimensions and measures are crossed out, and what's left is
+     * the <code>unmatchedDimensions</code> and <code>unmatchedAggregations</code>.
+     * 
+     * Each measure type on the cube is then called on this method to check if any of the unmatched
+     * can be fulfilled. If a measure type cannot fulfill any of the unmatched, it simply return null.
+     * Or otherwise, <code>unmatchedDimensions</code> and <code>unmatchedAggregations</code> must
+     * be modified to drop the satisfied dimension or measure, and a CapabilityInfluence object
+     * must be returned to mark the contribution of this measure type.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+CapabilityInfluence,Identifier
+ ,Whitespace
+influenceCapabilityCheck,Identifier
+(,Punctuation
+Collection,Identifier
+<,Operator
+TblColRef,Identifier
+>,Operator
+ ,Whitespace
+unmatchedDimensions,Identifier
+",",Punctuation
+ ,Whitespace
+Collection,Identifier
+<,Operator
+FunctionDesc,Identifier
+>,Operator
+ ,Whitespace
+unmatchedAggregations,Identifier
+",",Punctuation
+ ,Whitespace
+SQLDigest,Identifier
+ ,Whitespace
+digest,Identifier
+",",Punctuation
+ ,Whitespace
+MeasureDesc,Identifier
+ ,Whitespace
+measureDesc,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+null,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/* ============================================================================
+     * Query Rewrite
+     * ---------------------------------------------------------------------------- */",Comment
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+// TODO support user defined Calcite aggr function,Comment
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+/** Whether or not Calcite rel-tree needs rewrite to do last around of aggregation */,Comment
+"
+",Newline
+    ,Whitespace
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needRewrite,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+/** Returns a Calcite aggregation function implementation class */,Comment
+"
+",Newline
+    ,Whitespace
+abstract,Keyword
+ ,Whitespace
+public,Keyword
+ ,Whitespace
+Class,Identifier
+<,Operator
+?,Operator
+>,Operator
+ ,Whitespace
+getRewriteCalciteAggrFunctionClass,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/* ============================================================================
+     * Storage
+     * ---------------------------------------------------------------------------- */",Comment
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/**
+     * Some special measures hold columns which are usually treated as dimensions (or vice-versa). 
+     * They need to adjust dimensions and measures in <code>sqlDigest</code> before scanning,
+     * such that correct cuboid and measures can be selected by storage.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+adjustSqlDigest,Identifier
+(,Punctuation
+MeasureDesc,Identifier
+ ,Whitespace
+measureDesc,Identifier
+",",Punctuation
+ ,Whitespace
+SQLDigest,Identifier
+ ,Whitespace
+sqlDigest,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/** Return true if one storage record maps to multiple tuples, or false otherwise. */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+boolean,Keyword
+ ,Whitespace
+needAdvancedTupleFilling,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/** The simple filling mode, one tuple per storage record. */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+fillTupleSimply,Identifier
+(,Punctuation
+Tuple,Identifier
+ ,Whitespace
+tuple,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+indexInTuple,Identifier
+",",Punctuation
+ ,Whitespace
+Object,Identifier
+ ,Whitespace
+measureValue,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+tuple,Identifier
+.,Punctuation
+setMeasureValue,Identifier
+(,Punctuation
+indexInTuple,Identifier
+",",Punctuation
+ ,Whitespace
+measureValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+"/** The advanced filling mode, multiple tuples per storage record. */",Comment
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+IAdvMeasureFiller,Identifier
+ ,Whitespace
+getAdvancedTupleFiller,Identifier
+(,Punctuation
+FunctionDesc,Identifier
+ ,Whitespace
+function,Identifier
+",",Punctuation
+ ,Whitespace
+TupleInfo,Identifier
+ ,Whitespace
+returnTupleInfo,Identifier
+",",Punctuation
+ ,Whitespace
+Map,Identifier
+<,Operator
+TblColRef,Identifier
+",",Punctuation
+ ,Whitespace
+Dictionary,Identifier
+<,Operator
+String,Identifier
+>>,Operator
+ ,Whitespace
+dictionaryMap,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+throw,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+UnsupportedOperationException,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+"
+",Newline
+    ,Whitespace
+public,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+interface,Keyword
+ ,Whitespace
+IAdvMeasureFiller,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+/** Reload a value from storage and get ready to fill multiple tuples with it. */,Comment
+"
+",Newline
+        ,Whitespace
+void,Keyword
+ ,Whitespace
+reload,Identifier
+(,Punctuation
+Object,Identifier
+ ,Whitespace
+measureValue,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+/** Returns how many rows contained in last loaded value. */,Comment
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+getNumOfRows,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+"
+",Newline
+        ,Whitespace
+/** Fill in specified row into tuple. */,Comment
+"
+",Newline
+        ,Whitespace
+void,Keyword
+ ,Whitespace
+fillTuple,Identifier
+(,Punctuation
+Tuple,Identifier
+ ,Whitespace
+tuple,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+row,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline

@@ -1,0 +1,2761 @@
+"/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * ""License""); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an ""AS IS"" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */",Comment
+"
+",Newline
+"
+",Newline
+package,Keyword
+ ,Whitespace
+org,Identifier
+.,Punctuation
+apache,Identifier
+.,Punctuation
+kylin,Identifier
+.,Punctuation
+metadata,Identifier
+.,Punctuation
+filter,Identifier
+.,Punctuation
+function,Identifier
+;,Punctuation
+"
+",Newline
+"
+",Newline
+"/**
+ * From Calcite
+ *
+ * Utilities for converting SQL {@code LIKE} and {@code SIMILAR} operators
+ * to regular expressions.
+ */",Comment
+"
+",Newline
+public,Keyword
+ ,Whitespace
+class,Keyword
+ ,Whitespace
+Like,Identifier
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+JAVA_REGEX_SPECIALS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""[]()|^-+*?{}$\\""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+SQL_SIMILAR_SPECIALS,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+"""[]()|^-+*_%?{}""",String
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+final,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+[,Punctuation
+],Punctuation
+ ,Whitespace
+REG_CHAR_CLASSES,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:ALPHA:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\p{Alpha}""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:alpha:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\p{Alpha}""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:UPPER:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\p{Upper}""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:upper:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\p{Upper}""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:LOWER:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\p{Lower}""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:lower:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\p{Lower}""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:DIGIT:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\d""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:digit:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\d""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:SPACE:]""",String
+",",Punctuation
+ ,Whitespace
+""" """,String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:space:]""",String
+",",Punctuation
+ ,Whitespace
+""" """,String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:WHITESPACE:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\s""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:whitespace:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\s""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:ALNUM:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\p{Alnum}""",String
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+"""[:alnum:]""",String
+",",Punctuation
+ ,Whitespace
+"""\\p{Alnum}""",String
+"
+",Newline
+    ,Whitespace
+},Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+Like,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Translates a SQL LIKE pattern to Java regex pattern, with optional
+     * escape string.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlToRegexLike,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlPattern,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+CharSequence,Identifier
+ ,Whitespace
+escapeStr,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+char,Keyword
+ ,Whitespace
+escapeChar,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+escapeStr,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+escapeStr,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeCharacter,Identifier
+(,Punctuation
+escapeStr,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+escapeChar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+escapeStr,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+escapeChar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+sqlToRegexLike,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Translates a SQL LIKE pattern to Java regex pattern.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlToRegexLike,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlPattern,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+char,Keyword
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+javaPattern,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+len,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+len,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+char,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+JAVA_REGEX_SPECIALS,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'\\',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+(,Punctuation
+sqlPattern,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeSequence,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+char,Keyword
+ ,Whitespace
+nextChar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+nextChar,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'_',String
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+||,Operator
+ ,Whitespace
+(,Punctuation
+nextChar,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'%',String
+),Punctuation
+"
+",Newline
+                        ,Whitespace
+||,Operator
+ ,Whitespace
+(,Punctuation
+nextChar,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+i,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeSequence,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'_',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'.',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'%',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+""".""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'*',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+ ,Whitespace
+invalidEscapeCharacter,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"
+",Newline
+                ,Whitespace
+"""Invalid escape character '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+ ,Whitespace
+invalidEscapeSequence,Identifier
+(,Punctuation
+String,Identifier
+ ,Whitespace
+s,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"
+",Newline
+                ,Whitespace
+"""Invalid escape sequence '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+s,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""', """,String
+ ,Whitespace
++,Operator
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+void,Keyword
+ ,Whitespace
+similarEscapeRuleChecking,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlPattern,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+char,Keyword
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+escapeChar,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+return,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+SQL_SIMILAR_SPECIALS,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+// The the escape character is a special character,Comment
+"
+",Newline
+            ,Whitespace
+// SQL 2003 Part 2 Section 8.6 General Rule 3.b,Comment
+"
+",Newline
+            ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+sqlPattern,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+ ,Whitespace
+==,Operator
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+(,Punctuation
+sqlPattern,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeSequence,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+char,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+(,Punctuation
+SQL_SIMILAR_SPECIALS,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+"
+",Newline
+                            ,Whitespace
+&&,Operator
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeSequence,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+// SQL 2003 Part 2 Section 8.6 General Rule 3.c,Comment
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+escapeChar,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+':',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+position,Identifier
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+position,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+"""[:""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+position,Identifier
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+position,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+""":]""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+position,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeSequence,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+position,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+ ,Whitespace
+invalidRegularExpression,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+pattern,Identifier
+",",Punctuation
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+new,Keyword
+ ,Whitespace
+RuntimeException,Identifier
+(,Punctuation
+"
+",Newline
+                ,Whitespace
+"""Invalid regular expression '""",String
+ ,Whitespace
++,Operator
+ ,Whitespace
+pattern,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+"""'""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+private,Keyword
+ ,Whitespace
+static,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+sqlSimilarRewriteCharEnumeration,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlPattern,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+javaPattern,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+int,Keyword
+ ,Whitespace
+pos,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+char,Keyword
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+int,Keyword
+ ,Whitespace
+i,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+pos,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+char,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+']',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+return,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+i,Identifier
+++,Operator
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+char,Keyword
+ ,Whitespace
+nextChar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+SQL_SIMILAR_SPECIALS,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+JAVA_REGEX_SPECIALS,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'\\',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+escapeChar,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+nextChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidRegularExpression,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'-',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'-',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+'^',String
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'^',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+sqlPattern,Identifier
+.,Punctuation
+startsWith,Identifier
+(,Punctuation
+"""[:""",String
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+int,Keyword
+ ,Whitespace
+numOfRegCharSets,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+REG_CHAR_CLASSES,Identifier
+.,Punctuation
+length,Identifier
+ ,Whitespace
+/,Operator
+ ,Whitespace
+2,Literal
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+boolean,Keyword
+ ,Whitespace
+found,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+j,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+numOfRegCharSets,Identifier
+;,Punctuation
+ ,Whitespace
+j,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+sqlPattern,Identifier
+.,Punctuation
+startsWith,Identifier
+(,Punctuation
+REG_CHAR_CLASSES,Identifier
+[,Punctuation
+j,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+j,Identifier
+],Punctuation
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+REG_CHAR_CLASSES,Identifier
+[,Punctuation
+j,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+j,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+],Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+                        ,Whitespace
+i,Identifier
+ ,Whitespace
++=,Operator
+ ,Whitespace
+REG_CHAR_CLASSES,Identifier
+[,Punctuation
+j,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+j,Identifier
+],Punctuation
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+found,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+found,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidRegularExpression,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+SQL_SIMILAR_SPECIALS,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidRegularExpression,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Translates a SQL SIMILAR pattern to Java regex pattern, with optional
+     * escape string.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlToRegexSimilar,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlPattern,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+CharSequence,Identifier
+ ,Whitespace
+escapeStr,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+char,Keyword
+ ,Whitespace
+escapeChar,Identifier
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+escapeStr,Identifier
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+null,Keyword
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+escapeStr,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+!=,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeCharacter,Identifier
+(,Punctuation
+escapeStr,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+escapeChar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+escapeStr,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+0,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+escapeChar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+sqlToRegexSimilar,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+    ,Whitespace
+"/**
+     * Translates SQL SIMILAR pattern to Java regex pattern.
+     */",Comment
+"
+",Newline
+    ,Whitespace
+static,Keyword
+ ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlToRegexSimilar,Identifier
+(,Punctuation
+"
+",Newline
+            ,Whitespace
+String,Identifier
+ ,Whitespace
+sqlPattern,Identifier
+",",Punctuation
+"
+",Newline
+            ,Whitespace
+char,Keyword
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+        ,Whitespace
+similarEscapeRuleChecking,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+boolean,Keyword
+ ,Whitespace
+insideCharacterEnumeration,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+ ,Whitespace
+javaPattern,Identifier
+ ,Whitespace
+=,Operator
+"
+",Newline
+                ,Whitespace
+new,Keyword
+ ,Whitespace
+StringBuilder,Identifier
+(,Punctuation
+sqlPattern,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+ ,Whitespace
+*,Operator
+ ,Whitespace
+2,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+final,Keyword
+ ,Whitespace
+int,Keyword
+ ,Whitespace
+len,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+length,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+for,Keyword
+ ,Whitespace
+(,Punctuation
+int,Keyword
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+0,Literal
+;,Punctuation
+ ,Whitespace
+i,Identifier
+ ,Whitespace
+<,Operator
+ ,Whitespace
+len,Identifier
+;,Punctuation
+ ,Whitespace
+i,Identifier
+++,Operator
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+char,Keyword
+ ,Whitespace
+c,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+            ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+i,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+(,Punctuation
+len,Identifier
+ ,Whitespace
+-,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+// It should never reach here after the escape rule,Comment
+"
+",Newline
+                    ,Whitespace
+// checking.,Comment
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeSequence,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+char,Keyword
+ ,Whitespace
+nextChar,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlPattern,Identifier
+.,Punctuation
+charAt,Identifier
+(,Punctuation
+i,Identifier
+ ,Whitespace
++,Operator
+ ,Whitespace
+1,Literal
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+SQL_SIMILAR_SPECIALS,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+"// special character, use \ to replace the escape char.",Comment
+"
+",Newline
+                    ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+JAVA_REGEX_SPECIALS,Identifier
+.,Punctuation
+indexOf,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+ ,Whitespace
+>=,Operator
+ ,Whitespace
+0,Literal
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'\\',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+},Punctuation
+"
+",Newline
+                    ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+nextChar,Identifier
+ ,Whitespace
+==,Operator
+ ,Whitespace
+escapeChar,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+nextChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+// It should never reach here after the escape rule,Comment
+"
+",Newline
+                    ,Whitespace
+// checking.,Comment
+"
+",Newline
+                    ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidEscapeSequence,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+                ,Whitespace
+i,Identifier
+++,Operator
+;,Punctuation
+ ,Whitespace
+// we already process the next char.,Comment
+"
+",Newline
+            ,Whitespace
+},Punctuation
+ ,Whitespace
+else,Keyword
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                ,Whitespace
+switch,Keyword
+ ,Whitespace
+(,Punctuation
+c,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                    ,Whitespace
+case,Keyword
+ ,Whitespace
+'_',String
+:,Operator
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'.',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+case,Keyword
+ ,Whitespace
+'%',String
+:,Operator
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'.',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'*',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+case,Keyword
+ ,Whitespace
+'[',String
+:,Operator
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+'[',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+insideCharacterEnumeration,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+true,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+i,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+sqlSimilarRewriteCharEnumeration,Identifier
+(,Punctuation
+"
+",Newline
+                                ,Whitespace
+sqlPattern,Identifier
+",",Punctuation
+"
+",Newline
+                                ,Whitespace
+javaPattern,Identifier
+",",Punctuation
+"
+",Newline
+                                ,Whitespace
+i,Identifier
+",",Punctuation
+"
+",Newline
+                                ,Whitespace
+escapeChar,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+case,Keyword
+ ,Whitespace
+']',String
+:,Operator
+"
+",Newline
+                        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+!,Operator
+insideCharacterEnumeration,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+                            ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidRegularExpression,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+i,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+},Punctuation
+"
+",Newline
+                        ,Whitespace
+insideCharacterEnumeration,Identifier
+ ,Whitespace
+=,Operator
+ ,Whitespace
+false,Keyword
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+']',String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+case,Keyword
+ ,Whitespace
+'\\',String
+:,Operator
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\\\\""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+case,Keyword
+ ,Whitespace
+'$',String
+:,Operator
+"
+",Newline
+"
+",Newline
+                        ,Whitespace
+"// $ is special character in java regex, but regular in",Comment
+"
+",Newline
+                        ,Whitespace
+// SQL regex.,Comment
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+"""\\$""",String
+),Punctuation
+;,Punctuation
+"
+",Newline
+                        ,Whitespace
+break,Keyword
+;,Punctuation
+"
+",Newline
+                    ,Whitespace
+default,Keyword
+:,Operator
+"
+",Newline
+                        ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+append,Identifier
+(,Punctuation
+c,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+                ,Whitespace
+},Punctuation
+"
+",Newline
+            ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+        ,Whitespace
+if,Keyword
+ ,Whitespace
+(,Punctuation
+insideCharacterEnumeration,Identifier
+),Punctuation
+ ,Whitespace
+{,Punctuation
+"
+",Newline
+            ,Whitespace
+throw,Keyword
+ ,Whitespace
+invalidRegularExpression,Identifier
+(,Punctuation
+sqlPattern,Identifier
+",",Punctuation
+ ,Whitespace
+len,Identifier
+),Punctuation
+;,Punctuation
+"
+",Newline
+        ,Whitespace
+},Punctuation
+"
+",Newline
+"
+",Newline
+        ,Whitespace
+return,Keyword
+ ,Whitespace
+javaPattern,Identifier
+.,Punctuation
+toString,Identifier
+(,Punctuation
+),Punctuation
+;,Punctuation
+"
+",Newline
+    ,Whitespace
+},Punctuation
+"
+",Newline
+},Punctuation
+"
+",Newline
+"
+",Newline
+// End Like.java,Comment
+"
+",Newline
